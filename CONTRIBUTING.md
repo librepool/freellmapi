@@ -31,6 +31,21 @@ Every PR should:
 - Stay scoped to one change. Smaller PRs get reviewed and merged faster.
 - Avoid adding paid or card-gated services. This catalog only lists tiers that are genuinely free to start using without a credit card.
 
+## Adding a provider adapter
+
+Every provider follows the same checklist, in this order:
+
+1. **Adapter file** — `server/src/providers/<name>.ts`.
+   - OpenAI-compatible (the common case, ~5 lines): extend `OpenAICompatProvider` (`server/src/providers/openai-compat.ts`, constructor opts `{platform, name, baseUrl, extraHeaders?}`).
+   - Bespoke wire format / special auth / keyless flow: extend `BaseProvider` (`server/src/providers/base.ts`) — see `GoogleProvider`, `SailProvider`, `KiosAPIProvider`.
+2. **Register** — add `register(new …)` to the `register()` chain in `server/src/providers/index.ts`, with a comment block documenting the free tier, where the key comes from, and live-test evidence (probe date and quota figures).
+3. **Platform literal** — add the platform to the `Platform` union in `shared/types.ts`, with a comment documenting the free tier.
+4. **Key prefix** — if the provider uses prefixed keys, add it to the `detectPlatform` map in `server/src/lib/key-parser.ts` (e.g. `KIOSAPI_: 'kiosapi'`).
+5. **Seed models — bundled migration OR feed-only.** Bundled rows go in a **new** migration under `server/src/db/migrations/` (`INSERT OR IGNORE INTO models (…)` — see the baseline migration for the column list). Preferred for LibrePool: **feed-only** — no bundled rows; the provider's models arrive via the signed catalog. Either way, **the adapter must exist in the router before feed rows are published for it**, or `applyCatalog` silently drops them as `skippedUnknownPlatform`. Feed-only providers are invisible until the first successful catalog sync; bundled seeds make fresh installs work offline.
+6. **Test** — `server/src/__tests__/providers/<name>.test.ts` (vitest; pattern in `kiosapi.test.ts`): `initDb(':memory:')` with `ENCRYPTION_KEY` set; assert `getProvider('<name>')` is the right class; assert key-prefix detection; assert discovery eligibility; mocked-`fetch` chat-completion + streaming round-trips.
+7. **Modality gates** (only if not plain chat) — add the platform to the right set, or the catalog's rows for that modality are ignored: `MEDIA_PLATFORMS` / `TRANSCRIPTION_PLATFORMS` / `VIDEO_PLATFORMS` (`server/src/services/media.ts`), `SEARCH_ENGINE_PLATFORMS` (`server/src/services/search.ts`), `DECISION_PLATFORMS` (`server/src/services/decision.ts`), `EMBEDDING_PLATFORMS` (`server/src/services/embeddings.ts`).
+8. **Feed rows** — the provider's models need catalog rows with `premiumSince` set so the 15-day free-tier gate can compute; a provider can be listed in `managedPlatforms` with zero rows while still inside its Premium window.
+
 ## Database migrations
 
 Schema changes must use file-per-migration files under
