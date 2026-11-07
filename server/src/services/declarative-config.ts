@@ -97,7 +97,7 @@ const adminSchema = z.object({
 
 const declarativeConfigSchema = z.object({
   admin: adminSchema.optional(),
-  // Premium license key (freellmapi.co). Same minimum as the dashboard's
+  // Premium license key (librepool.com). Same minimum as the dashboard's
   // POST /api/premium/key length gate.
   license: z.string().min(8).optional(),
   keys: z.array(keySchema).optional(),

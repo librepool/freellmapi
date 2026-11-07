@@ -22,7 +22,7 @@ usage credits, not cash or a separate grant for each model. Availability and
 charges within that allowance depend on the model and account plan.
 
 Model rows are delivered through the signed live catalog, not database seeds.
-The existing Premium-immediate / Free-after-30-days release logic is unchanged.
+The existing Premium-immediate / Free-after-15-days release logic is unchanged.
 Adding a key therefore does not unlock fresh model rows for Free installations.
 
 Sources: [API documentation](https://aclide.com/en/documentation) and

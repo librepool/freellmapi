@@ -1,3 +1,5 @@
+> **Note:** This translation still describes FreeLLMAPI and has not yet been updated for the LibrePool rebrand (including the 15-day free-feed delay). The English documentation is current; this file is pending update.
+
 [English](../../en/fallback/CHANGELOG.md) · **简体中文**
 
 # 回退域 —— 变更日志

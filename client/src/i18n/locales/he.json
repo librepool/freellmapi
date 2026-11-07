@@ -60,7 +60,7 @@
     "emailChanged": "הדוא\"ל שונה בהצלחה.",
     "passwordReset": "הסיסמה אופסה. יש להתחבר.",
     "resetCodeDockerHint": "מריצים ב-Docker? הקוד מופיע ביומן הקונטיינר: docker logs <container>.",
-    "desktopSessionFailed": "לוח הבקרה לא הצליח להתחבר לשרת המקומי. סגור את FreeLLMAPI ופתח אותו מחדש."
+    "desktopSessionFailed": "לוח הבקרה לא הצליח להתחבר לשרת המקומי. סגור את LibrePool ופתח אותו מחדש."
   },
   "common": {
     "save": "שמור",
@@ -160,16 +160,16 @@
     "notGitInstall": "התקנה זו אינה כוללת מידע על קומיטים.",
     "checkFailed": "לא ניתן היה לבדוק אם קיימים עדכונים.",
     "autoUpdateCheck": "בדיקת עדכונים אוטומטית",
-    "restartAfterUpdate": "הפעל מחדש את FreeLLMAPI לאחר השלמת הבנייה.",
+    "restartAfterUpdate": "הפעל מחדש את LibrePool לאחר השלמת הבנייה.",
     "downloadUpdate": "הורדת העדכון",
     "downloadingUpdate": "מוריד… {percent}%",
     "restartToUpdate": "הפעלה מחדש לעדכון",
-    "updateReadyHint": "ההורדה הושלמה. FreeLLMAPI מגבה את הנתונים שלך, מופעל מחדש ופותח את הגרסה החדשה.",
+    "updateReadyHint": "ההורדה הושלמה. LibrePool מגבה את הנתונים שלך, מופעל מחדש ופותח את הגרסה החדשה.",
     "updateInstallFailed": "לא ניתן היה להתקין את העדכון.",
     "updateNow": "עדכן עכשיו",
-    "updatingContainer": "מושך את האימג׳ החדש ומפעיל מחדש. הדף ייטען מחדש כש-FreeLLMAPI יחזור.",
+    "updatingContainer": "מושך את האימג׳ החדש ומפעיל מחדש. הדף ייטען מחדש כש-LibrePool יחזור.",
     "updateNowFailed": "המעדכן לא קיבל את הבקשה. ודאו שמכולת watchtower פועלת.",
-    "updateNowTimeout": "FreeLLMAPI לא הופעל מחדש אחרי 5 דקות. בדקו את היומנים של מכולת watchtower."
+    "updateNowTimeout": "LibrePool לא הופעל מחדש אחרי 5 דקות. בדקו את היומנים של מכולת watchtower."
   },
   "models": {
     "title": "דגמים",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "תקציב טוקנים חודשי",
     "remaining": "נותרו",
     "used": "משומש",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "בעיית הסינכרון האחרון: {error}",
     "license": "רישיון",
     "planAnnual": "שנתי פרימיום",
-    "planLifetime": "חיי פרימיום",
     "expired": "פג תוקפו",
     "inactive": "לא פעיל",
-    "lifetimeNote": "רישיון לכל החיים: אף פעם לא פג תוקף.",
     "renewsOn": "חידוש ב-{date}.",
     "willNotRenew": "לא יחדש. פרימיום עד {date}, ואז ההתקנה הזו חוזרת לקטלוג החודשי החינמי.",
     "keyInactive": "המפתח הזה כבר אינו פעיל. האפליקציה ממשיכה לעבוד על הקטלוג החודשי החינמי.",
@@ -1056,7 +1054,7 @@
     "keyHint": "המפתח שלך נמצא במייל הרכישה ובדף שלאחר התשלום. איבדת את זה?",
     "recoverKey": "שחזר את זה באתר",
     "upsellTitle": "תצא לשידור חי ב-19 דולר בשנה",
-    "upsellDescription": "דגמים חינמיים חדשים מהרגע שהם קיימים, במקום 30 יום לאחר מכן. מפתח אחד, כל מכשיר. בטל בכל עת; הנתב נשאר חופשי לנצח.",
+    "upsellDescription": "דגמים חינמיים חדשים מהרגע שהם קיימים, במקום 15 יום לאחר מכן. מפתח אחד, כל מכשיר. בטל בכל עת; הנתב נשאר חופשי לנצח.",
     "goPremium": "גו פרימיום",
     "bundled": "חבילה",
     "planGeneric": "פרימיום"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "הותקנה גרסה חדשה יותר של FreeLLMAPI.",
+    "newBuild": "הותקנה גרסה חדשה יותר של LibrePool.",
     "reload": "טעינה מחדש"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

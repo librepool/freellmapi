@@ -4,7 +4,7 @@
 
 [← Back to README](../README.md) · [Documentation index](../README.md) · [API reference](../api/01-rest-api.md)
 
-Long coding-agent sessions repeatedly send system prompts, file reads, command output, and tool schemas. FreeLLMAPI can shrink that request context before cache lookup, token budgeting, and routing, so the router sees the reduced estimate and more small-context models remain eligible. Provider responses are never rewritten.
+Long coding-agent sessions repeatedly send system prompts, file reads, command output, and tool schemas. LibrePool can shrink that request context before cache lookup, token budgeting, and routing, so the router sees the reduced estimate and more small-context models remain eligible. Provider responses are never rewritten.
 
 The same pipeline runs on Chat Completions, Responses, Anthropic Messages, and Anthropic token counting. Compression is **off by default**.
 
@@ -13,7 +13,7 @@ The same pipeline runs on Chat Completions, Responses, Anthropic Messages, and A
 Choose a mode under dashboard **Settings → Prompt compression**, or bootstrap the mode with:
 
 ```env
-FREELLMAPI_COMPRESSION=lossless
+LIBREPOOL_COMPRESSION=lossless
 ```
 
 Once settings have been saved in the dashboard, the stored setting takes precedence over the environment value.
@@ -29,7 +29,7 @@ The dashboard also controls each engine independently, the estimated-token auto-
 
 ## Per-request control
 
-Send one of these values with `X-FreeLLM-Compress`:
+Send one of these values with `X-LibrePool-Compress`:
 
 ```text
 off | on | lossless | standard | aggressive
@@ -38,7 +38,7 @@ off | on | lossless | standard | aggressive
 The header may turn compression off or lower the operator's configured mode, but it cannot raise it. `on` uses the configured mode. Responses report the effective mode and estimated savings:
 
 ```text
-X-FreeLLM-Compress: standard; saved~=1840
+X-LibrePool-Compress: standard; saved~=1840
 ```
 
 Savings use the same estimated `chars / 4` accounting as routing, so the header deliberately uses `~=`.
@@ -72,8 +72,8 @@ Built-in filters understand common output from Git, package managers, test runne
 
 Additional JSON filter definitions can be loaded from:
 
-- `~/.freellmapi/filters/*.json` for user-owned filters;
-- `.freellmapi/filters.json` in the project, only when **Trust project filter files** is enabled.
+- `~/.librepool/filters/*.json` for user-owned filters;
+- `.librepool/filters.json` in the project, only when **Trust project filter files** is enabled.
 
 Project filters are disabled by default because repositories may be untrusted.
 

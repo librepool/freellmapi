@@ -60,7 +60,7 @@
     "emailChanged": "El. paštas pakeistas.",
     "passwordReset": "Slaptažodis atstatytas. Prisijunkite.",
     "resetCodeDockerHint": "Naudojate Docker? Kodas yra konteinerio žurnale: docker logs <container>.",
-    "desktopSessionFailed": "Valdymo skydeliui nepavyko prisijungti prie vietinio serverio. Uždarykite FreeLLMAPI ir atidarykite iš naujo."
+    "desktopSessionFailed": "Valdymo skydeliui nepavyko prisijungti prie vietinio serverio. Uždarykite LibrePool ir atidarykite iš naujo."
   },
   "common": {
     "save": "Išsaugoti",
@@ -160,16 +160,16 @@
     "notGitInstall": "Šiame diegime nėra informacijos apie Git įrašus.",
     "checkFailed": "Nepavyko patikrinti, ar yra naujinių.",
     "autoUpdateCheck": "Automatinis atnaujinimų tikrinimas",
-    "restartAfterUpdate": "Baigę komponuoti paleiskite FreeLLMAPI iš naujo.",
+    "restartAfterUpdate": "Baigę komponuoti paleiskite LibrePool iš naujo.",
     "downloadUpdate": "Atsisiųsti naujinimą",
     "downloadingUpdate": "Atsisiunčiama… {percent} %",
     "restartToUpdate": "Paleisti iš naujo ir atnaujinti",
-    "updateReadyHint": "Atsisiųsta. FreeLLMAPI padaro jūsų duomenų atsarginę kopiją, pasileidžia iš naujo ir atidaro naują versiją.",
+    "updateReadyHint": "Atsisiųsta. LibrePool padaro jūsų duomenų atsarginę kopiją, pasileidžia iš naujo ir atidaro naują versiją.",
     "updateInstallFailed": "Naujinimo įdiegti nepavyko.",
     "updateNow": "Atnaujinti dabar",
-    "updatingContainer": "Atsisiunčiamas naujas atvaizdas ir paleidžiama iš naujo. Puslapis įsikels iš naujo, kai FreeLLMAPI grįš.",
+    "updatingContainer": "Atsisiunčiamas naujas atvaizdas ir paleidžiama iš naujo. Puslapis įsikels iš naujo, kai LibrePool grįš.",
     "updateNowFailed": "Atnaujintuvas nepriėmė užklausos. Patikrinkite, ar veikia watchtower konteineris.",
-    "updateNowTimeout": "FreeLLMAPI per 5 minutes nepasileido iš naujo. Peržiūrėkite watchtower konteinerio žurnalus."
+    "updateNowTimeout": "LibrePool per 5 minutes nepasileido iš naujo. Peržiūrėkite watchtower konteinerio žurnalus."
   },
   "models": {
     "title": "Modeliai",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Mėnesinis žetonų biudžetas",
     "remaining": "Išlikimas",
     "used": "Naudota",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Paskutinė sinchronizacijos problema: {error}",
     "license": "Licencija",
     "planAnnual": "Metinė premija",
-    "planLifetime": "Premium Lifetime",
     "expired": "Pasibaigė",
     "inactive": "Neaktyvus",
-    "lifetimeNote": "Gyvenimo trukmės licencija: niekada nesibaigia.",
     "renewsOn": "Atnaujinta {date}.",
     "willNotRenew": "Neatnaujinsiu. Premium iki {date}, tada ši instaliacija grįžta į nemokamą mėnesinį katalogą.",
     "keyInactive": "Šis raktas nebėra aktyvus. Programėlė toliau dirba su nemokamu mėnesiniu katalogu.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Jūsų raktas yra pirkimo el. pašte ir po atsiskaitymo puslapyje. Praradai?",
     "recoverKey": "Atkurkite jį svetainėje",
     "upsellTitle": "Paleisk už 19 dolerių per metus",
-    "upsellDescription": "Nauji nemokami modeliai iš karto, kai tik jie atsiranda, o ne po 30 dienų. Vienas raktas, kiekvienas įrenginys. Atšaukti bet kada; Maršrutizatorius lieka laisvas amžinai.",
+    "upsellDescription": "Nauji nemokami modeliai iš karto, kai tik jie atsiranda, o ne po 15 dienų. Vienas raktas, kiekvienas įrenginys. Atšaukti bet kada; Maršrutizatorius lieka laisvas amžinai.",
     "goPremium": "Go Premium",
     "bundled": "Supakuota",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Įdiegta naujesnė FreeLLMAPI versija.",
+    "newBuild": "Įdiegta naujesnė LibrePool versija.",
     "reload": "Įkelti iš naujo"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

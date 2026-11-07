@@ -4,7 +4,7 @@
 
 [← Back to README](../README.md) · [Documentation index](../README.md)
 
-Everything about getting FreeLLMAPI running: the one-liner, Docker Compose, local development, declarative config, production builds, the desktop app, where your data lives, and how to reset a password, read the logs, or uninstall.
+Everything about getting LibrePool running: the one-liner, Docker Compose, local development, declarative config, production builds, the desktop app, where your data lives, and how to reset a password, read the logs, or uninstall.
 
 - [Quick start (one-liner)](#quick-start-one-liner)
 - [Docker Compose](#docker-compose)
@@ -17,21 +17,21 @@ Everything about getting FreeLLMAPI running: the one-liner, Docker Compose, loca
 
 ## Quick start (one-liner)
 
-Docker required — sets up `~/freellmapi`, generates an encryption key, pulls the image, and starts the container:
+Docker required — sets up `~/librepool`, generates an encryption key, pulls the image, and starts the container:
 
 ```bash
-curl -fsSL https://freellmapi.co/install.sh | bash
+curl -fsSL https://librepool.com/install.sh | bash
 ```
 
-Prefer to read before you pipe to bash? [The script is here](https://freellmapi.co/install.sh). Re-running it is safe: your `.env` (and encryption key) is preserved and the container updates to `:latest`. Override the defaults with `FREELLMAPI_DIR`, `PORT`, or `HOST_BIND` env vars.
+Prefer to read before you pipe to bash? [The script is here](https://librepool.com/install.sh). Re-running it is safe: your `.env` (and encryption key) is preserved and the container updates to `:latest`. Override the defaults with `LIBREPOOL_DIR`, `PORT`, or `HOST_BIND` env vars.
 
-On Windows, the easiest path is the desktop **[`.exe` installer from Releases](https://github.com/tashfeenahmed/freellmapi/releases/latest)** ([below](#desktop-app)); the Docker steps work in WSL or any bash shell.
+On Windows, the easiest path is the desktop **[`.exe` installer from Releases](https://github.com/librepool/freellmapi/releases/latest)** ([below](#desktop-app)); the Docker steps work in WSL or any bash shell.
 
 On Android, see the experimental [Termux installation guide](02-android-termux.md). It uses Node's built-in SQLite driver and does not require the Android NDK.
 
 Open http://localhost:3001, add your provider keys on the **Keys** page, reorder the **Fallback Chain** to taste, and grab your unified API key from the **Keys** page header. That unified key is what you point your OpenAI SDK at.
 
-Your install keeps itself updated from the signed catalog feed. The current full catalog is listed at [freellmapi.co/models](https://freellmapi.co/models.html).
+Your install keeps itself updated from the signed catalog feed. The current full catalog is listed at [librepool.com/models](https://librepool.com/models.html).
 
 ## Docker Compose
 
@@ -41,8 +41,8 @@ Runs the API and dashboard together on port 3001 and persists SQLite in a named 
 
 *On macOS / Linux (Bash):*
 ```bash
-git clone https://github.com/tashfeenahmed/freellmapi.git
-cd freellmapi
+git clone https://github.com/librepool/freellmapi.git
+cd librepool
 
 # Generate an encryption key for at-rest key storage
 ENCRYPTION_KEY="$(openssl rand -hex 32)"
@@ -53,8 +53,8 @@ docker compose up -d
 
 *On Windows (PowerShell):*
 ```powershell
-git clone https://github.com/tashfeenahmed/freellmapi.git
-cd freellmapi
+git clone https://github.com/librepool/freellmapi.git
+cd librepool
 
 $Bytes = New-Object Byte[] 32
 [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($Bytes)
@@ -73,13 +73,13 @@ docker compose up -d
 
 > **Providers unreachable from the container, but fine from the host?** A container has its own network stack, so two things that work on your machine do not carry over:
 >
-> - **A proxy on `127.0.0.1` is not your machine.** Inside the container, loopback is the container itself. If you reach providers through a proxy client on the host (Clash, v2rayN, sing-box, a corporate proxy), point FreeLLMAPI at the host instead: `PROXY_URL=socks5h://host.docker.internal:7890`. The bundled `docker-compose.yml` maps `host.docker.internal` to the host gateway, so this works on plain Linux Docker as well as Docker Desktop. The proxy also has to accept connections from outside loopback (in Clash, `allow-lan: true`).
+> - **A proxy on `127.0.0.1` is not your machine.** Inside the container, loopback is the container itself. If you reach providers through a proxy client on the host (Clash, v2rayN, sing-box, a corporate proxy), point LibrePool at the host instead: `PROXY_URL=socks5h://host.docker.internal:7890`. The bundled `docker-compose.yml` maps `host.docker.internal` to the host gateway, so this works on plain Linux Docker as well as Docker Desktop. The proxy also has to accept connections from outside loopback (in Clash, `allow-lan: true`).
 > - **An IPv6-only host needs IPv6 enabled in Docker.** The default bridge network is IPv4-only, so on a host with no IPv4 route the container cannot reach anything, DNS included. Enable it in `/etc/docker/daemon.json` with `"ipv6": true`, `"ip6tables": true` and a `"fixed-cidr-v6"` range, then restart Docker.
 >
 > To see which of these you are hitting, ask the container directly:
 >
 > ```bash
-> docker compose exec freellmapi node -e "fetch('https://generativelanguage.googleapis.com/').then(r=>console.log('ok',r.status)).catch(e=>console.log('fail',e.cause?.code||e.message))"
+> docker compose exec librepool node -e "fetch('https://generativelanguage.googleapis.com/').then(r=>console.log('ok',r.status)).catch(e=>console.log('fail',e.cause?.code||e.message))"
 > ```
 
 ## Local development
@@ -88,8 +88,8 @@ docker compose up -d
 
 *On macOS / Linux (Bash):*
 ```bash
-git clone https://github.com/tashfeenahmed/freellmapi.git
-cd freellmapi
+git clone https://github.com/librepool/freellmapi.git
+cd librepool
 npm install
 ENCRYPTION_KEY="$(node -e 'console.log(require("crypto").randomBytes(32).toString("hex"))')"
 printf "ENCRYPTION_KEY=%s\nPORT=3001\n" "$ENCRYPTION_KEY" > .env
@@ -98,8 +98,8 @@ npm run dev
 
 *On Windows (PowerShell):*
 ```powershell
-git clone https://github.com/tashfeenahmed/freellmapi.git
-cd freellmapi
+git clone https://github.com/librepool/freellmapi.git
+cd librepool
 npm install
 $ENCRYPTION_KEY = node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 "ENCRYPTION_KEY=$ENCRYPTION_KEY`nPORT=3001" | Out-File -Encoding utf8 .env
@@ -163,16 +163,16 @@ node server/dist/index.js     # server + dashboard both served on :3001
 
 ## Declarative startup config
 
-For repeatable Docker/server installs, FreeLLMAPI can apply a JSON config on
-every boot. Set `FREEAPI_CONFIG_PATH=/path/to/freellmapi.config.json` or put the
-same JSON in `FREEAPI_CONFIG_JSON`. The config is idempotent: existing keys,
+For repeatable Docker/server installs, LibrePool can apply a JSON config on
+every boot. Set `LIBREPOOL_CONFIG_PATH=/path/to/librepool.config.json` or put the
+same JSON in `LIBREPOOL_CONFIG_JSON`. The config is idempotent: existing keys,
 custom providers, model edits, fallback rows, and routing settings are updated
 instead of duplicated.
 
 ```json
 {
   "admin": { "email": "ops@example.com", "password": "change-me-min-8-chars" },
-  "license": "premium license key from freellmapi.co",
+  "license": "premium license key from librepool.com",
   "keys": [
     { "platform": "groq", "key": "gsk_...", "label": "main" },
     { "platform": "google", "key": "AIza...", "enabled": true }
@@ -207,7 +207,7 @@ Two optional top-level fields cover first-run provisioning:
   listener starts, an `admin` entry also closes the unauthenticated
   first-run setup window entirely: no setup code is minted and
   `POST /api/auth/setup` answers 409 from the first request on.
-- **`license`** is a Premium key from freellmapi.co. It is validated against
+- **`license`** is a Premium key from librepool.com. It is validated against
   the license service before being stored — the same contract as the
   dashboard's Premium page — then a live-tier catalog sync starts right away.
   Activation runs in the background so an unreachable license service never
@@ -232,10 +232,10 @@ than one endpoint is rejected rather than applied to an arbitrary one:
 
 ## Docker image & operations
 
-FreeLLMAPI publishes a single production image that contains the Express server and the built React dashboard:
+LibrePool publishes a single production image that contains the Express server and the built React dashboard:
 
 ```bash
-docker pull ghcr.io/tashfeenahmed/freellmapi:latest   # or pin a release, e.g. :v1.2.3
+docker pull ghcr.io/librepool/freellmapi:latest   # or pin a release, e.g. :v1.2.3
 ```
 
 The image is multi-arch (`linux/amd64` + `linux/arm64`, so it runs on a Raspberry Pi). Published tags: `latest` (the newest release), `main` (the default branch), `v*.*.*` (git release tags), and `sha-<commit>`.
@@ -244,7 +244,7 @@ The included `docker-compose.yml` is the recommended install path:
 
 ```bash
 docker compose up -d
-docker compose logs -f freellmapi
+docker compose logs -f librepool
 ```
 
 **Updating:** `docker compose pull && docker compose up -d` (your volume and `.env` carry over). To update from the dashboard instead, set `WATCHTOWER_TOKEN` in `.env` (e.g. `openssl rand -hex 32`) and start with the opt-in profile:
@@ -253,7 +253,7 @@ docker compose logs -f freellmapi
 docker compose --profile autoupdate up -d
 ```
 
-Settings → **Check for updates** then shows **Update now** when a newer release exists: a [Watchtower](https://github.com/nicholas-fedor/watchtower) sidecar pulls the image and recreates the `freellmapi` container, and the dashboard reloads when it is back. Watchtower runs with only its token-protected update endpoint, never updates on a schedule, publishes no port and only touches the `freellmapi` container — but it mounts the Docker socket, which is root-equivalent on the host, so the profile stays off unless you start it.
+Settings → **Check for updates** then shows **Update now** when a newer release exists: a [Watchtower](https://github.com/nicholas-fedor/watchtower) sidecar pulls the image and recreates the `librepool` container, and the dashboard reloads when it is back. Watchtower runs with only its token-protected update endpoint, never updates on a schedule, publishes no port and only touches the `librepool` container — but it mounts the Docker socket, which is root-equivalent on the host, so the profile stays off unless you start it.
 
 By default the container's port is bound to `127.0.0.1` (localhost only). To reach the dashboard/API from another machine on your network, publish it on all interfaces with `HOST_BIND=0.0.0.0 docker compose up -d` — only on a trusted LAN, since the proxy is single-user.
 
@@ -262,22 +262,22 @@ Plain HTTP over a LAN address works as-is: the security headers that only apply 
 SQLite data is stored in the `freellmapi-data` volume at `/app/server/data`.
 Keep the same `.env` `ENCRYPTION_KEY` and volume when upgrading, because
 provider keys are encrypted at rest. If your host only persists a specific
-directory, set `FREEAPI_DB_PATH=/that/path/freellmapi.db`.
+directory, set `LIBREPOOL_DB_PATH=/that/path/librepool.db`.
 
 On hosts with ephemeral disks, configure an encrypted backup target:
 
 ```env
-FREEAPI_DB_BACKUP_PATH=/app/server/data/freellmapi.db.backup
+LIBREPOOL_DB_BACKUP_PATH=/app/server/data/librepool.db.backup
 # or:
-FREEAPI_DB_BACKUP_URL=https://example.com/freellmapi.db.backup
-FREEAPI_DB_BACKUP_TOKEN=optional-bearer-token
-FREEAPI_DB_BACKUP_KEY=64-char-hex-backup-key
-FREEAPI_DB_BACKUP_INTERVAL_MS=300000
+LIBREPOOL_DB_BACKUP_URL=https://example.com/librepool.db.backup
+LIBREPOOL_DB_BACKUP_TOKEN=optional-bearer-token
+LIBREPOOL_DB_BACKUP_KEY=64-char-hex-backup-key
+LIBREPOOL_DB_BACKUP_INTERVAL_MS=300000
 ```
 
-When the database file is missing at startup, FreeLLMAPI restores the backup
+When the database file is missing at startup, LibrePool restores the backup
 before migrations run. While the server is running it uploads a fresh encrypted
-backup periodically. If `FREEAPI_DB_BACKUP_KEY` is omitted, the app uses
+backup periodically. If `LIBREPOOL_DB_BACKUP_KEY` is omitted, the app uses
 `ENCRYPTION_KEY` for the backup envelope too.
 
 More Docker operations and examples live in [docker/README.md](../../../docker/README.md).
@@ -288,9 +288,9 @@ A native menu-bar app lives in [`desktop/`](../desktop): the entire router +
 dashboard running locally from your tray, with a glass popover showing live
 request stats.
 
-![FreeLLMAPI desktop app](../../../repo-assets/desktop.png)
+![LibrePool desktop app](../../../repo-assets/desktop.png)
 
-**[Download from Releases](https://github.com/tashfeenahmed/freellmapi/releases/latest)** — the macOS `.dmg` and the Windows `.exe` installer are built and attached to every release by the [`desktop-release`](../../../.github/workflows/desktop-release.yml) workflow. Or build it from this repo in a few minutes:
+**[Download from Releases](https://github.com/librepool/freellmapi/releases/latest)** — the macOS `.dmg` and the Windows `.exe` installer are built and attached to every release by the [`desktop-release`](../../../.github/workflows/desktop-release.yml) workflow. Or build it from this repo in a few minutes:
 
 **Mac downloads:** choose `arm64` for Apple Silicon or `x64` for Intel. Both require macOS 12 Monterey or later and include DMG and ZIP downloads.
 
@@ -301,9 +301,9 @@ request stats.
 ```bash
 npm install
 npm install --prefix desktop  # install desktop dependencies
-npm run desktop:dist          # macOS  → desktop/dist-electron/FreeLLMAPI-…-arm64.dmg
-npm run desktop:dist:mac:x64  # Intel Mac → desktop/dist-electron/FreeLLMAPI-…-x64.dmg
-npm run desktop:dist:win      # Windows → "desktop/dist-electron/FreeLLMAPI-Setup-….exe"
+npm run desktop:dist          # macOS  → desktop/dist-electron/LibrePool-…-arm64.dmg
+npm run desktop:dist:mac:x64  # Intel Mac → desktop/dist-electron/LibrePool-…-x64.dmg
+npm run desktop:dist:win      # Windows → "desktop/dist-electron/LibrePool-Setup-….exe"
 ```
 
 > Locally built apps are unsigned, so Windows SmartScreen may warn on first run
@@ -318,12 +318,12 @@ build signs the dashboard in automatically with a hidden local account, so
 you're never prompted for credentials and never need one.
 
 The only credential you need is your **unified API key** — the
-`freellmapi-…` token your OpenAI/Anthropic client points at. Get it from:
+`librepool-…` token your OpenAI/Anthropic client points at. Get it from:
 
 - the tray popover — click the tray icon, then **Copy Key**, or
 - the dashboard **Keys** page header (tray → **Open Dashboard**).
 
-You do not need to open or edit `freeapi.db` by hand.
+You do not need to open or edit `librepool.db` by hand.
 
 Your settings and data live in one folder per OS (copy it to migrate to
 another machine or into a container):
@@ -334,12 +334,12 @@ another machine or into a container):
 | macOS | `~/Library/Application Support/FreeLLMAPI/` |
 | Linux | `~/.config/FreeLLMAPI/` |
 
-That folder holds `freeapi.db` (all keys, models, settings, encrypted at rest),
-`config.json` (window/theme/port/LAN preferences) and `logs/freeapi.log` (what
+That folder holds `librepool.db` (all keys, models, settings, encrypted at rest),
+`config.json` (window/theme/port/LAN preferences) and `logs/librepool.log` (what
 the app would print to a terminal if it had one). Copy the first two to move an
 install. For the server (non-desktop) deployment, the equivalent state is the
-`.env` file and the SQLite DB at `server/data/freeapi.db` (or wherever
-`FREEAPI_DB_PATH` points).
+`.env` file and the SQLite DB at `server/data/librepool.db` (or wherever
+`LIBREPOOL_DB_PATH` points).
 
 ## FAQ: passwords, logs, uninstall
 
@@ -374,17 +374,17 @@ rather than clicking repeatedly.
 
 | Install method | Where the log goes |
 |----------------|--------------------|
-| Docker Compose | `docker compose logs -f freellmapi` |
+| Docker Compose | `docker compose logs -f librepool` |
 | Plain Docker | `docker logs -f <container>` (`docker ps` lists the name) |
-| One-liner install | `cd ~/freellmapi && docker compose logs -f freellmapi` |
+| One-liner install | `cd ~/librepool && docker compose logs -f librepool` |
 | `npm run dev` / `node server/dist/index.js` | the terminal the server is running in |
-| Desktop app | `<data dir>/logs/freeapi.log` — tray icon → right-click → **Open Logs Folder** |
+| Desktop app | `<data dir>/logs/librepool.log` — tray icon → right-click → **Open Logs Folder** |
 
 The desktop app has no terminal attached, so it also tees everything it prints
-to a file: `freeapi.log` in the `logs` folder inside the data directory listed
+to a file: `librepool.log` in the `logs` folder inside the data directory listed
 [above](#credentials-and-where-your-data-lives) — for example
-`~/Library/Application Support/FreeLLMAPI/logs/freeapi.log` on macOS. It keeps
-the current file plus one rotated `freeapi.log.1`, 1 MB each. Open it in any
+`~/Library/Application Support/FreeLLMAPI/logs/librepool.log` on macOS. It keeps
+the current file plus one rotated `librepool.log.1`, 1 MB each. Open it in any
 text editor; the reset code above appears there too.
 
 ### How do I uninstall?
@@ -395,12 +395,12 @@ the top.
 
 **Desktop app**
 
-1. Quit from the tray menu (**Quit FreeLLMAPI**). If you turned on *Start at
+1. Quit from the tray menu (**Quit LibrePool**). If you turned on *Start at
    login* in the popover, switch it off first so no stale login item is left.
 2. Remove the application:
-   - **macOS** — drag `FreeLLMAPI.app` from `/Applications` to the Trash.
-   - **Windows** — *Settings → Apps → Installed apps → FreeLLMAPI → Uninstall*.
-   - **Linux** — delete the AppImage, `sudo apt remove freellmapi` for the `.deb`, or `sudo dnf remove freellmapi` for the `.rpm`.
+   - **macOS** — drag `LibrePool.app` from `/Applications` to the Trash.
+   - **Windows** — *Settings → Apps → Installed apps → LibrePool → Uninstall*.
+   - **Linux** — delete the AppImage, `sudo apt remove librepool` for the `.deb`, or `sudo dnf remove librepool` for the `.rpm`.
 3. Delete the data directory to remove your keys, settings and logs for good:
    - **Windows** — `%APPDATA%\FreeLLMAPI\`
    - **macOS** — `~/Library/Application Support/FreeLLMAPI/`
@@ -410,12 +410,12 @@ the top.
 
 ```bash
 docker compose down -v            # -v also drops the freellmapi-data volume
-docker image rm ghcr.io/tashfeenahmed/freellmapi:latest
-rm -rf ~/freellmapi               # the one-liner's directory: .env + compose file
+docker image rm ghcr.io/librepool/freellmapi:latest
+rm -rf ~/librepool               # the one-liner's directory: .env + compose file
 ```
 
 Leave off `-v` if you want to keep the database for a later reinstall.
 
 **From source** — delete the checkout. The state that matters is `.env` and
-`server/data/freeapi.db` (or wherever `FREEAPI_DB_PATH` points), so back those
+`server/data/librepool.db` (or wherever `LIBREPOOL_DB_PATH` points), so back those
 up first if you plan to come back.

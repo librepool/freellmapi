@@ -60,7 +60,7 @@
     "emailChanged": "E-posten er endret.",
     "passwordReset": "Passordet er tilbakestilt. Logg inn.",
     "resetCodeDockerHint": "Kjører du i Docker? Koden står i containerloggen: docker logs <container>.",
-    "desktopSessionFailed": "Dashbordet kunne ikke logge inn på den lokale serveren. Avslutt FreeLLMAPI og åpne det på nytt."
+    "desktopSessionFailed": "Dashbordet kunne ikke logge inn på den lokale serveren. Avslutt LibrePool og åpne det på nytt."
   },
   "common": {
     "save": "Lagre",
@@ -160,16 +160,16 @@
     "notGitInstall": "Denne installasjonen inneholder ikke commit-informasjon.",
     "checkFailed": "Kunne ikke se etter oppdateringer.",
     "autoUpdateCheck": "Automatisk oppdateringssjekk",
-    "restartAfterUpdate": "Start FreeLLMAPI på nytt etter at byggingen er fullført.",
+    "restartAfterUpdate": "Start LibrePool på nytt etter at byggingen er fullført.",
     "downloadUpdate": "Last ned oppdatering",
     "downloadingUpdate": "Laster ned… {percent} %",
     "restartToUpdate": "Start på nytt for å oppdatere",
-    "updateReadyHint": "Lastet ned. FreeLLMAPI tar sikkerhetskopi av dataene dine, starter på nytt og åpner den nye versjonen.",
+    "updateReadyHint": "Lastet ned. LibrePool tar sikkerhetskopi av dataene dine, starter på nytt og åpner den nye versjonen.",
     "updateInstallFailed": "Oppdateringen kunne ikke installeres.",
     "updateNow": "Oppdater nå",
-    "updatingContainer": "Henter det nye imaget og starter på nytt. Siden lastes inn på nytt når FreeLLMAPI er tilbake.",
+    "updatingContainer": "Henter det nye imaget og starter på nytt. Siden lastes inn på nytt når LibrePool er tilbake.",
     "updateNowFailed": "Oppdateringstjenesten godtok ikke forespørselen. Sjekk at watchtower-containeren kjører.",
-    "updateNowTimeout": "FreeLLMAPI har ikke startet på nytt etter 5 minutter. Sjekk loggene til watchtower-containeren."
+    "updateNowTimeout": "LibrePool har ikke startet på nytt etter 5 minutter. Sjekk loggene til watchtower-containeren."
   },
   "models": {
     "title": "Modeller",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Månedlig tokenbudsjett",
     "remaining": "Gjenværende",
     "used": "Brukt",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Siste synkroniseringsproblem: {error}",
     "license": "Lisens",
     "planAnnual": "Årlig premie",
-    "planLifetime": "Premium livstid",
     "expired": "Utløpt",
     "inactive": "Inaktiv",
-    "lifetimeNote": "Livstidslisens: utløper aldri.",
     "renewsOn": "Fornyer på {date}.",
     "willNotRenew": "Vil ikke fornye. Premium frem til {date}, så faller denne installasjonen tilbake til den gratis månedlige katalogen.",
     "keyInactive": "Denne nøkkelen er ikke lenger aktiv. Appen fortsetter å jobbe med den gratis månedlige katalogen.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Nøkkelen din er i kjøps-e-posten og på siden etter utsjekk. Mistet den?",
     "recoverKey": "Hent det tilbake på nettsiden",
     "upsellTitle": "Gå live for 19 dollar i året",
-    "upsellDescription": "Nye gratis modeller i det øyeblikket de finnes, i stedet for 30 dager senere. Én nøkkel, hver enhet. Avbestill når som helst; Ruteren er gratis for alltid.",
+    "upsellDescription": "Nye gratis modeller i det øyeblikket de finnes, i stedet for 15 dager senere. Én nøkkel, hver enhet. Avbestill når som helst; Ruteren er gratis for alltid.",
     "goPremium": "Velg Premium",
     "bundled": "Bundled",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "En nyere versjon av FreeLLMAPI er installert.",
+    "newBuild": "En nyere versjon av LibrePool er installert.",
     "reload": "Last inn på nytt"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

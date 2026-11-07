@@ -25,3 +25,12 @@ update-hermes.sh
 
 # Monetization planning — private, never committed
 monetization/
+
+# LibrePool catalog service — dev signing keys. The private key in
+# catalog/dev-keys/ must NEVER be committed; production keys live on the
+# feed host only (see catalog/README.md). Generated catalog output and the
+# dev license store are also build output, not source — but the seed catalog
+# (catalog/data/seed-catalog.json) IS source and must be committed.
+catalog/dev-keys/
+catalog/data/licenses.json
+catalog/data/catalog.*.json

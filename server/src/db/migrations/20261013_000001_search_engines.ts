@@ -6,7 +6,7 @@
 // Search engines live in media_models with modality = 'search' and
 // model_id = the engine id, maintained by the catalog's `searchEngines`
 // registry exactly like video rows. Nothing is seeded here on purpose: new
-// engines reach Premium installs first and Free installs 30 days later through
+// engines reach Premium installs first and Free installs 15 days later through
 // the catalog, so a bundled baseline would hand every install all of them on
 // day one and then have the free catalog's sync take them away again.
 //

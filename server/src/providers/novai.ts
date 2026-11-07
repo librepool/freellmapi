@@ -1,4 +1,4 @@
-import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@librepool/shared/types.js';
 import type { CompletionOptions, KeyValidationResult } from './base.js';
 import type { QuotaObservationContext } from '../services/provider-quota.js';
 import { OpenAICompatProvider } from './openai-compat.js';
@@ -78,7 +78,7 @@ function checkIdentity(requested: string, returned: unknown): void {
 }
 
 /** Chat and video share NovAI's daily free allowance. Rows are delivered only
- * by the signed catalog; registering a key never bypasses the 30-day gate. */
+ * by the signed catalog; registering a key never bypasses the 15-day gate. */
 export class NovaiProvider extends OpenAICompatProvider {
   constructor() {
     super({ platform: 'novai', name: 'NovAI', baseUrl: NOVAI_BASE_URL });

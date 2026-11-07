@@ -60,7 +60,7 @@
     "emailChanged": "تم تغيير البريد الإلكتروني بنجاح.",
     "passwordReset": "تمت إعادة تعيين كلمة المرور. يرجى تسجيل الدخول.",
     "resetCodeDockerHint": "هل تعمل داخل Docker؟ الرمز موجود في سجل الحاوية: docker logs <container>.",
-    "desktopSessionFailed": "تعذّر على لوحة التحكم تسجيل الدخول إلى الخادم المحلي. أغلق FreeLLMAPI ثم افتحه من جديد."
+    "desktopSessionFailed": "تعذّر على لوحة التحكم تسجيل الدخول إلى الخادم المحلي. أغلق LibrePool ثم افتحه من جديد."
   },
   "common": {
     "save": "حفظ",
@@ -160,16 +160,16 @@
     "notGitInstall": "لا يتضمن هذا التثبيت معلومات الالتزام.",
     "checkFailed": "تعذر التحقق من وجود تحديثات.",
     "autoUpdateCheck": "التحقق التلقائي من التحديثات",
-    "restartAfterUpdate": "أعد تشغيل FreeLLMAPI بعد اكتمال البنية.",
+    "restartAfterUpdate": "أعد تشغيل LibrePool بعد اكتمال البنية.",
     "downloadUpdate": "تنزيل التحديث",
     "downloadingUpdate": "جارٍ التنزيل… {percent}%",
     "restartToUpdate": "أعد التشغيل للتحديث",
-    "updateReadyHint": "اكتمل التنزيل. يحفظ FreeLLMAPI نسخة احتياطية من بياناتك ثم يعيد التشغيل ويفتح الإصدار الجديد.",
+    "updateReadyHint": "اكتمل التنزيل. يحفظ LibrePool نسخة احتياطية من بياناتك ثم يعيد التشغيل ويفتح الإصدار الجديد.",
     "updateInstallFailed": "تعذّر تثبيت التحديث.",
     "updateNow": "حدّث الآن",
-    "updatingContainer": "جارٍ سحب الصورة الجديدة وإعادة التشغيل. ستُعاد تحميل هذه الصفحة عند عودة FreeLLMAPI.",
+    "updatingContainer": "جارٍ سحب الصورة الجديدة وإعادة التشغيل. ستُعاد تحميل هذه الصفحة عند عودة LibrePool.",
     "updateNowFailed": "لم يقبل المحدِّث الطلب. تحقّق من أن حاوية watchtower تعمل.",
-    "updateNowTimeout": "لم يُعد FreeLLMAPI التشغيل بعد 5 دقائق. راجع سجلات حاوية watchtower."
+    "updateNowTimeout": "لم يُعد LibrePool التشغيل بعد 5 دقائق. راجع سجلات حاوية watchtower."
   },
   "models": {
     "title": "نماذج",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "ميزانية الرمز الشهرية",
     "remaining": "المتبقية",
     "used": "تستخدم",
-    "usedScopeHint": "طلبات المحادثة فقط، منذ بداية هذا الشهر الميلادي، مجمَّعة عبر كل النماذج في السلسلة النشطة — بما في ذلك النقاط المخصّصة. لا تُحتسب حركة المرور التي ترسلها إلى مزوّد خارج FreeLLMAPI.",
+    "usedScopeHint": "طلبات المحادثة فقط، منذ بداية هذا الشهر الميلادي، مجمَّعة عبر كل النماذج في السلسلة النشطة — بما في ذلك النقاط المخصّصة. لا تُحتسب حركة المرور التي ترسلها إلى مزوّد خارج LibrePool.",
     "legendRemainingTitle": "المتبقي / الميزانية الشهرية لـ {name} ({platform})",
     "noPublishedQuota": "+{count} بلا حصة منشورة",
     "noPublishedQuotaTitle": "هذه النماذج ليس لها ميزانية رموز شهرية موثّقة، لذا لا يوجد متبقٍ لعرضه.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "مشكلة المزامنة الأخيرة: {error}",
     "license": "الترخيص",
     "planAnnual": "قسط سنوي",
-    "planLifetime": "قسط مدى الحياة",
     "expired": "انتهت صلاحيتها",
     "inactive": "غير نشط",
-    "lifetimeNote": "ترخيص مدى الحياة: لا تنتهي صلاحيته أبدًا.",
     "renewsOn": "يتم التجديد على {date}.",
     "willNotRenew": "لن تجدد. Premium حتى {date}، ثم يعود هذا التثبيت إلى الكتالوج الشهري المجاني.",
     "keyInactive": "هذا المفتاح لم يعد نشطا. يستمر التطبيق في العمل على الكتالوج الشهري المجاني.",
@@ -1056,7 +1054,7 @@
     "keyHint": "مفتاحك موجود في البريد الإلكتروني الخاص بالشراء وفي صفحة ما بعد الخروج. فقدت ذلك؟",
     "recoverKey": "استعادتها على الموقع",
     "upsellTitle": "ابدأ البث المباشر مقابل 19 دولارًا سنويًا",
-    "upsellDescription": "نماذج مجانية جديدة فور وجودها، بدلاً من مرور 30 يومًا. مفتاح واحد لكل جهاز. إلغاء في أي وقت؛ يبقى جهاز التوجيه مجانيًا إلى الأبد.",
+    "upsellDescription": "نماذج مجانية جديدة فور وجودها، بدلاً من مرور 15 يومًا. مفتاح واحد لكل جهاز. إلغاء في أي وقت؛ يبقى جهاز التوجيه مجانيًا إلى الأبد.",
     "goPremium": "اذهب إلى الإصدار المميز",
     "bundled": "المجمعة",
     "planGeneric": "قسط"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "تم تثبيت إصدار أحدث من FreeLLMAPI.",
+    "newBuild": "تم تثبيت إصدار أحدث من LibrePool.",
     "reload": "إعادة التحميل"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

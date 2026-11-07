@@ -60,7 +60,7 @@
     "emailChanged": "ଇମେଲ ସଫଳତାର ସହ ବଦଳିଲା।",
     "passwordReset": "ପାସୱାର୍ଡ ରିସେଟ ହେଲା। ଦୟାକରି ସାଇନ ଇନ କରନ୍ତୁ।",
     "resetCodeDockerHint": "Docker ରେ ଚଳାଉଛନ୍ତି କି? କୋଡ କଣ୍ଟେନର ଲଗରେ ଅଛି: docker logs <container>।",
-    "desktopSessionFailed": "ଡ୍ୟାସବୋର୍ଡ ଲୋକାଲ ସର୍ଭରରେ ସାଇନ ଇନ କରିପାରିଲା ନାହିଁ। FreeLLMAPI ବନ୍ଦ କରି ପୁଣି ଖୋଲନ୍ତୁ।"
+    "desktopSessionFailed": "ଡ୍ୟାସବୋର୍ଡ ଲୋକାଲ ସର୍ଭରରେ ସାଇନ ଇନ କରିପାରିଲା ନାହିଁ। LibrePool ବନ୍ଦ କରି ପୁଣି ଖୋଲନ୍ତୁ।"
   },
   "common": {
     "save": "ସଞ୍ଚୟ କରନ୍ତୁ",
@@ -160,16 +160,16 @@
     "notGitInstall": "ଏହି ଇନ୍‌ଷ୍ଟଲେସନ୍‌ରେ commit ସୂଚନା ନାହିଁ।",
     "checkFailed": "ଅପଡେଟ୍ ଯାଞ୍ଚ କରାଯାଇପାରିଲା ନାହିଁ।",
     "autoUpdateCheck": "ସ୍ୱୟଂଚାଳିତ ଅପଡେଟ୍ ଯାଞ୍ଚ",
-    "restartAfterUpdate": "ବିଲ୍ଡ ସମ୍ପୂର୍ଣ୍ଣ ହେବା ପରେ FreeLLMAPI ପୁନଃ ଚାଲୁ କରନ୍ତୁ।",
+    "restartAfterUpdate": "ବିଲ୍ଡ ସମ୍ପୂର୍ଣ୍ଣ ହେବା ପରେ LibrePool ପୁନଃ ଚାଲୁ କରନ୍ତୁ।",
     "downloadUpdate": "ଅପଡେଟ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ",
     "downloadingUpdate": "ଡାଉନଲୋଡ୍ ହେଉଛି… {percent}%",
     "restartToUpdate": "ଅପଡେଟ୍ ପାଇଁ ପୁନଃ ଆରମ୍ଭ କରନ୍ତୁ",
-    "updateReadyHint": "ଡାଉନଲୋଡ୍ ହୋଇଗଲା। FreeLLMAPI ଆପଣଙ୍କ ଡାଟାର ବ୍ୟାକଅପ୍ ନେଇ, ପୁନଃ ଆରମ୍ଭ ହୋଇ ନୂଆ ସଂସ୍କରଣ ଖୋଲେ।",
+    "updateReadyHint": "ଡାଉନଲୋଡ୍ ହୋଇଗଲା। LibrePool ଆପଣଙ୍କ ଡାଟାର ବ୍ୟାକଅପ୍ ନେଇ, ପୁନଃ ଆରମ୍ଭ ହୋଇ ନୂଆ ସଂସ୍କରଣ ଖୋଲେ।",
     "updateInstallFailed": "ଅପଡେଟ୍ ଇନଷ୍ଟଲ୍ ହୋଇପାରିଲା ନାହିଁ।",
     "updateNow": "ବର୍ତ୍ତମାନ ଅପଡେଟ୍ କରନ୍ତୁ",
-    "updatingContainer": "ନୂଆ ଇମେଜ୍ ଟାଣାଯାଉଛି ଏବଂ ପୁନଃ ଆରମ୍ଭ ହେଉଛି। FreeLLMAPI ଫେରିଲେ ଏହି ପୃଷ୍ଠା ପୁନଃ ଲୋଡ୍ ହେବ।",
+    "updatingContainer": "ନୂଆ ଇମେଜ୍ ଟାଣାଯାଉଛି ଏବଂ ପୁନଃ ଆରମ୍ଭ ହେଉଛି। LibrePool ଫେରିଲେ ଏହି ପୃଷ୍ଠା ପୁନଃ ଲୋଡ୍ ହେବ।",
     "updateNowFailed": "ଅପଡେଟର ଅନୁରୋଧ ଗ୍ରହଣ କଲା ନାହିଁ। watchtower କଣ୍ଟେନର ଚାଲୁଛି କି ନାହିଁ ଯାଞ୍ଚ କରନ୍ତୁ।",
-    "updateNowTimeout": "୫ ମିନିଟ ପରେ ମଧ୍ୟ FreeLLMAPI ପୁନଃ ଆରମ୍ଭ ହୋଇନାହିଁ। watchtower କଣ୍ଟେନରର ଲଗ୍ ଦେଖନ୍ତୁ।"
+    "updateNowTimeout": "୫ ମିନିଟ ପରେ ମଧ୍ୟ LibrePool ପୁନଃ ଆରମ୍ଭ ହୋଇନାହିଁ। watchtower କଣ୍ଟେନରର ଲଗ୍ ଦେଖନ୍ତୁ।"
   },
   "models": {
     "title": "ମଡେଲଗୁଡିକ",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "ମାସିକ ଟୋକେନ୍ ବଜେଟ୍",
     "remaining": "ଅବଶିଷ୍ଟ",
     "used": "ବ୍ୟବହୃତ",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "ଶେଷ ସିଙ୍କ୍ରୋନାଇଜ୍ ସମସ୍ୟା: {error}",
     "license": "ଲାଇସେନ୍ସ",
     "planAnnual": "ପ୍ରିମିୟମ୍ ବାର୍ଷିକ",
-    "planLifetime": "ପ୍ରିମିୟମ୍ ଲାଇଫ୍ ଟାଇମ୍",
     "expired": "ସମୟ ସମାପ୍ତି ହୋଇଛି",
     "inactive": "ନିଷ୍କ୍ରିୟ",
-    "lifetimeNote": "ଲାଇଫ୍ ଟାଇମ୍ ଲାଇସେନ୍ସ: କଦାପି ସମାପ୍ତ ହୁଏ ନାହିଁ ।",
     "renewsOn": "{date} ରେ ନବୀକରଣ କରନ୍ତୁ ।",
     "willNotRenew": "ନବୀକରଣ କରିବ ନାହିଁ । {date} ପର୍ଯ୍ୟନ୍ତ ପ୍ରିମିୟମ, ତା'ପରେ ଏହି ସଂସ୍ଥାପନ ମାଗଣା ମାସିକ କାଟାଲଗ୍ କୁ ଫେରିଯାଏ ।",
     "keyInactive": "ଏହି କୀ ଆଉ ଅଧିକ ସକ୍ରିୟ ନାହିଁ। ଆପ୍ ମାଗଣା ମାସିକ ତାଲିକାରେ କାମ ଜାରି ରଖିଛି |",
@@ -1056,7 +1054,7 @@
     "keyHint": "ଆପଣଙ୍କ କୀ ଆପଣଙ୍କ କ୍ରୟ ଇମେଲରେ ଏବଂ ପୋଷ୍ଟ-ଚେକଆଉଟ୍ ପୃଷ୍ଠାରେ ଅଛି। ଏହାକୁ ହରାଇଲେ କି?",
     "recoverKey": "ୱେବସାଇଟରେ ଏହାକୁ ପୁନରୁଦ୍ଧାର କରନ୍ତୁ",
     "upsellTitle": "ବର୍ଷକୁ $19 ପାଇଁ ଲାଇଭ୍ ଯାଆନ୍ତୁ",
-    "upsellDescription": "ନୂତନ ମାଗଣା ମଡେଲଗୁଡିକ 30 ଦିନ ପରେ ବଦଳରେ ବିଦ୍ୟମାନ ହେବା ମୁହୂର୍ତ୍ତରେ । ଗୋଟିଏ ଚାବି, ପ୍ରତ୍ୟେକ ଡିଭାଇସ୍। ଯେକୌଣସି ସମୟରେ ବାତିଲ କରନ୍ତୁ; ରାଉଟର୍ ସବୁଦିନ ପାଇଁ ମୁକ୍ତ ରହିଥାଏ।",
+    "upsellDescription": "ନୂତନ ମାଗଣା ମଡେଲଗୁଡିକ 15 ଦିନ ପରେ ବଦଳରେ ବିଦ୍ୟମାନ ହେବା ମୁହୂର୍ତ୍ତରେ । ଗୋଟିଏ ଚାବି, ପ୍ରତ୍ୟେକ ଡିଭାଇସ୍। ଯେକୌଣସି ସମୟରେ ବାତିଲ କରନ୍ତୁ; ରାଉଟର୍ ସବୁଦିନ ପାଇଁ ମୁକ୍ତ ରହିଥାଏ।",
     "goPremium": "ପ୍ରିମିୟମ୍ ଯାଆନ୍ତୁ",
     "bundled": "ବଣ୍ଡଲ୍ ହୋଇଛି",
     "planGeneric": "ପ୍ରିମିୟମ"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI ର ନୂଆ ସଂସ୍କରଣ ଇନଷ୍ଟଲ୍ ହୋଇଛି।",
+    "newBuild": "LibrePool ର ନୂଆ ସଂସ୍କରଣ ଇନଷ୍ଟଲ୍ ହୋଇଛି।",
     "reload": "ପୁନଃ ଲୋଡ୍"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

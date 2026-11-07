@@ -3,7 +3,7 @@ import { apiFetch } from '@/lib/api'
 
 export interface LicenseStatus {
   valid: boolean
-  plan: 'annual' | 'lifetime' | null
+  plan: 'annual' | null
   status: string | null
   expiresAt: string | null
   cancelAtPeriodEnd?: boolean

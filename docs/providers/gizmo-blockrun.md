@@ -3,7 +3,7 @@
 Both providers use bearer API keys. Add a key in **Keys**, or import
 `GIZMO_API_KEY=...` / `BLOCKRUN_API_KEY=...`. Model rows come exclusively from
 the signed hosted catalog; no model seeds or automatic roster imports ship
-with these adapters. Existing Premium-now / Free-after-30-days behavior is
+with these adapters. Existing Premium-now / Free-after-15-days behavior is
 unchanged.
 
 ## Gizmo

@@ -1,4 +1,4 @@
-import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@librepool/shared/types.js';
 import { BaseProvider, type KeyValidationResult } from './base.js';
 
 /** Explicitly activated with the normal no-key credential. Decision-only

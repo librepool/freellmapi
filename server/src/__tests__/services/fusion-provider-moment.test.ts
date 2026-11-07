@@ -13,7 +13,7 @@ let keySeq = keySeqStart;
 import { initDb, getDb } from '../../db/index.js';
 import { runModelCall } from '../../services/fusion.js';
 import { getAllPenalties, type RouteResult } from '../../services/router.js';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 
 function fakeRoute(throwErr: any): { route: RouteResult; calls: () => number } {
   const n = ++keySeq;

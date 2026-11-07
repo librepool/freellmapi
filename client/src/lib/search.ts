@@ -3,8 +3,7 @@
 // but they never serve chat, so the Keys page, the add-key picker and the
 // Models tabs all treat them as their own group.
 
-import type { SearchPlatform as SharedSearchPlatform } from '@freellmapi/shared/types'
-import type { QueryClient } from '@tanstack/react-query'
+import type { SearchPlatform as SharedSearchPlatform } from '@librepool/shared/types'
 
 // Mirrors SEARCH_PLATFORMS in shared/types.ts. The client only imports types
 // from shared, so the list is repeated here; the two assertions below fail the
@@ -110,7 +109,7 @@ export interface SearchResult {
 }
 
 // New catalog rows reach Free installs this long after they reach Premium.
-const FREE_TIER_LAG_MS = 30 * 24 * 60 * 60 * 1000
+const FREE_TIER_LAG_MS = 15 * 24 * 60 * 60 * 1000
 
 /**
  * When a Premium-first engine reaches the free catalog, or null when it is

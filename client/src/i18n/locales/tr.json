@@ -60,7 +60,7 @@
     "emailChanged": "E-posta değiştirildi.",
     "passwordReset": "Şifre sıfırlandı. Lütfen giriş yapın.",
     "resetCodeDockerHint": "Docker içinde mi çalışıyor? Kod konteyner günlüğündedir: docker logs <container>.",
-    "desktopSessionFailed": "Kontrol paneli yerel sunucuya giriş yapamadı. FreeLLMAPI uygulamasını kapatıp yeniden açın."
+    "desktopSessionFailed": "Kontrol paneli yerel sunucuya giriş yapamadı. LibrePool uygulamasını kapatıp yeniden açın."
   },
   "common": {
     "save": "Kaydet",
@@ -160,16 +160,16 @@
     "notGitInstall": "Bu kurulum commit bilgisi içermiyor.",
     "checkFailed": "Güncellemeler denetlenemedi.",
     "autoUpdateCheck": "Otomatik güncelleme denetimi",
-    "restartAfterUpdate": "Derleme tamamlandıktan sonra FreeLLMAPI'yi yeniden başlatın.",
+    "restartAfterUpdate": "Derleme tamamlandıktan sonra LibrePool'yi yeniden başlatın.",
     "downloadUpdate": "Güncellemeyi indir",
     "downloadingUpdate": "İndiriliyor… %{percent}",
     "restartToUpdate": "Güncellemek için yeniden başlat",
-    "updateReadyHint": "İndirildi. FreeLLMAPI verilerinizi yedekler, yeniden başlar ve yeni sürümü açar.",
+    "updateReadyHint": "İndirildi. LibrePool verilerinizi yedekler, yeniden başlar ve yeni sürümü açar.",
     "updateInstallFailed": "Güncelleme yüklenemedi.",
     "updateNow": "Şimdi güncelle",
-    "updatingContainer": "Yeni imaj çekiliyor ve yeniden başlatılıyor. FreeLLMAPI geri geldiğinde bu sayfa yenilenecek.",
+    "updatingContainer": "Yeni imaj çekiliyor ve yeniden başlatılıyor. LibrePool geri geldiğinde bu sayfa yenilenecek.",
     "updateNowFailed": "Güncelleyici isteği kabul etmedi. watchtower konteynerinin çalıştığından emin olun.",
-    "updateNowTimeout": "FreeLLMAPI 5 dakika sonra hâlâ yeniden başlamadı. watchtower konteynerinin günlüklerine bakın."
+    "updateNowTimeout": "LibrePool 5 dakika sonra hâlâ yeniden başlamadı. watchtower konteynerinin günlüklerine bakın."
   },
   "models": {
     "title": "Modeller",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Aylık token bütçesi",
     "remaining": "kalan",
     "used": "kullanılan",
-    "usedScopeHint": "Yalnızca bu takvim ayının başından bu yana yapılan sohbet istekleri; etkin zincirdeki tüm modeller (özel uç noktalar dâhil) toplanır. FreeLLMAPI dışından sağlayıcıya gönderdiğiniz trafik sayılmaz.",
+    "usedScopeHint": "Yalnızca bu takvim ayının başından bu yana yapılan sohbet istekleri; etkin zincirdeki tüm modeller (özel uç noktalar dâhil) toplanır. LibrePool dışından sağlayıcıya gönderdiğiniz trafik sayılmaz.",
     "legendRemainingTitle": "{name} ({platform}) için kalan / aylık bütçe",
     "noPublishedQuota": "+{count} yayımlanmış kotası olmayan",
     "noPublishedQuotaTitle": "Bu modellerin belgelenmiş aylık token bütçesi yok; bu nedenle gösterilecek bir kalan miktar bulunmuyor.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Son senkronizasyon sorunu: {error}",
     "license": "Lisans",
     "planAnnual": "Premium Yıllık",
-    "planLifetime": "Premium Ömür Boyu",
     "expired": "Süresi dolmuş",
     "inactive": "Etkin değil",
-    "lifetimeNote": "Ömür boyu lisans: hiçbir zaman sona ermez.",
     "renewsOn": "{date} tarihinde yenilenir.",
     "willNotRenew": "Yenilenmeyecek. {date} tarihine kadar Premium kullanılabilir; ardından bu kurulum ücretsiz aylık kataloğa geri döner.",
     "keyInactive": "Bu anahtar artık etkin değil. Uygulama ücretsiz aylık katalog üzerinde çalışmaya devam ediyor.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Anahtarınız satın alma e-postanızda ve ödeme sonrası sayfasındadır. Kaybettiniz mi?",
     "recoverKey": "Web sitesinde kurtarın",
     "upsellTitle": "Yılda 19 $ ile canlı kataloğa geçin",
-    "upsellDescription": "Yeni ücretsiz modeller, 30 gün sonra değil, ortaya çıktıkları anda. Her cihazda tek anahtar. İstediğiniz zaman iptal edin; yönlendirici sonsuza kadar ücretsiz kalır.",
+    "upsellDescription": "Yeni ücretsiz modeller, 15 gün sonra değil, ortaya çıktıkları anda. Her cihazda tek anahtar. İstediğiniz zaman iptal edin; yönlendirici sonsuza kadar ücretsiz kalır.",
     "goPremium": "Premium'a Geçin",
     "bundled": "paketle birlikte",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "Yeni sürüm mevcut",
     "dismiss": "Yoksay",
-    "newBuild": "FreeLLMAPI'nin daha yeni bir sürümü yüklü.",
+    "newBuild": "LibrePool'nin daha yeni bir sürümü yüklü.",
     "reload": "Yeniden yükle"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

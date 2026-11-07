@@ -69,9 +69,9 @@ describe('validateLicenseKey', () => {
   it('activates through the fallback when Node fetch cannot reach the service', async () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.stubGlobal('fetch', vi.fn(async () => { throw tlsFailure(); }));
-    setCatalogFallbackFetch(async () => json({ valid: true, plan: 'lifetime', status: 'active' }));
+    setCatalogFallbackFetch(async () => json({ valid: true, plan: 'annual', status: 'active' }));
 
-    await expect(validateLicenseKey('fla_TESTKEY')).resolves.toMatchObject({ valid: true, plan: 'lifetime' });
+    await expect(validateLicenseKey('fla_TESTKEY')).resolves.toMatchObject({ valid: true, plan: 'annual' });
   });
 
   it('returns null (unreachable) and logs the cause when both stacks fail', async () => {

@@ -2,7 +2,7 @@
 
 # API Domain — Overview & File Index
 
-This domain documents FreeLLMAPI's OpenAI-compatible HTTP surface and its Anthropic/Gemini-compatible shims. The root [`README.md`](../README.md) and [`OVERVIEW.md`](../OVERVIEW.md) index this as the gateway's external contract.
+This domain documents LibrePool's OpenAI-compatible HTTP surface and its Anthropic/Gemini-compatible shims. The root [`README.md`](../README.md) and [`OVERVIEW.md`](../OVERVIEW.md) index this as the gateway's external contract.
 
 ## File Index
 
@@ -20,5 +20,5 @@ This domain documents FreeLLMAPI's OpenAI-compatible HTTP surface and its Anthro
 ## Related
 
 - [../clients/](../clients/) — Coding-agent integration recipes that consume this API.
-- [../compression/](../compression/) — Request-side compression (`X-FreeLLM-Compress`) visible on API responses.
+- [../compression/](../compression/) — Request-side compression (`X-LibrePool-Compress`) visible on API responses.
 - [../architecture/](../architecture/) — Router, scoring, and streaming internals behind these endpoints.

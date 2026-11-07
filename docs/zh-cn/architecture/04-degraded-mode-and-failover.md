@@ -1,3 +1,5 @@
+> **Note:** This translation still describes FreeLLMAPI and has not yet been updated for the LibrePool rebrand (including the 15-day free-feed delay). The English documentation is current; this file is pending update.
+
 [English](../../en/architecture/04-degraded-mode-and-failover.md) · **简体中文**
 
 # 降级模式与回退 —— 深度剖析

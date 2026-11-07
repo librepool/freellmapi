@@ -1,4 +1,4 @@
-# FreeLLMAPI -> ChatGPT private MCP connection.
+# LibrePool -> ChatGPT private MCP connection.
 # Secrets are read from environment variables and are never stored here.
 config_version: 1
 
@@ -11,12 +11,12 @@ mcp:
   server_urls:
     - channel: main
       url: http://127.0.0.1:3001/mcp
-  # Set FREELLMAPI_MCP_AUTHORIZATION to the complete value
-  # "Bearer freellmapi-..." in the process environment.
+  # Set LIBREPOOL_MCP_AUTHORIZATION to the complete value
+  # "Bearer librepool-..." in the process environment.
   extra_headers:
-    Authorization: env:FREELLMAPI_MCP_AUTHORIZATION
+    Authorization: env:LIBREPOOL_MCP_AUTHORIZATION
   discovery_extra_headers:
-    Authorization: env:FREELLMAPI_MCP_AUTHORIZATION
+    Authorization: env:LIBREPOOL_MCP_AUTHORIZATION
   startup_wait_timeout: 60s
 
 health:

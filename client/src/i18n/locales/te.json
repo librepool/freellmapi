@@ -60,7 +60,7 @@
     "emailChanged": "ఇమెయిల్ విజయవంతంగా మార్చబడింది.",
     "passwordReset": "పాస్‌వర్డ్ రీసెట్ అయింది. దయచేసి సైన్ ఇన్ చేయండి.",
     "resetCodeDockerHint": "Docker లో నడుపుతున్నారా? కోడ్ కంటైనర్ లాగ్‌లో ఉంది: docker logs <container>.",
-    "desktopSessionFailed": "డాష్‌బోర్డ్ లోకల్ సర్వర్‌కు సైన్ ఇన్ కాలేకపోయింది. FreeLLMAPI ని మూసివేసి మళ్లీ తెరవండి."
+    "desktopSessionFailed": "డాష్‌బోర్డ్ లోకల్ సర్వర్‌కు సైన్ ఇన్ కాలేకపోయింది. LibrePool ని మూసివేసి మళ్లీ తెరవండి."
   },
   "common": {
     "save": "సేవ్ చేయండి",
@@ -160,16 +160,16 @@
     "notGitInstall": "ఈ ఇన్‌స్టాలేషన్‌లో commit సమాచారం లేదు.",
     "checkFailed": "నవీకరణల కోసం తనిఖీ చేయడం సాధ్యం కాలేదు.",
     "autoUpdateCheck": "స్వయంచాలక నవీకరణ తనిఖీ",
-    "restartAfterUpdate": "బిల్డ్ పూర్తయిన తర్వాత FreeLLMAPIని పునఃప్రారంభించండి.",
+    "restartAfterUpdate": "బిల్డ్ పూర్తయిన తర్వాత LibrePoolని పునఃప్రారంభించండి.",
     "downloadUpdate": "అప్‌డేట్ డౌన్‌లోడ్ చేయండి",
     "downloadingUpdate": "డౌన్‌లోడ్ అవుతోంది… {percent}%",
     "restartToUpdate": "అప్‌డేట్ కోసం రీస్టార్ట్ చేయండి",
-    "updateReadyHint": "డౌన్‌లోడ్ అయింది. FreeLLMAPI మీ డేటాను బ్యాకప్ చేసి, రీస్టార్ట్ అయి కొత్త వెర్షన్‌ను తెరుస్తుంది.",
+    "updateReadyHint": "డౌన్‌లోడ్ అయింది. LibrePool మీ డేటాను బ్యాకప్ చేసి, రీస్టార్ట్ అయి కొత్త వెర్షన్‌ను తెరుస్తుంది.",
     "updateInstallFailed": "అప్‌డేట్‌ను ఇన్‌స్టాల్ చేయలేకపోయాము.",
     "updateNow": "ఇప్పుడే అప్‌డేట్ చేయండి",
-    "updatingContainer": "కొత్త ఇమేజ్‌ను తెచ్చి రీస్టార్ట్ అవుతోంది. FreeLLMAPI తిరిగి వచ్చాక ఈ పేజీ రీలోడ్ అవుతుంది.",
+    "updatingContainer": "కొత్త ఇమేజ్‌ను తెచ్చి రీస్టార్ట్ అవుతోంది. LibrePool తిరిగి వచ్చాక ఈ పేజీ రీలోడ్ అవుతుంది.",
     "updateNowFailed": "అప్‌డేటర్ అభ్యర్థనను అంగీకరించలేదు. watchtower కంటైనర్ నడుస్తోందో లేదో చూడండి.",
-    "updateNowTimeout": "5 నిమిషాల తర్వాత కూడా FreeLLMAPI రీస్టార్ట్ కాలేదు. watchtower కంటైనర్ లాగ్‌లను చూడండి."
+    "updateNowTimeout": "5 నిమిషాల తర్వాత కూడా LibrePool రీస్టార్ట్ కాలేదు. watchtower కంటైనర్ లాగ్‌లను చూడండి."
   },
   "models": {
     "title": "మోడల్స్",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "నెలవారీ టోకెన్ బడ్జెట్",
     "remaining": "మిగిలి ఉంది",
     "used": "ఉపయోగించారు",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "చివరి సమకాలీకరణ సమస్య: {error}",
     "license": "లైసెన్స్",
     "planAnnual": "ప్రీమియం వార్షిక",
-    "planLifetime": "ప్రీమియం జీవితకాలం",
     "expired": "గడువు ముగిసింది",
     "inactive": "నిష్క్రియ",
-    "lifetimeNote": "జీవితకాల లైసెన్స్: ఎప్పటికీ గడువు ముగియదు.",
     "renewsOn": "{date}లో పునరుద్ధరించబడుతుంది.",
     "willNotRenew": "పునరుద్ధరించబడదు. {date} వరకు ప్రీమియం, ఆపై ఈ ఇన్‌స్టాల్ ఉచిత నెలవారీ కేటలాగ్‌కి తిరిగి వస్తుంది.",
     "keyInactive": "ఈ కీ ఇప్పుడు సక్రియంగా లేదు. యాప్ ఉచిత నెలవారీ కేటలాగ్‌పై పని చేస్తూనే ఉంటుంది.",
@@ -1056,7 +1054,7 @@
     "keyHint": "మీ కీ మీ కొనుగోలు ఇమెయిల్‌లో మరియు పోస్ట్-చెక్అవుట్ పేజీలో ఉంది. పోగొట్టుకున్నారా?",
     "recoverKey": "వెబ్‌సైట్‌లో దాన్ని తిరిగి పొందండి",
     "upsellTitle": "సంవత్సరానికి $19కి ప్రత్యక్ష ప్రసారం చేయండి",
-    "upsellDescription": "కొత్త ఉచిత మోడల్‌లు 30 రోజుల తర్వాత కాకుండా అవి ఉనికిలో ఉన్న క్షణంలోనే ఉంటాయి. ఒక కీ, ప్రతి పరికరం. ఎప్పుడైనా రద్దు చేయండి; రూటర్ ఎప్పటికీ ఉచితంగా ఉంటుంది.",
+    "upsellDescription": "కొత్త ఉచిత మోడల్‌లు 15 రోజుల తర్వాత కాకుండా అవి ఉనికిలో ఉన్న క్షణంలోనే ఉంటాయి. ఒక కీ, ప్రతి పరికరం. ఎప్పుడైనా రద్దు చేయండి; రూటర్ ఎప్పటికీ ఉచితంగా ఉంటుంది.",
     "goPremium": "ప్రీమియంకు వెళ్లండి",
     "bundled": "కట్టలుగా",
     "planGeneric": "ప్రీమియం"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI యొక్క కొత్త వెర్షన్ ఇన్‌స్టాల్ అయింది.",
+    "newBuild": "LibrePool యొక్క కొత్త వెర్షన్ ఇన్‌స్టాల్ అయింది.",
     "reload": "రీలోడ్"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

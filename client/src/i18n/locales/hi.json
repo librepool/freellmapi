@@ -60,7 +60,7 @@
     "emailChanged": "ईमेल सफलतापूर्वक बदला गया।",
     "passwordReset": "पासवर्ड रीसेट हो गया। कृपया साइन इन करें।",
     "resetCodeDockerHint": "Docker में चला रहे हैं? कोड कंटेनर लॉग में है: docker logs <container>।",
-    "desktopSessionFailed": "डैशबोर्ड लोकल सर्वर में साइन इन नहीं कर सका। FreeLLMAPI बंद करके दोबारा खोलें।"
+    "desktopSessionFailed": "डैशबोर्ड लोकल सर्वर में साइन इन नहीं कर सका। LibrePool बंद करके दोबारा खोलें।"
   },
   "common": {
     "save": "सहेजें",
@@ -160,16 +160,16 @@
     "notGitInstall": "इस इंस्टॉलेशन में कमिट की जानकारी शामिल नहीं है।",
     "checkFailed": "अपडेट की जाँच नहीं की जा सकी।",
     "autoUpdateCheck": "स्वचालित अपडेट जाँच",
-    "restartAfterUpdate": "बिल्ड पूरा होने के बाद FreeLLMAPI को पुनः आरंभ करें।",
+    "restartAfterUpdate": "बिल्ड पूरा होने के बाद LibrePool को पुनः आरंभ करें।",
     "downloadUpdate": "अपडेट डाउनलोड करें",
     "downloadingUpdate": "डाउनलोड हो रहा है… {percent}%",
     "restartToUpdate": "अपडेट के लिए रीस्टार्ट करें",
-    "updateReadyHint": "डाउनलोड हो गया। FreeLLMAPI आपके डेटा का बैकअप लेता है, रीस्टार्ट होता है और नया संस्करण खोलता है।",
+    "updateReadyHint": "डाउनलोड हो गया। LibrePool आपके डेटा का बैकअप लेता है, रीस्टार्ट होता है और नया संस्करण खोलता है।",
     "updateInstallFailed": "अपडेट इंस्टॉल नहीं हो सका।",
     "updateNow": "अभी अपडेट करें",
-    "updatingContainer": "नई इमेज खींची जा रही है और रीस्टार्ट हो रहा है। FreeLLMAPI वापस आने पर यह पेज रीलोड होगा।",
+    "updatingContainer": "नई इमेज खींची जा रही है और रीस्टार्ट हो रहा है। LibrePool वापस आने पर यह पेज रीलोड होगा।",
     "updateNowFailed": "अपडेटर ने अनुरोध स्वीकार नहीं किया। जाँचें कि watchtower कंटेनर चल रहा है।",
-    "updateNowTimeout": "5 मिनट बाद भी FreeLLMAPI रीस्टार्ट नहीं हुआ। watchtower कंटेनर के लॉग देखें।"
+    "updateNowTimeout": "5 मिनट बाद भी LibrePool रीस्टार्ट नहीं हुआ। watchtower कंटेनर के लॉग देखें।"
   },
   "models": {
     "title": "मॉडल",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "मासिक टोकन बजट",
     "remaining": "शेष",
     "used": "प्रयोग किया गया",
-    "usedScopeHint": "केवल चैट अनुरोध, इस कैलेंडर माह की शुरुआत से, सक्रिय शृंखला के सभी मॉडलों (कस्टम एंडपॉइंट सहित) का योग। FreeLLMAPI के बाहर सीधे प्रदाता को भेजा गया ट्रैफ़िक इसमें नहीं गिना जाता।",
+    "usedScopeHint": "केवल चैट अनुरोध, इस कैलेंडर माह की शुरुआत से, सक्रिय शृंखला के सभी मॉडलों (कस्टम एंडपॉइंट सहित) का योग। LibrePool के बाहर सीधे प्रदाता को भेजा गया ट्रैफ़िक इसमें नहीं गिना जाता।",
     "legendRemainingTitle": "{name} ({platform}) के लिए शेष / मासिक बजट",
     "noPublishedQuota": "+{count} बिना प्रकाशित कोटा वाले",
     "noPublishedQuotaTitle": "इन मॉडलों का मासिक टोकन बजट प्रलेखित नहीं है, इसलिए दिखाने के लिए कोई शेष राशि नहीं है।",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "अंतिम सिंक समस्या: {error}",
     "license": "लाइसेंस",
     "planAnnual": "प्रीमियम वार्षिक",
-    "planLifetime": "प्रीमियम लाइफटाइम",
     "expired": "समाप्त हो गया",
     "inactive": "निष्क्रिय",
-    "lifetimeNote": "आजीवन लाइसेंस: कभी समाप्त नहीं होता।",
     "renewsOn": "{date} पर नवीनीकरण।",
     "willNotRenew": "नवीनीकरण नहीं होगा. {date} तक प्रीमियम, फिर यह इंस्टॉल मुफ़्त मासिक कैटलॉग पर वापस आ जाता है।",
     "keyInactive": "यह कुंजी अब सक्रिय नहीं है. ऐप मुफ़्त मासिक कैटलॉग पर काम करता रहता है।",
@@ -1056,7 +1054,7 @@
     "keyHint": "आपकी कुंजी आपके खरीदारी ईमेल और पोस्ट-चेकआउट पृष्ठ पर है। इसे खो दिया?",
     "recoverKey": "इसे वेबसाइट पर पुनर्प्राप्त करें",
     "upsellTitle": "$19 प्रति वर्ष पर जियो",
-    "upsellDescription": "नए मुफ़्त मॉडल 30 दिन बाद के बजाय उसी क्षण उपलब्ध होंगे। एक कुंजी, हर उपकरण। किसी भी समय रद्द करें; राउटर हमेशा के लिए फ्री रहता है।",
+    "upsellDescription": "नए मुफ़्त मॉडल 15 दिन बाद के बजाय उसी क्षण उपलब्ध होंगे। एक कुंजी, हर उपकरण। किसी भी समय रद्द करें; राउटर हमेशा के लिए फ्री रहता है।",
     "goPremium": "प्रीमियम जाओ",
     "bundled": "बंडल",
     "planGeneric": "प्रीमियम"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI का नया संस्करण इंस्टॉल है।",
+    "newBuild": "LibrePool का नया संस्करण इंस्टॉल है।",
     "reload": "रीलोड करें"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

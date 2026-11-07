@@ -37,7 +37,7 @@
 
 import crypto from 'crypto';
 import { getSetting, getDb } from '../db/index.js';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 
 // ── Config (read on each call so tests and the dashboard can toggle live) ──
 
@@ -117,7 +117,7 @@ export function isCacheableTemperature(temperature?: number | null): boolean {
 }
 
 // ── Per-request directive ──
-// `X-FreeLLM-Cache: off|on` (and the standard `Cache-Control: no-store`) let a
+// `X-LibrePool-Cache: off|on` (and the standard `Cache-Control: no-store`) let a
 // caller override the global switch for one request, e.g. force a fresh
 // generation, or opt a single call into caching on an otherwise cache-off
 // install.

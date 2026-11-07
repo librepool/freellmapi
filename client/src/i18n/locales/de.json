@@ -60,7 +60,7 @@
     "emailChanged": "E-Mail erfolgreich geändert.",
     "passwordReset": "Passwort zurückgesetzt. Bitte melden Sie sich an.",
     "resetCodeDockerHint": "Läuft der Server in Docker? Der Code steht im Container-Log: docker logs <container>.",
-    "desktopSessionFailed": "Das Dashboard konnte sich nicht am lokalen Server anmelden. Beenden Sie FreeLLMAPI und öffnen Sie es erneut."
+    "desktopSessionFailed": "Das Dashboard konnte sich nicht am lokalen Server anmelden. Beenden Sie LibrePool und öffnen Sie es erneut."
   },
   "common": {
     "save": "Speichern",
@@ -160,16 +160,16 @@
     "notGitInstall": "Diese Installation enthält keine Commit-Informationen.",
     "checkFailed": "Aktualisierungen konnten nicht geprüft werden.",
     "autoUpdateCheck": "Automatische Updateprüfung",
-    "restartAfterUpdate": "FreeLLMAPI nach Abschluss des Builds neu starten.",
+    "restartAfterUpdate": "LibrePool nach Abschluss des Builds neu starten.",
     "downloadUpdate": "Update herunterladen",
     "downloadingUpdate": "Wird heruntergeladen… {percent} %",
     "restartToUpdate": "Neu starten und aktualisieren",
-    "updateReadyHint": "Heruntergeladen. FreeLLMAPI sichert Ihre Daten, startet neu und öffnet die neue Version.",
+    "updateReadyHint": "Heruntergeladen. LibrePool sichert Ihre Daten, startet neu und öffnet die neue Version.",
     "updateInstallFailed": "Das Update konnte nicht installiert werden.",
     "updateNow": "Jetzt aktualisieren",
-    "updatingContainer": "Das neue Image wird geladen und neu gestartet. Die Seite lädt neu, sobald FreeLLMAPI wieder da ist.",
+    "updatingContainer": "Das neue Image wird geladen und neu gestartet. Die Seite lädt neu, sobald LibrePool wieder da ist.",
     "updateNowFailed": "Der Updater hat die Anfrage nicht angenommen. Prüfen Sie, ob der watchtower-Container läuft.",
-    "updateNowTimeout": "FreeLLMAPI ist nach 5 Minuten nicht neu gestartet. Prüfen Sie die Logs des watchtower-Containers."
+    "updateNowTimeout": "LibrePool ist nach 5 Minuten nicht neu gestartet. Prüfen Sie die Logs des watchtower-Containers."
   },
   "models": {
     "title": "Modelle",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Monatliches Token-Budget",
     "remaining": "verbleibend",
     "used": "verwendet",
-    "usedScopeHint": "Nur Chat-Anfragen, seit Beginn dieses Kalendermonats, über alle Modelle der aktiven Kette summiert – benutzerdefinierte Endpunkte eingeschlossen. Datenverkehr, den Sie außerhalb von FreeLLMAPI an einen Anbieter senden, wird nicht gezählt.",
+    "usedScopeHint": "Nur Chat-Anfragen, seit Beginn dieses Kalendermonats, über alle Modelle der aktiven Kette summiert – benutzerdefinierte Endpunkte eingeschlossen. Datenverkehr, den Sie außerhalb von LibrePool an einen Anbieter senden, wird nicht gezählt.",
     "legendRemainingTitle": "Verbleibend / Monatsbudget von {name} ({platform})",
     "noPublishedQuota": "+{count} ohne veröffentlichtes Kontingent",
     "noPublishedQuotaTitle": "Für diese Modelle ist kein monatliches Token-Budget dokumentiert, daher gibt es keinen Restwert anzuzeigen.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Letztes Synchronisierungsproblem: {error}",
     "license": "Lizenz",
     "planAnnual": "Premium-Jahrbuch",
-    "planLifetime": "Premium-Lebenszeit",
     "expired": "Abgelaufen",
     "inactive": "Inaktiv",
-    "lifetimeNote": "Lebenslange Lizenz: läuft nie ab.",
     "renewsOn": "Verlängert am {date}.",
     "willNotRenew": "Wird nicht verlängert. Premium bis {date}, dann fällt diese Installation auf den kostenlosen monatlichen Katalog zurück.",
     "keyInactive": "Dieser Schlüssel ist nicht mehr aktiv. Die App arbeitet weiterhin am kostenlosen Monatskatalog.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ihr Schlüssel befindet sich in Ihrer Kauf-E-Mail und auf der Post-Checkout-Seite. Verloren?",
     "recoverKey": "Stellen Sie es auf der Website wieder her",
     "upsellTitle": "Gehen Sie für 19 $ pro Jahr live",
-    "upsellDescription": "Neue kostenlose Modelle, sobald sie verfügbar sind, statt 30 Tage später. Ein Schlüssel, jedes Gerät. Jederzeit kündbar; Der Router bleibt für immer frei.",
+    "upsellDescription": "Neue kostenlose Modelle, sobald sie verfügbar sind, statt 15 Tage später. Ein Schlüssel, jedes Gerät. Jederzeit kündbar; Der Router bleibt für immer frei.",
     "goPremium": "Gehen Sie Premium",
     "bundled": "gebündelt",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Eine neuere Version von FreeLLMAPI ist installiert.",
+    "newBuild": "Eine neuere Version von LibrePool ist installiert.",
     "reload": "Neu laden"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

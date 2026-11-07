@@ -157,7 +157,7 @@ export function budgetWebhookPayload(
   now = Date.now(),
 ) {
   return {
-    type: 'freellmapi.key_budget_threshold',
+    type: 'librepool.key_budget_threshold',
     key_id: keyId,
     label,
     platform,

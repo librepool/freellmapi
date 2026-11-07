@@ -5,7 +5,7 @@
 //
 // Workers AI meters 10,000 free neurons per day per ACCOUNT. On the Free plan
 // Cloudflare answers a 429 once they are gone; on Workers Paid it never does,
-// it bills the overage instead. So FreeLLMAPI meters neurons itself, at
+// it bills the overage instead. So LibrePool meters neurons itself, at
 // dispatch time, in this ledger (services/cloudflare-neurons.ts): one row per
 // UTC day, account and model, charged with an estimate when a call goes out
 // and corrected to the real usage when it completes. A call that aborts or

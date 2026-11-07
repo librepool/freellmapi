@@ -21,7 +21,7 @@
 // droplist entry is one line to add.
 
 import { z } from 'zod';
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 import { getSetting } from '../db/index.js';
 
 // OpenAI's request-side reasoning knob. Wire values as of the current OpenAI

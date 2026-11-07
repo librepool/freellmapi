@@ -9,7 +9,7 @@ export const ITERACOMPUTE_BASE_URL = 'https://api.iteracompute.com/v1';
  * included) per account, 160,000 TPM, resetting at 00:00 UTC on the 1st with
  * no rollover and no paid overage (free-tier terms, Oct 2026). The free model
  * published today is `qwen/qwen3.8-27b` (`is_free: true`, zero prices on the
- * public model list; the paid rows share the key, so the 30-day free gate and
+ * public model list; the paid rows share the key, so the 15-day free gate and
  * the signed catalog decide what actually routes here).
  *
  * Key validation is deliberately OFF (mirrors freeai #1459): `GET /models` is

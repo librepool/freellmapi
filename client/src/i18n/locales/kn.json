@@ -60,7 +60,7 @@
     "emailChanged": "ಇಮೇಲ್ ಯಶಸ್ವಿಯಾಗಿ ಬದಲಾಯಿಸಲಾಗಿದೆ.",
     "passwordReset": "ಪಾಸ್‌ವರ್ಡ್ ಮರುಹೊಂದಿಸಲಾಗಿದೆ. ದಯವಿಟ್ಟು ಸೈನ್ ಇನ್ ಮಾಡಿ.",
     "resetCodeDockerHint": "Docker ನಲ್ಲಿ ಚಾಲನೆಯಲ್ಲಿದೆಯೇ? ಕೋಡ್ ಕಂಟೈನರ್ ಲಾಗ್‌ನಲ್ಲಿದೆ: docker logs <container>.",
-    "desktopSessionFailed": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಸ್ಥಳೀಯ ಸರ್ವರ್‌ಗೆ ಸೈನ್ ಇನ್ ಆಗಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. FreeLLMAPI ಅನ್ನು ಮುಚ್ಚಿ ಮತ್ತೆ ತೆರೆಯಿರಿ."
+    "desktopSessionFailed": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಸ್ಥಳೀಯ ಸರ್ವರ್‌ಗೆ ಸೈನ್ ಇನ್ ಆಗಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. LibrePool ಅನ್ನು ಮುಚ್ಚಿ ಮತ್ತೆ ತೆರೆಯಿರಿ."
   },
   "common": {
     "save": "ಉಳಿಸಿ",
@@ -160,16 +160,16 @@
     "notGitInstall": "ಈ ಸ್ಥಾಪನೆಯು ಕಮಿಟ್ ಮಾಹಿತಿಯನ್ನು ಒಳಗೊಂಡಿಲ್ಲ.",
     "checkFailed": "ನವೀಕರಣಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
     "autoUpdateCheck": "ಸ್ವಯಂಚಾಲಿತ ನವೀಕರಣ ಪರಿಶೀಲನೆ",
-    "restartAfterUpdate": "ಬಿಲ್ಡ್ ಪೂರ್ಣಗೊಂಡ ನಂತರ FreeLLMAPI ಅನ್ನು ಮರುಪ್ರಾರಂಭಿಸಿ.",
+    "restartAfterUpdate": "ಬಿಲ್ಡ್ ಪೂರ್ಣಗೊಂಡ ನಂತರ LibrePool ಅನ್ನು ಮರುಪ್ರಾರಂಭಿಸಿ.",
     "downloadUpdate": "ಅಪ್‌ಡೇಟ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
     "downloadingUpdate": "ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ… {percent}%",
     "restartToUpdate": "ಅಪ್‌ಡೇಟ್ ಮಾಡಲು ಮರುಪ್ರಾರಂಭಿಸಿ",
-    "updateReadyHint": "ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ. FreeLLMAPI ನಿಮ್ಮ ಡೇಟಾದ ಬ್ಯಾಕಪ್ ತೆಗೆದು, ಮರುಪ್ರಾರಂಭಿಸಿ ಹೊಸ ಆವೃತ್ತಿಯನ್ನು ತೆರೆಯುತ್ತದೆ.",
+    "updateReadyHint": "ಡೌನ್‌ಲೋಡ್ ಆಗಿದೆ. LibrePool ನಿಮ್ಮ ಡೇಟಾದ ಬ್ಯಾಕಪ್ ತೆಗೆದು, ಮರುಪ್ರಾರಂಭಿಸಿ ಹೊಸ ಆವೃತ್ತಿಯನ್ನು ತೆರೆಯುತ್ತದೆ.",
     "updateInstallFailed": "ಅಪ್‌ಡೇಟ್ ಅನ್ನು ಸ್ಥಾಪಿಸಲಾಗಲಿಲ್ಲ.",
     "updateNow": "ಈಗಲೇ ಅಪ್‌ಡೇಟ್ ಮಾಡಿ",
-    "updatingContainer": "ಹೊಸ ಇಮೇಜ್ ಎಳೆಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ. FreeLLMAPI ಮರಳಿದಾಗ ಈ ಪುಟ ಮರುಲೋಡ್ ಆಗುತ್ತದೆ.",
+    "updatingContainer": "ಹೊಸ ಇಮೇಜ್ ಎಳೆಯಲಾಗುತ್ತಿದೆ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ. LibrePool ಮರಳಿದಾಗ ಈ ಪುಟ ಮರುಲೋಡ್ ಆಗುತ್ತದೆ.",
     "updateNowFailed": "ಅಪ್‌ಡೇಟರ್ ವಿನಂತಿಯನ್ನು ಸ್ವೀಕರಿಸಲಿಲ್ಲ. watchtower ಕಂಟೇನರ್ ಚಾಲನೆಯಲ್ಲಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ.",
-    "updateNowTimeout": "5 ನಿಮಿಷಗಳ ನಂತರವೂ FreeLLMAPI ಮರುಪ್ರಾರಂಭವಾಗಿಲ್ಲ. watchtower ಕಂಟೇನರ್ ಲಾಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ."
+    "updateNowTimeout": "5 ನಿಮಿಷಗಳ ನಂತರವೂ LibrePool ಮರುಪ್ರಾರಂಭವಾಗಿಲ್ಲ. watchtower ಕಂಟೇನರ್ ಲಾಗ್‌ಗಳನ್ನು ಪರಿಶೀಲಿಸಿ."
   },
   "models": {
     "title": "ಮಾದರಿಗಳು",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "ಮಾಸಿಕ ಟೋಕನ್ ಬಜೆಟ್",
     "remaining": "ಉಳಿದಿದೆ",
     "used": "ಬಳಸಲಾಗಿದೆ",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "ಕೊನೆಯ ಸಿಂಕ್ ಸಮಸ್ಯೆ: {error}",
     "license": "ಪರವಾನಗಿ",
     "planAnnual": "ಪ್ರೀಮಿಯಂ ವಾರ್ಷಿಕ",
-    "planLifetime": "ಪ್ರೀಮಿಯಂ ಜೀವಿತಾವಧಿ",
     "expired": "ಅವಧಿ ಮೀರಿದೆ",
     "inactive": "ನಿಷ್ಕ್ರಿಯ",
-    "lifetimeNote": "ಜೀವಮಾನದ ಪರವಾನಗಿ: ಎಂದಿಗೂ ಅವಧಿ ಮೀರುವುದಿಲ್ಲ.",
     "renewsOn": "{date} ನಲ್ಲಿ ನವೀಕರಿಸಲಾಗಿದೆ.",
     "willNotRenew": "ನವೀಕರಿಸುವುದಿಲ್ಲ. {date} ವರೆಗೆ ಪ್ರೀಮಿಯಂ, ನಂತರ ಈ ಸ್ಥಾಪನೆಯು ಉಚಿತ ಮಾಸಿಕ ಕ್ಯಾಟಲಾಗ್‌ಗೆ ಹಿಂತಿರುಗುತ್ತದೆ.",
     "keyInactive": "ಈ ಕೀಲಿಯು ಇನ್ನು ಮುಂದೆ ಸಕ್ರಿಯವಾಗಿಲ್ಲ. ಅಪ್ಲಿಕೇಶನ್ ಉಚಿತ ಮಾಸಿಕ ಕ್ಯಾಟಲಾಗ್‌ನಲ್ಲಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ.",
@@ -1056,7 +1054,7 @@
     "keyHint": "ನಿಮ್ಮ ಕೀ ನಿಮ್ಮ ಖರೀದಿ ಇಮೇಲ್‌ನಲ್ಲಿ ಮತ್ತು ನಂತರದ ಚೆಕ್‌ಔಟ್ ಪುಟದಲ್ಲಿದೆ. ಅದನ್ನು ಕಳೆದುಕೊಂಡೆ?",
     "recoverKey": "ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ಅದನ್ನು ಮರುಪಡೆಯಿರಿ",
     "upsellTitle": "ವರ್ಷಕ್ಕೆ $19 ಗೆ ಲೈವ್ ಮಾಡಿ",
-    "upsellDescription": "30 ದಿನಗಳ ನಂತರದ ಬದಲಿಗೆ ಹೊಸ ಉಚಿತ ಮಾದರಿಗಳು ಅಸ್ತಿತ್ವದಲ್ಲಿವೆ. ಒಂದು ಕೀ, ಪ್ರತಿ ಸಾಧನ. ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಿ; ರೂಟರ್ ಶಾಶ್ವತವಾಗಿ ಉಚಿತವಾಗಿರುತ್ತದೆ.",
+    "upsellDescription": "15 ದಿನಗಳ ನಂತರದ ಬದಲಿಗೆ ಹೊಸ ಉಚಿತ ಮಾದರಿಗಳು ಅಸ್ತಿತ್ವದಲ್ಲಿವೆ. ಒಂದು ಕೀ, ಪ್ರತಿ ಸಾಧನ. ಯಾವಾಗ ಬೇಕಾದರೂ ರದ್ದುಮಾಡಿ; ರೂಟರ್ ಶಾಶ್ವತವಾಗಿ ಉಚಿತವಾಗಿರುತ್ತದೆ.",
     "goPremium": "ಪ್ರೀಮಿಯಂಗೆ ಹೋಗಿ",
     "bundled": "ಕಟ್ಟುಗಳ",
     "planGeneric": "ಪ್ರೀಮಿಯಂ"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI ನ ಹೊಸ ಆವೃತ್ತಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ.",
+    "newBuild": "LibrePool ನ ಹೊಸ ಆವೃತ್ತಿ ಸ್ಥಾಪಿಸಲಾಗಿದೆ.",
     "reload": "ಮರುಲೋಡ್"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

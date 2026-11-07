@@ -1,4 +1,4 @@
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 import type { KeyValidationResult } from './base.js';
 import { SearchOnlyProvider } from './search-only.js';
 import { isAnonymousCredential } from '../lib/credential.js';
@@ -6,7 +6,7 @@ import { isAnonymousCredential } from '../lib/credential.js';
 export const KEENABLE_BASE_URL = 'https://api.keenable.ai/v1';
 /** Keenable identifies keyless callers by app name and refuses a keyless call
  *  without it (400). */
-export const KEENABLE_APP_TITLE = 'freellmapi';
+export const KEENABLE_APP_TITLE = 'librepool';
 
 // Keenable (keenable.ai): keyless web search. POST /v1/search/public answers
 // with no account (10 requests/second and 1,000/hour per IP), so the Keys page

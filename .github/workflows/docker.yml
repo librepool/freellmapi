@@ -12,7 +12,7 @@ permissions:
   packages: write
 
 env:
-  IMAGE: ghcr.io/${{ github.repository_owner }}/freellmapi
+  IMAGE: ghcr.io/${{ github.repository_owner }}/librepool
 
 # Each platform builds NATIVELY (ubuntu-24.04-arm is free for public repos) —
 # no QEMU. Emulated arm64 builds took ~20 min cold (better-sqlite3 compiles
@@ -70,7 +70,7 @@ jobs:
           file: ./Dockerfile
           platforms: ${{ matrix.platform }}
           build-args: |
-            FREELLMAPI_COMMIT_SHA=${{ github.sha }}
+            LIBREPOOL_COMMIT_SHA=${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ env.PLATFORM_PAIR }}
           cache-to: type=gha,mode=max,scope=${{ env.PLATFORM_PAIR }}

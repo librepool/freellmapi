@@ -1,5 +1,5 @@
-appId: com.freellmapi.desktop
-productName: FreeLLMAPI
+appId: com.librepool.desktop
+productName: LibrePool
 directories:
   output: dist-electron
 files:
@@ -16,7 +16,7 @@ files:
 # attaches the files itself. See #703.
 publish:
   provider: github
-  owner: tashfeenahmed
+  owner: librepool
   repo: freellmapi
 asar: true
 # Linux chrome-sandbox must be mode 4755 (setuid) in the .deb; otherwise
@@ -89,7 +89,7 @@ linux:
       arch:
         - x64
 nsis:
-  # electron-builder's default NSIS name has spaces ("FreeLLMAPI Setup x.y.z.exe")
+  # electron-builder's default NSIS name has spaces ("LibrePool Setup x.y.z.exe")
   # and latest.yml records it with dashes, while GitHub stores the upload with
   # dots — so the updater asked for a file the release did not have. A name with
   # no spaces is the same string in all three places.

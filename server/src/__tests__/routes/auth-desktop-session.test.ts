@@ -52,11 +52,11 @@ describe('POST /api/auth/desktop-session (#1399)', () => {
   beforeEach(() => {
     getDb().prepare('DELETE FROM sessions').run();
     getDb().prepare('DELETE FROM users').run();
-    process.env.FREEAPI_DESKTOP = '1';
+    process.env.LIBREPOOL_DESKTOP = '1';
   });
 
   afterAll(() => {
-    delete process.env.FREEAPI_DESKTOP;
+    delete process.env.LIBREPOOL_DESKTOP;
   });
 
   it('mints a working session for a local browser tab and creates the hidden account on first run', async () => {
@@ -77,8 +77,8 @@ describe('POST /api/auth/desktop-session (#1399)', () => {
     }
   });
 
-  it('refuses web and Docker installs (no FREEAPI_DESKTOP)', async () => {
-    delete process.env.FREEAPI_DESKTOP;
+  it('refuses web and Docker installs (no LIBREPOOL_DESKTOP)', async () => {
+    delete process.env.LIBREPOOL_DESKTOP;
     expect((await call(app(), 'GET', '/api/auth/status')).body.desktop).toBe(false);
     expect((await call(app(), 'POST', '/api/auth/desktop-session')).status).toBe(403);
   });

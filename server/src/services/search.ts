@@ -263,7 +263,7 @@ function keepHits(hits: Array<{ title: string; url: string; content: string; sco
 
 // Parallel's anonymous Search MCP asks for a stable conversation id on every
 // call (used for its free-tier rate limiting); one per server process.
-const PARALLEL_SESSION_ID = `freellmapi-${randomUUID()}`;
+const PARALLEL_SESSION_ID = `librepool-${randomUUID()}`;
 const RATE_LIMIT_TEXT = /rate.?limit|too many requests|quota/i;
 
 /** Unwrap a JSON-RPC `tools/call` reply from Parallel's Search MCP into the
@@ -769,7 +769,7 @@ export interface SearchEngineView {
   creditsPerQuery: number | null;
   features: SearchEngineFeatures;
   premiumSince: string | null;
-  /** premiumSince + 30 days: when a free install receives the engine. */
+  /** premiumSince + 15 days: when a free install receives the engine. */
   freeFrom: string | null;
   isCustom: boolean;
   keyCount: number;
@@ -777,7 +777,7 @@ export interface SearchEngineView {
   searchesThisMonth: number;
 }
 
-const FREE_LAG_MS = 30 * 24 * 60 * 60 * 1000;
+const FREE_LAG_MS = 15 * 24 * 60 * 60 * 1000;
 
 export function listSearchEngines(): SearchEngineView[] {
   const db = getDb();

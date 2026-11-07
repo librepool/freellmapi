@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { ChatCompletionChunk } from '@freellmapi/shared/types.js';
+import type { ChatCompletionChunk } from '@librepool/shared/types.js';
 import { TyphoonProvider, TYPHOON_BASE_URL } from '../../providers/typhoon.js';
 import { getProvider } from '../../providers/index.js';
 import { AUTH_JSON_PROVIDER_MAP, parseKeysFromFile } from '../../lib/key-parser.js';
@@ -57,7 +57,7 @@ describe('Typhoon provider', () => {
     await expect(getProvider('typhoon')!.validateKey('test-key')).resolves.toBe(true);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][0]).toBe(`${TYPHOON_BASE_URL}/chat/completions`);
-    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ model: '__freellmapi_key_validation__', max_tokens: 1, stream: false });
+    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ model: '__librepool_key_validation__', max_tokens: 1, stream: false });
     expect(new Headers(fetch.mock.calls[0][1]?.headers).get('authorization')).toBe('Bearer test-key');
   });
 

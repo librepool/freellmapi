@@ -60,7 +60,7 @@
     "emailChanged": "Email modificata con successo.",
     "passwordReset": "Password reimpostata con successo. Accedi di nuovo.",
     "resetCodeDockerHint": "Usi Docker? Il codice è nel log del container: docker logs <container>.",
-    "desktopSessionFailed": "La dashboard non è riuscita ad accedere al server locale. Chiudi FreeLLMAPI e riaprilo."
+    "desktopSessionFailed": "La dashboard non è riuscita ad accedere al server locale. Chiudi LibrePool e riaprilo."
   },
   "common": {
     "save": "Salva",
@@ -160,16 +160,16 @@
     "notGitInstall": "Questa installazione non include informazioni sui commit.",
     "checkFailed": "Impossibile verificare la disponibilità di aggiornamenti.",
     "autoUpdateCheck": "Controllo automatico degli aggiornamenti",
-    "restartAfterUpdate": "Riavvia FreeLLMAPI al termine della build.",
+    "restartAfterUpdate": "Riavvia LibrePool al termine della build.",
     "downloadUpdate": "Scarica aggiornamento",
     "downloadingUpdate": "Download in corso… {percent}%",
     "restartToUpdate": "Riavvia per aggiornare",
-    "updateReadyHint": "Scaricato. FreeLLMAPI esegue il backup dei tuoi dati, si riavvia e apre la nuova versione.",
+    "updateReadyHint": "Scaricato. LibrePool esegue il backup dei tuoi dati, si riavvia e apre la nuova versione.",
     "updateInstallFailed": "Impossibile installare l’aggiornamento.",
     "updateNow": "Aggiorna ora",
-    "updatingContainer": "Download della nuova immagine e riavvio in corso. La pagina si ricarica quando FreeLLMAPI torna disponibile.",
+    "updatingContainer": "Download della nuova immagine e riavvio in corso. La pagina si ricarica quando LibrePool torna disponibile.",
     "updateNowFailed": "Il servizio di aggiornamento non ha accettato la richiesta. Verifica che il container watchtower sia in esecuzione.",
-    "updateNowTimeout": "FreeLLMAPI non si è riavviato dopo 5 minuti. Controlla i log del container watchtower."
+    "updateNowTimeout": "LibrePool non si è riavviato dopo 5 minuti. Controlla i log del container watchtower."
   },
   "models": {
     "title": "Modelli",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Budget mensile di token",
     "remaining": "rimanenti",
     "used": "usati",
-    "usedScopeHint": "Solo richieste di chat, dall'inizio di questo mese solare, sommate su tutti i modelli della catena attiva, endpoint personalizzati inclusi. Il traffico inviato a un provider al di fuori di FreeLLMAPI non viene conteggiato.",
+    "usedScopeHint": "Solo richieste di chat, dall'inizio di questo mese solare, sommate su tutti i modelli della catena attiva, endpoint personalizzati inclusi. Il traffico inviato a un provider al di fuori di LibrePool non viene conteggiato.",
     "legendRemainingTitle": "Residuo / budget mensile di {name} ({platform})",
     "noPublishedQuota": "+{count} senza quota pubblicata",
     "noPublishedQuotaTitle": "Questi modelli non hanno un budget mensile di token documentato, quindi non c'è un residuo da mostrare.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Ultimo problema di sincronizzazione: {error}",
     "license": "Licenza",
     "planAnnual": "Premium Annuale",
-    "planLifetime": "Premium a Vita",
     "expired": "Scaduto",
     "inactive": "Inattivo",
-    "lifetimeNote": "Licenza a vita: non scade mai.",
     "renewsOn": "Rinnova il {date}.",
     "willNotRenew": "Non si rinnoverà. Premium fino al {date}, poi questa installazione torna al catalogo mensile gratuito.",
     "keyInactive": "Questa chiave non è più attiva. L'app continua a funzionare con il catalogo mensile gratuito.",
@@ -1056,7 +1054,7 @@
     "keyHint": "La tua chiave è nell'email di acquisto e nella pagina post-checkout. L'hai persa?",
     "recoverKey": "Recuperala sul sito web",
     "upsellTitle": "Passa al feed live per $19 all'anno",
-    "upsellDescription": "Nuovi modelli gratuiti nel momento in cui esistono, invece che 30 giorni dopo. Una chiave, ogni dispositivo. Annulla quando vuoi; il router rimane gratuito per sempre.",
+    "upsellDescription": "Nuovi modelli gratuiti nel momento in cui esistono, invece che 15 giorni dopo. Una chiave, ogni dispositivo. Annulla quando vuoi; il router rimane gratuito per sempre.",
     "goPremium": "Vai a Premium",
     "bundled": "incluso",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "È installata una versione più recente di FreeLLMAPI.",
+    "newBuild": "È installata una versione più recente di LibrePool.",
     "reload": "Ricarica"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

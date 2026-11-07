@@ -61,7 +61,7 @@ describe('Host-header guard (#1637)', () => {
     // desktop-LAN and reverse-proxy installs the moment they upgraded.
     it('lets any Host through, including LAN IPs, container names and proxies', async () => {
       const app = appWithAllowed(undefined);
-      for (const host of ['localhost:3001', '192.168.1.50:3001', 'freellmapi:3001', 'proxy.example.com', 'evil.example:3001']) {
+      for (const host of ['localhost:3001', '192.168.1.50:3001', 'librepool:3001', 'proxy.example.com', 'evil.example:3001']) {
         expect((await call(app, '/api/ping', host)).status, host).toBe(200);
       }
     });

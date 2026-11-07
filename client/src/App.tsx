@@ -142,7 +142,7 @@ function Brand() {
   return (
     <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-70">
       <span className="inline-block size-2 rounded-full bg-foreground" />
-      <span className="font-semibold tracking-tight text-sm">FreeLLMAPI</span>
+      <span className="font-semibold tracking-tight text-sm">LibrePool</span>
     </Link>
   )
 }
@@ -151,10 +151,10 @@ function Brand() {
 // sets this). The navbar then doubles as the window title bar: draggable,
 // padded for the macOS traffic lights, and without the web-only Sign out.
 const isDesktopApp = typeof window !== 'undefined'
-  && (window as Window & { __FREEAPI_DESKTOP__?: boolean }).__FREEAPI_DESKTOP__ === true
+  && (window as Window & { __LIBREPOOL_DESKTOP__?: boolean }).__LIBREPOOL_DESKTOP__ === true
 
 const desktopPlatform = typeof window !== 'undefined'
-  ? (window as Window & { __FREEAPI_PLATFORM__?: string }).__FREEAPI_PLATFORM__
+  ? (window as Window & { __LIBREPOOL_PLATFORM__?: string }).__LIBREPOOL_PLATFORM__
   : undefined
 
 const isMacDesktop = isDesktopApp && (

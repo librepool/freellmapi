@@ -60,7 +60,7 @@
     "emailChanged": "Имейлът е сменен.",
     "passwordReset": "Паролата е нулирана. Влезте отново.",
     "resetCodeDockerHint": "Работите в Docker? Кодът е в лога на контейнера: docker logs <container>.",
-    "desktopSessionFailed": "Таблото не успя да влезе в локалния сървър. Затворете FreeLLMAPI и го отворете отново."
+    "desktopSessionFailed": "Таблото не успя да влезе в локалния сървър. Затворете LibrePool и го отворете отново."
   },
   "common": {
     "save": "Запази",
@@ -160,16 +160,16 @@
     "notGitInstall": "Тази инсталация не съдържа информация за commit.",
     "checkFailed": "Актуализациите не можаха да бъдат проверени.",
     "autoUpdateCheck": "Автоматична проверка за актуализации",
-    "restartAfterUpdate": "Рестартирайте FreeLLMAPI след завършване на компилацията.",
+    "restartAfterUpdate": "Рестартирайте LibrePool след завършване на компилацията.",
     "downloadUpdate": "Изтегли актуализацията",
     "downloadingUpdate": "Изтегляне… {percent}%",
     "restartToUpdate": "Рестартирай за актуализиране",
-    "updateReadyHint": "Изтеглено. FreeLLMAPI архивира данните ви, рестартира и отваря новата версия.",
+    "updateReadyHint": "Изтеглено. LibrePool архивира данните ви, рестартира и отваря новата версия.",
     "updateInstallFailed": "Актуализацията не можа да се инсталира.",
     "updateNow": "Актуализирай сега",
-    "updatingContainer": "Изтегля се новият образ и се рестартира. Страницата ще се презареди, когато FreeLLMAPI се върне.",
+    "updatingContainer": "Изтегля се новият образ и се рестартира. Страницата ще се презареди, когато LibrePool се върне.",
     "updateNowFailed": "Актуализаторът не прие заявката. Проверете дали контейнерът watchtower работи.",
-    "updateNowTimeout": "FreeLLMAPI не се е рестартирал след 5 минути. Проверете логовете на контейнера watchtower."
+    "updateNowTimeout": "LibrePool не се е рестартирал след 5 минути. Проверете логовете на контейнера watchtower."
   },
   "models": {
     "title": "Модели",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Месечен бюджет за жетони",
     "remaining": "Останали",
     "used": "Употребявана",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Последен проблем със синхронизацията: {error}",
     "license": "Лиценз",
     "planAnnual": "Премиум годишна",
-    "planLifetime": "Премиум срок на живот",
     "expired": "Изтекъл",
     "inactive": "Неактивен",
-    "lifetimeNote": "Пожизнен лиценз: никога не изтича.",
     "renewsOn": "Подновява на {date}.",
     "willNotRenew": "Няма да подновя. Премиум до {date}, след което тази инсталация се връща към безплатния месечен каталог.",
     "keyInactive": "Този ключ вече не е активен. Приложението продължава да работи по безплатния месечен каталог.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ключът ви е в имейла за покупка и на страницата след плащане. Изгуби го?",
     "recoverKey": "Възстановете го на уебсайта",
     "upsellTitle": "Пусни на живо за 19 долара годишно",
-    "upsellDescription": "Нови безплатни модели веднага щом се появят, вместо 30 дни по-късно. Един ключ, всяко устройство. Отмени по всяко време; Рутерът остава свободен завинаги.",
+    "upsellDescription": "Нови безплатни модели веднага щом се появят, вместо 15 дни по-късно. Един ключ, всяко устройство. Отмени по всяко време; Рутерът остава свободен завинаги.",
     "goPremium": "Go Premium",
     "bundled": "пакетирани",
     "planGeneric": "Премиум"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Инсталирана е по-нова версия на FreeLLMAPI.",
+    "newBuild": "Инсталирана е по-нова версия на LibrePool.",
     "reload": "Презареди"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

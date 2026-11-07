@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { ChatCompletionChunk } from '@freellmapi/shared/types.js';
+import type { ChatCompletionChunk } from '@librepool/shared/types.js';
 import { LlmtrProvider } from '../../providers/llmtr.js';
 import { getProvider } from '../../providers/index.js';
 import { AUTH_JSON_PROVIDER_MAP, detectPlatform, parseKeysFromFile } from '../../lib/key-parser.js';
@@ -68,7 +68,7 @@ describe('LLMTR provider', () => {
     await expect(unpaced().validateKey('test-key')).resolves.toBe(true);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][0]).toBe('https://llmtr.com/v1/chat/completions');
-    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ model: '__freellmapi_key_validation__', max_tokens: 1, stream: false });
+    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ model: '__librepool_key_validation__', max_tokens: 1, stream: false });
   });
 
   it.each([401, 403])('rejects invalid credentials (%s)', async status => {

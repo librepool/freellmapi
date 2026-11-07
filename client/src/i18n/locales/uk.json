@@ -60,7 +60,7 @@
     "emailChanged": "E-mail успішно змінено.",
     "passwordReset": "Пароль скинуто. Увійдіть знову.",
     "resetCodeDockerHint": "Використовуєте Docker? Код знаходиться в лозі контейнера: docker logs <container>.",
-    "desktopSessionFailed": "Панель керування не змогла увійти на локальний сервер. Закрийте FreeLLMAPI і відкрийте його знову."
+    "desktopSessionFailed": "Панель керування не змогла увійти на локальний сервер. Закрийте LibrePool і відкрийте його знову."
   },
   "common": {
     "save": "зберегти",
@@ -160,16 +160,16 @@
     "notGitInstall": "Ця інсталяція не містить інформації про commit.",
     "checkFailed": "Не вдалося перевірити наявність оновлень.",
     "autoUpdateCheck": "Автоматична перевірка оновлень",
-    "restartAfterUpdate": "Перезапустіть FreeLLMAPI після завершення збірки.",
+    "restartAfterUpdate": "Перезапустіть LibrePool після завершення збірки.",
     "downloadUpdate": "Завантажити оновлення",
     "downloadingUpdate": "Завантаження… {percent}%",
     "restartToUpdate": "Перезапустити для оновлення",
-    "updateReadyHint": "Завантажено. FreeLLMAPI створює резервну копію даних, перезапускається й відкриває нову версію.",
+    "updateReadyHint": "Завантажено. LibrePool створює резервну копію даних, перезапускається й відкриває нову версію.",
     "updateInstallFailed": "Не вдалося встановити оновлення.",
     "updateNow": "Оновити зараз",
-    "updatingContainer": "Завантажується новий образ і виконується перезапуск. Сторінка перезавантажиться, коли FreeLLMAPI повернеться.",
+    "updatingContainer": "Завантажується новий образ і виконується перезапуск. Сторінка перезавантажиться, коли LibrePool повернеться.",
     "updateNowFailed": "Служба оновлення не прийняла запит. Перевірте, що контейнер watchtower запущено.",
-    "updateNowTimeout": "FreeLLMAPI не перезапустився за 5 хвилин. Перегляньте журнали контейнера watchtower."
+    "updateNowTimeout": "LibrePool не перезапустився за 5 хвилин. Перегляньте журнали контейнера watchtower."
   },
   "models": {
     "title": "Моделі",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Місячний бюджет токенів",
     "remaining": "залишилося",
     "used": "використовується",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Остання проблема синхронізації: {error}",
     "license": "Ліцензія",
     "planAnnual": "Річна премія",
-    "planLifetime": "Преміум термін служби",
     "expired": "Термін дії минув",
     "inactive": "Неактивний",
-    "lifetimeNote": "Довічна ліцензія: безстрокова.",
     "renewsOn": "Поновлення на {date}.",
     "willNotRenew": "Не поновлюватимуть. Преміум до {date}, потім це встановлення повертається до безкоштовного щомісячного каталогу.",
     "keyInactive": "Цей ключ більше не активний. Додаток продовжує працювати над безкоштовним щомісячним каталогом.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ваш ключ міститься в електронному листі про покупку та на сторінці після оформлення замовлення. Загубив?",
     "recoverKey": "Відновіть його на сайті",
     "upsellTitle": "Почніть жити за 19 доларів на рік",
-    "upsellDescription": "Нові безкоштовні моделі одразу після їх появи, а не через 30 днів. Один ключ, кожен пристрій. Скасувати будь-коли; маршрутизатор залишається вільним назавжди.",
+    "upsellDescription": "Нові безкоштовні моделі одразу після їх появи, а не через 15 днів. Один ключ, кожен пристрій. Скасувати будь-коли; маршрутизатор залишається вільним назавжди.",
     "goPremium": "Перейти на Premium",
     "bundled": "в комплекті",
     "planGeneric": "Преміум"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Встановлено новішу версію FreeLLMAPI.",
+    "newBuild": "Встановлено новішу версію LibrePool.",
     "reload": "Перезавантажити"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

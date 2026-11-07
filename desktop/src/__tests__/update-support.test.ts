@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { updateSupport, updaterProxy } from '../update-support.js';
 
-const base = { isPackaged: true, execPath: '/Applications/FreeLLMAPI.app/Contents/MacOS/FreeLLMAPI', productName: 'FreeLLMAPI' };
+const base = { isPackaged: true, execPath: '/Applications/LibrePool.app/Contents/MacOS/LibrePool', productName: 'LibrePool' };
 
 describe('updateSupport', () => {
   it('leaves a dev build alone unless a test feed is configured', () => {
@@ -11,20 +11,20 @@ describe('updateSupport', () => {
 
   it('updates an installed mac app but not one running from the mounted dmg', () => {
     expect(updateSupport({ ...base, platform: 'darwin' })).toBeNull();
-    expect(updateSupport({ ...base, platform: 'darwin', execPath: '/Volumes/FreeLLMAPI/FreeLLMAPI.app/Contents/MacOS/FreeLLMAPI' }))
+    expect(updateSupport({ ...base, platform: 'darwin', execPath: '/Volumes/LibrePool/LibrePool.app/Contents/MacOS/LibrePool' }))
       .toEqual({ phase: 'unsupported', reason: 'package' });
   });
 
   it('updates the NSIS install on Windows but not the portable zip', () => {
-    const execPath = 'C:\\Users\\me\\AppData\\Local\\Programs\\FreeLLMAPI\\FreeLLMAPI.exe';
-    const installed = (file: string) => file.endsWith('Uninstall FreeLLMAPI.exe');
+    const execPath = 'C:\\Users\\me\\AppData\\Local\\Programs\\LibrePool\\LibrePool.exe';
+    const installed = (file: string) => file.endsWith('Uninstall LibrePool.exe');
     expect(updateSupport({ ...base, platform: 'win32', execPath }, installed)).toBeNull();
     expect(updateSupport({ ...base, platform: 'win32', execPath }, () => false)).toEqual({ phase: 'unsupported', reason: 'package' });
   });
 
   it('updates the AppImage on Linux and leaves deb/rpm to the package manager', () => {
-    expect(updateSupport({ ...base, platform: 'linux', execPath: '/tmp/.mount_x/freellmapi-desktop', appImage: '/home/me/FreeLLMAPI.AppImage' })).toBeNull();
-    expect(updateSupport({ ...base, platform: 'linux', execPath: '/opt/FreeLLMAPI/freellmapi-desktop' })).toEqual({ phase: 'unsupported', reason: 'package' });
+    expect(updateSupport({ ...base, platform: 'linux', execPath: '/tmp/.mount_x/librepool-desktop', appImage: '/home/me/LibrePool.AppImage' })).toBeNull();
+    expect(updateSupport({ ...base, platform: 'linux', execPath: '/opt/LibrePool/librepool-desktop' })).toEqual({ phase: 'unsupported', reason: 'package' });
   });
 });
 

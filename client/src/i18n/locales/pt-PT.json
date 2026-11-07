@@ -60,7 +60,7 @@
     "emailChanged": "E-mail alterado com sucesso.",
     "passwordReset": "Palavra-passe reposta. Inicie sessão.",
     "resetCodeDockerHint": "Está a usar Docker? O código está no registo do contentor: docker logs <container>.",
-    "desktopSessionFailed": "O painel não conseguiu iniciar sessão no servidor local. Feche o FreeLLMAPI e volte a abri-lo."
+    "desktopSessionFailed": "O painel não conseguiu iniciar sessão no servidor local. Feche o LibrePool e volte a abri-lo."
   },
   "common": {
     "save": "Guardar",
@@ -160,16 +160,16 @@
     "notGitInstall": "Esta instalação não inclui informações do commit.",
     "checkFailed": "Não foi possível procurar atualizações.",
     "autoUpdateCheck": "Verificação automática de atualizações",
-    "restartAfterUpdate": "Reinicie o FreeLLMAPI após a conclusão da compilação.",
+    "restartAfterUpdate": "Reinicie o LibrePool após a conclusão da compilação.",
     "downloadUpdate": "Transferir atualização",
     "downloadingUpdate": "A transferir… {percent}%",
     "restartToUpdate": "Reiniciar para atualizar",
-    "updateReadyHint": "Transferida. O FreeLLMAPI faz uma cópia de segurança dos seus dados, reinicia e abre a nova versão.",
+    "updateReadyHint": "Transferida. O LibrePool faz uma cópia de segurança dos seus dados, reinicia e abre a nova versão.",
     "updateInstallFailed": "Não foi possível instalar a atualização.",
     "updateNow": "Atualizar agora",
-    "updatingContainer": "A transferir a nova imagem e a reiniciar. Esta página recarrega quando o FreeLLMAPI voltar.",
+    "updatingContainer": "A transferir a nova imagem e a reiniciar. Esta página recarrega quando o LibrePool voltar.",
     "updateNowFailed": "O atualizador não aceitou o pedido. Verifique se o contentor watchtower está em execução.",
-    "updateNowTimeout": "O FreeLLMAPI não reiniciou ao fim de 5 minutos. Verifique os registos do contentor watchtower."
+    "updateNowTimeout": "O LibrePool não reiniciou ao fim de 5 minutos. Verifique os registos do contentor watchtower."
   },
   "models": {
     "title": "Modelos",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Orçamento mensal de tokens",
     "remaining": "remanescente",
     "used": "Usado",
-    "usedScopeHint": "Apenas pedidos de chat, desde o início deste mês civil, somados em todos os modelos da cadeia ativa, incluindo endpoints personalizados. O tráfego enviado a um fornecedor fora do FreeLLMAPI não é contado.",
+    "usedScopeHint": "Apenas pedidos de chat, desde o início deste mês civil, somados em todos os modelos da cadeia ativa, incluindo endpoints personalizados. O tráfego enviado a um fornecedor fora do LibrePool não é contado.",
     "legendRemainingTitle": "Restante / orçamento mensal de {name} ({platform})",
     "noPublishedQuota": "+{count} sem quota publicada",
     "noPublishedQuotaTitle": "Estes modelos não têm orçamento mensal de tokens documentado, pelo que não há restante para mostrar.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Último problema de sincronização: {error}",
     "license": "Licença",
     "planAnnual": "Anual Premium",
-    "planLifetime": "Vida Útil Premium",
     "expired": "Expirado",
     "inactive": "Inativo",
-    "lifetimeNote": "Carta vitalícia: nunca expira.",
     "renewsOn": "Renova no {date}.",
     "willNotRenew": "Não vai renovar. Premium até {date}, depois esta instalação volta ao catálogo mensal gratuito.",
     "keyInactive": "Esta chave já não está ativa. A aplicação continua a trabalhar no catálogo mensal gratuito.",
@@ -1056,7 +1054,7 @@
     "keyHint": "A sua chave está no email de compra e na página pós-checkout. Perdeste a cabeça?",
     "recoverKey": "Recupere-o no site",
     "upsellTitle": "Vai ao vivo por 19 dólares por ano",
-    "upsellDescription": "Novos modelos gratuitos no momento em que existem, em vez de 30 dias depois. Uma chave, cada dispositivo. Cancele a qualquer momento; O router fica livre para sempre.",
+    "upsellDescription": "Novos modelos gratuitos no momento em que existem, em vez de 15 dias depois. Uma chave, cada dispositivo. Cancele a qualquer momento; O router fica livre para sempre.",
     "goPremium": "Go Premium",
     "bundled": "agrupados",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Está instalada uma versão mais recente do FreeLLMAPI.",
+    "newBuild": "Está instalada uma versão mais recente do LibrePool.",
     "reload": "Recarregar"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

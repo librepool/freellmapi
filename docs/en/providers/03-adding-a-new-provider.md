@@ -56,7 +56,7 @@ Env-tunable timeouts come automatically via `PROVIDER_TIMEOUT_<PLATFORM>` (#547)
 Model rows come from two places, and picking wrong leaks paid models to free users:
 
 - **Versioned migrations** (`migrateModelsV<N>`) for docs-confirmed free rosters shipped to every binary (opencode V18, ovh V26).
-- **Hosted catalog** via `services/catalog-sync.ts` (gated on `hasProvider`) when availability should be managed centrally — typically premium now, free after the 30-day age gate. Rows are never seeded from third-party lists without live verification: a bad model id is caught by health checks instead of shipped as default.
+- **Hosted catalog** via `services/catalog-sync.ts` (gated on `hasProvider`) when availability should be managed centrally — typically premium now, free after the 15-day age gate. Rows are never seeded from third-party lists without live verification: a bad model id is caught by health checks instead of shipped as default.
 
 If the platform publishes no limits, set `null` rather than guessing; the unknown-limit cooldown path caps benches at 10 minutes precisely because guesses are not measurements.
 

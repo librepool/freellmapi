@@ -148,13 +148,13 @@ describe('decision routing over HTTP (#1354)', () => {
       decisionChoice = 'smartest';
       const smart = await request('POST', '/v1/chat/completions', { messages: [{ role: 'user', content: `prove a theorem ${i}` }] }, auth());
       expect(smart.status).toBe(200);
-      expect(smart.headers.get('x-freellm-routing-strategy')).toBe('smartest');
+      expect(smart.headers.get('x-librepool-routing-strategy')).toBe('smartest');
       expect(servedModel()).toBe('big-slow');
 
       decisionChoice = 'fastest';
       const fast = await request('POST', '/v1/chat/completions', { messages: [{ role: 'user', content: `what is ${i}+${i}` }] }, auth());
       expect(fast.status).toBe(200);
-      expect(fast.headers.get('x-freellm-routing-strategy')).toBe('fastest');
+      expect(fast.headers.get('x-librepool-routing-strategy')).toBe('fastest');
       expect(servedModel()).toBe('small-fast');
     }
     expect(decisionCalls).toBe(10);
@@ -165,13 +165,13 @@ describe('decision routing over HTTP (#1354)', () => {
     decisionChoice = 'fastest';
     const msgs = await request('POST', '/v1/messages', { max_tokens: 50, messages: [{ role: 'user', content: 'hi there' }] }, auth());
     expect(msgs.status).toBe(200);
-    expect(msgs.headers.get('x-freellm-routing-strategy')).toBe('fastest');
+    expect(msgs.headers.get('x-librepool-routing-strategy')).toBe('fastest');
     expect(servedModel()).toBe('small-fast');
 
     decisionChoice = 'smartest';
     const resp = await request('POST', '/v1/responses', { input: 'derive the quadratic formula' }, auth());
     expect(resp.status).toBe(200);
-    expect(resp.headers.get('x-freellm-routing-strategy')).toBe('smartest');
+    expect(resp.headers.get('x-librepool-routing-strategy')).toBe('smartest');
     expect(servedModel()).toBe('big-slow');
   });
 
@@ -179,12 +179,12 @@ describe('decision routing over HTTP (#1354)', () => {
     await request('PUT', '/api/fallback/routing', { strategy: 'balanced' });
     const plain = await request('POST', '/v1/chat/completions', { messages: [{ role: 'user', content: 'hi' }] }, auth());
     expect(plain.status).toBe(200);
-    expect(plain.headers.get('x-freellm-routing-strategy')).toBeNull();
+    expect(plain.headers.get('x-librepool-routing-strategy')).toBeNull();
 
     await request('PUT', '/api/fallback/routing', { strategy: 'decision' });
     const pinned = await request('POST', '/v1/chat/completions', { model: 'small-fast', messages: [{ role: 'user', content: 'hi' }] }, auth());
     expect(pinned.status).toBe(200);
-    expect(pinned.headers.get('x-freellm-routing-strategy')).toBeNull();
+    expect(pinned.headers.get('x-librepool-routing-strategy')).toBeNull();
     expect(decisionCalls).toBe(0);
   });
 
@@ -206,6 +206,6 @@ describe('decision routing over HTTP (#1354)', () => {
     });
     const res = await request('POST', '/v1/chat/completions', { messages: [{ role: 'user', content: 'hello' }] }, auth());
     expect(res.status).toBe(200);
-    expect(res.headers.get('x-freellm-routing-strategy')).toBe('balanced; fallback=error');
+    expect(res.headers.get('x-librepool-routing-strategy')).toBe('balanced; fallback=error');
   });
 });

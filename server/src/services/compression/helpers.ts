@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 import type { ToolCallOrigin } from './types.js';
 
 export function textContent(message: ChatMessage): string | null {

@@ -33,7 +33,7 @@ function fakeExec(script: Array<[string, Result]>) {
 
 const quiet = { log: () => {}, sleep: async () => {} };
 const apiEnv = { APPLE_API_KEY: '/tmp/AuthKey.p8', APPLE_API_KEY_ID: 'KEYID', APPLE_API_ISSUER: 'ISSUER' };
-const context = { electronPlatformName: 'darwin', appOutDir: '/out/mac', packager: { appInfo: { productFilename: 'FreeLLMAPI' } } };
+const context = { electronPlatformName: 'darwin', appOutDir: '/out/mac', packager: { appInfo: { productFilename: 'LibrePool' } } };
 
 describe('afterSign notarization', () => {
   it('replaces electron-builder notarization with the hook', () => {
@@ -55,7 +55,7 @@ describe('afterSign notarization', () => {
       ['xcrun stapler staple', ok()],
       ['xcrun stapler validate', fail('The validate action failed! Error 68.')],
     ]);
-    const attempt = await hook.stapleWithRetry('/out/mac/FreeLLMAPI.app', { exec, ...quiet });
+    const attempt = await hook.stapleWithRetry('/out/mac/LibrePool.app', { exec, ...quiet });
     expect(attempt).toBe(3);
     expect(calls.filter(c => c.startsWith('xcrun stapler staple'))).toHaveLength(3);
   });
@@ -73,7 +73,7 @@ describe('afterSign notarization', () => {
     await hook.default(context, { exec, env: apiEnv, ...quiet });
     expect(calls.some(c => c.startsWith('ditto -c -k'))).toBe(true);
     expect(calls.find(c => c.startsWith('xcrun notarytool submit'))).toContain('--key-id KEYID');
-    expect(calls).toContain(`xcrun stapler staple ${join('/out/mac', 'FreeLLMAPI.app')}`);
+    expect(calls).toContain(`xcrun stapler staple ${join('/out/mac', 'LibrePool.app')}`);
   });
 
   it('fails the build when Apple rejects the submission', async () => {

@@ -9,12 +9,12 @@
 // chain are untouched, and `undefined` means "leave the preset weights alone".
 
 import type { Request } from 'express';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 import { contentToString } from './content.js';
 
 export type TaskType = 'code' | 'chat' | 'auto';
 
-export const TASK_TYPE_HEADER = 'x-freellm-task-type';
+export const TASK_TYPE_HEADER = 'x-librepool-task-type';
 
 // Bounded scan so a huge user message never costs the router a full read.
 const MAX_SCAN_CHARS = 4000;

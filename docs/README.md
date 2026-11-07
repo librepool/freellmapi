@@ -1,4 +1,4 @@
-# FreeLLMAPI documentation
+# LibrePool documentation
 
 Pick a language:
 

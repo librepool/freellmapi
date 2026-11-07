@@ -30,7 +30,7 @@ model metadata, not the ID prefix alone.
 
 Model rows are published only through the signed Oracle catalog. No seeds,
 model-discovery enrollment, or database migration bypasses the existing
-Premium-now / Free-after-30-days release gate. Existing installations need
+Premium-now / Free-after-15-days release gate. Existing installations need
 application code containing this adapter before they can use these rows.
 
 Sources:

@@ -45,7 +45,7 @@ dive wins; fix this file.
 - **Custom / relay model**: a row pointing at a user-supplied `base_url`
   (`endpoint scope` `custom:<hash>`). Same `model_id` on two relays
   is two different rows.
-- **Model-age gate**: new catalog rows serve as `premium` for 30 days,
+- **Model-age gate**: new catalog rows serve as `premium` for 15 days,
   then become `free` on the next signed sync.
 - **Tombstone / override / retirement**: the three ways a catalog row
   goes away or is edited without editing the catalog: user-hidden,

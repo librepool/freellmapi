@@ -60,7 +60,7 @@
     "emailChanged": "Barua pepe imebadilishwa.",
     "passwordReset": "Nenosiri limewekwa upya. Tafadhali ingia.",
     "resetCodeDockerHint": "Unatumia Docker? Msimbo uko kwenye kumbukumbu ya kontena: docker logs <container>.",
-    "desktopSessionFailed": "Dashibodi haikuweza kuingia kwenye seva ya ndani. Funga FreeLLMAPI kisha uifungue tena."
+    "desktopSessionFailed": "Dashibodi haikuweza kuingia kwenye seva ya ndani. Funga LibrePool kisha uifungue tena."
   },
   "common": {
     "save": "Hifadhi",
@@ -160,16 +160,16 @@
     "notGitInstall": "Usakinishaji huu hauna taarifa za commit.",
     "checkFailed": "Imeshindikana kuangalia masasisho.",
     "autoUpdateCheck": "Ukaguzi wa masasisho otomatiki",
-    "restartAfterUpdate": "Anzisha upya FreeLLMAPI baada ya ujenzi kukamilika.",
+    "restartAfterUpdate": "Anzisha upya LibrePool baada ya ujenzi kukamilika.",
     "downloadUpdate": "Pakua sasisho",
     "downloadingUpdate": "Inapakua… {percent}%",
     "restartToUpdate": "Anzisha upya ili kusasisha",
-    "updateReadyHint": "Imepakuliwa. FreeLLMAPI huhifadhi nakala ya data yako, huanza upya na kufungua toleo jipya.",
+    "updateReadyHint": "Imepakuliwa. LibrePool huhifadhi nakala ya data yako, huanza upya na kufungua toleo jipya.",
     "updateInstallFailed": "Sasisho halikuweza kusakinishwa.",
     "updateNow": "Sasisha sasa",
-    "updatingContainer": "Inavuta picha mpya na kuanza upya. Ukurasa huu utapakia upya FreeLLMAPI itakaporudi.",
+    "updatingContainer": "Inavuta picha mpya na kuanza upya. Ukurasa huu utapakia upya LibrePool itakaporudi.",
     "updateNowFailed": "Kisasishaji hakikukubali ombi. Hakikisha kontena la watchtower linafanya kazi.",
-    "updateNowTimeout": "FreeLLMAPI haijaanza upya baada ya dakika 5. Angalia kumbukumbu za kontena la watchtower."
+    "updateNowTimeout": "LibrePool haijaanza upya baada ya dakika 5. Angalia kumbukumbu za kontena la watchtower."
   },
   "models": {
     "title": "Mifano",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Bajeti ya tokeni ya kila mwezi",
     "remaining": "iliyobaki",
     "used": "kutumika",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Tatizo la mwisho la kusawazisha: {error}",
     "license": "Leseni",
     "planAnnual": "Premium ya Mwaka",
-    "planLifetime": "Premium Lifetime",
     "expired": "Muda wake umeisha",
     "inactive": "Isiyotumika",
-    "lifetimeNote": "Leseni ya maisha yote: haiisha muda wake.",
     "renewsOn": "Inasasishwa kwenye {date}.",
     "willNotRenew": "Haitajifanya upya. Inalipishwa hadi {date}, basi usakinishaji huu utarejeshwa kwenye katalogi isiyolipishwa ya kila mwezi.",
     "keyInactive": "Ufunguo huu hautumiki tena. Programu inaendelea kufanya kazi kwenye katalogi isiyolipishwa ya kila mwezi.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ufunguo wako upo kwenye barua pepe yako ya ununuzi na kwenye ukurasa wa baada ya kulipa. Umeipoteza?",
     "recoverKey": "Rejesha kwenye tovuti",
     "upsellTitle": "Nenda moja kwa moja kwa $19 kwa mwaka",
-    "upsellDescription": "Aina mpya zisizolipishwa zinapokuwepo, badala ya siku 30 baadaye. Kitufe kimoja, kila kifaa. Ghairi wakati wowote; router inakaa bure milele.",
+    "upsellDescription": "Aina mpya zisizolipishwa zinapokuwepo, badala ya siku 15 baadaye. Kitufe kimoja, kila kifaa. Ghairi wakati wowote; router inakaa bure milele.",
     "goPremium": "Nenda kwenye Premium",
     "bundled": "vifurushi",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Toleo jipya la FreeLLMAPI limesakinishwa.",
+    "newBuild": "Toleo jipya la LibrePool limesakinishwa.",
     "reload": "Pakia upya"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

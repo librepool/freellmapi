@@ -6,7 +6,7 @@ import { getDegradationStatus } from '../services/degradation.js';
 import { runModelProbePass } from '../services/model-probe.js';
 import { hasProvider, resolveProvider } from '../providers/index.js';
 import { getQuotaStateForKeys } from '../services/provider-quota.js';
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 
 export const healthRouter = Router();
 

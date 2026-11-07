@@ -4,7 +4,7 @@
 
 [← Back to README](../../../README.md) · [Documentation index](../README.md) · [Deep-dive domain](OVERVIEW.md)
 
-FreeLLMAPI is a self-hosted OpenAI-compatible gateway that stacks the free tiers of ~34 providers behind a single `freellmapi-…` bearer token. An Express proxy exposes `/v1/chat/completions` (plus `/v1/responses`, `/v1/messages`, `/v1/completions`, `/v1/embeddings` and `/v1/models`) and, per request, the router selects the best healthy model that is under all of its rate limits, decrypts its upstream key in memory, and streams the response back.
+LibrePool is a self-hosted OpenAI-compatible gateway that stacks the free tiers of ~34 providers behind a single `librepool-…` bearer token. An Express proxy exposes `/v1/chat/completions` (plus `/v1/responses`, `/v1/messages`, `/v1/completions`, `/v1/embeddings` and `/v1/models`) and, per request, the router selects the best healthy model that is under all of its rate limits, decrypts its upstream key in memory, and streams the response back.
 
 Because no single free tier is generous enough to live on, the router treats the catalog as a pooled fallback chain: it scores live reliability, speed, capability and headroom via a Thompson-sampling bandit, enforces RPM/RPD/TPM/TPD and provider-wide caps with a persistent ledger, and fails over across up to 20 attempts within a wall-clock budget. When the top of the chain exhausts its daily caps the endpoint gracefully degrades to the next healthy tier and resets at UTC midnight.
 
@@ -20,7 +20,7 @@ See [OVERVIEW.md](OVERVIEW.md) for deep-dives.
 ![One request in, the best free model out — the fallback chain with live scores, cooldowns, and quota tracking](../../../repo-assets/router-flow.png)
 
 ```
-┌──────────────────┐   Bearer freellmapi-…   ┌─────────────────────────┐
+┌──────────────────┐   Bearer librepool-…   ┌─────────────────────────┐
 │  OpenAI SDK /    │ ──────────────────────▶ │  Express proxy (:3001)  │
 │  curl / any      │ ◀────────────────────── │  /v1/chat/completions   │
 │  OpenAI client   │      streamed tokens    └────────────┬────────────┘
@@ -68,7 +68,7 @@ Stacking free tiers has real trade-offs. Be honest with yourself about them:
 - **Quota and availability are the ceiling, not model class.** The catalog does carry frontier-class rows — GPT-5.x, Grok 4.x, Kimi K3, DeepSeek V4 Pro, and Gemini 3.x all show up on somebody's free tier. What you don't get is *sustained* access to them: those are exactly the rows with the smallest daily allowances, the longest queues, and the highest chance of being pulled or paywalled at short notice. Budget for capacity and uptime, not for a capability limit.
 - **Intelligence degrades as the day progresses.** Your top-ranked models (usually Gemini 3.6 Flash, DeepSeek V4, Kimi K2.6) have the lowest daily caps. Once they hit their limits, the router falls down your priority chain to smaller/weaker models. Expect the effective intelligence of the endpoint to drop in the late hours of each day — then reset at UTC midnight.
 - **Latency is highly variable.** Cerebras and Groq are extremely fast; others are not. You get whichever one is available.
-- **Free tiers can change without notice.** Providers regularly tighten, loosen, or remove free tiers. When that happens you'll see 429s or auth errors until the catalog update reaches you — live-feed installs get those fixes within days, free installs on the 30-day trail. Re-seed scripts live in `server/src/scripts/`.
+- **Free tiers can change without notice.** Providers regularly tighten, loosen, or remove free tiers. When that happens you'll see 429s or auth errors until the catalog update reaches you — live-feed installs get those fixes within days, free installs on the 15-day trail. Re-seed scripts live in `server/src/scripts/`.
 - **No SLA, by definition.** If you need reliability, use a paid provider with a contract.
 - **Local-first.** There's no multi-tenant auth. Run this for yourself; don't expose it to the internet.
 

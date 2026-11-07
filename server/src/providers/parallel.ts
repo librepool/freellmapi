@@ -1,4 +1,4 @@
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 import type { KeyValidationResult } from './base.js';
 import { SearchOnlyProvider } from './search-only.js';
 import { isAnonymousCredential } from '../lib/credential.js';
@@ -35,7 +35,7 @@ export class ParallelProvider extends SearchOnlyProvider {
           jsonrpc: '2.0',
           id: 1,
           method: 'initialize',
-          params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'freellmapi', version: '1' } },
+          params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'librepool', version: '1' } },
         }),
       });
     }

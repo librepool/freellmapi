@@ -105,7 +105,7 @@ describe('Keenable keyless validation', () => {
     expect(await new KeenableProvider().validateKey('no-key')).toBe(true);
     const [calledUrl, init] = (fn.mock.calls as unknown as [string, RequestInit][])[0];
     expect(calledUrl).toBe('https://api.keenable.ai/v1/search/public');
-    expect((init.headers as Record<string, string>)['X-Keenable-Title']).toBe('freellmapi');
+    expect((init.headers as Record<string, string>)['X-Keenable-Title']).toBe('librepool');
     expect((init.headers as Record<string, string>)['X-API-Key']).toBeUndefined();
     expect(init.body).toBe('{}');
   });

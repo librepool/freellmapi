@@ -3,7 +3,7 @@
 Both are first-class OpenAI-compatible chat providers. Select them on the Keys
 page or import `ROUTER9_API_KEY` / `SEPTOR_API_KEY`. This integration does not
 seed model rows: the signed Oracle catalog controls availability and the
-existing Premium-immediate / Free-after-30-days release gate.
+existing Premium-immediate / Free-after-15-days release gate.
 
 ## Free access (checked 2026-09-10)
 

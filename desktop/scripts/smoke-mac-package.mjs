@@ -20,10 +20,10 @@ for (const binary of [process.execPath, sqliteBinary]) {
   assert.equal(execFileSync('lipo', ['-archs', binary], { encoding: 'utf8' }).trim(), nativeArch);
 }
 
-const directory = mkdtempSync(join(tmpdir(), 'freellmapi-package-smoke-'));
+const directory = mkdtempSync(join(tmpdir(), 'librepool-package-smoke-'));
 // Never load repository .env settings or start catalog downloads in this test.
 process.chdir(directory);
-process.env.FREEAPI_ENV_PATH = join(directory, '.env');
+process.env.LIBREPOOL_ENV_PATH = join(directory, '.env');
 process.env.CATALOG_SYNC_DISABLED = '1';
 let server;
 let db;

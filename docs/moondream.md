@@ -18,7 +18,7 @@ Both `moondream3.1-9B-A2B` and `moondream3-preview` passed real image-question
 and native text-streaming requests through this adapter, with matching returned
 model IDs and usage. Model rows are published separately
 in the signed Oracle catalog, not seeded in migrations. Existing Premium-now /
-Free-after-30-days delivery remains unchanged.
+Free-after-15-days delivery remains unchanged.
 
 ## API differences
 

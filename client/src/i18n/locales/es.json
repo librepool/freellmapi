@@ -60,7 +60,7 @@
     "emailChanged": "Correo electrónico cambiado correctamente.",
     "passwordReset": "Contraseña restablecida correctamente. Por favor, inicia sesión.",
     "resetCodeDockerHint": "¿Usas Docker? El código está en el registro del contenedor: docker logs <container>.",
-    "desktopSessionFailed": "El panel no pudo iniciar sesión en el servidor local. Cierra FreeLLMAPI y vuelve a abrirlo."
+    "desktopSessionFailed": "El panel no pudo iniciar sesión en el servidor local. Cierra LibrePool y vuelve a abrirlo."
   },
   "common": {
     "save": "Guardar",
@@ -160,16 +160,16 @@
     "notGitInstall": "Esta instalación no incluye información de commits.",
     "checkFailed": "No se pudo comprobar si hay actualizaciones.",
     "autoUpdateCheck": "Comprobación automática de actualizaciones",
-    "restartAfterUpdate": "Reinicia FreeLLMAPI cuando finalice la compilación.",
+    "restartAfterUpdate": "Reinicia LibrePool cuando finalice la compilación.",
     "downloadUpdate": "Descargar actualización",
     "downloadingUpdate": "Descargando… {percent} %",
     "restartToUpdate": "Reiniciar para actualizar",
-    "updateReadyHint": "Descargada. FreeLLMAPI hace una copia de seguridad de tus datos, se reinicia y abre la nueva versión.",
+    "updateReadyHint": "Descargada. LibrePool hace una copia de seguridad de tus datos, se reinicia y abre la nueva versión.",
     "updateInstallFailed": "No se pudo instalar la actualización.",
     "updateNow": "Actualizar ahora",
-    "updatingContainer": "Descargando la nueva imagen y reiniciando. Esta página se recargará cuando FreeLLMAPI vuelva.",
+    "updatingContainer": "Descargando la nueva imagen y reiniciando. Esta página se recargará cuando LibrePool vuelva.",
     "updateNowFailed": "El actualizador no aceptó la solicitud. Comprueba que el contenedor watchtower está en marcha.",
-    "updateNowTimeout": "FreeLLMAPI no se ha reiniciado tras 5 minutos. Revisa los registros del contenedor watchtower."
+    "updateNowTimeout": "LibrePool no se ha reiniciado tras 5 minutos. Revisa los registros del contenedor watchtower."
   },
   "models": {
     "title": "Modelos",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Presupuesto mensual de tokens",
     "remaining": "restante",
     "used": "usados",
-    "usedScopeHint": "Solo solicitudes de chat, desde el inicio de este mes natural, sumadas sobre todos los modelos de la cadena activa, incluidos los endpoints personalizados. El tráfico que envías a un proveedor fuera de FreeLLMAPI no se cuenta.",
+    "usedScopeHint": "Solo solicitudes de chat, desde el inicio de este mes natural, sumadas sobre todos los modelos de la cadena activa, incluidos los endpoints personalizados. El tráfico que envías a un proveedor fuera de LibrePool no se cuenta.",
     "legendRemainingTitle": "Restante / presupuesto mensual de {name} ({platform})",
     "noPublishedQuota": "+{count} sin cuota publicada",
     "noPublishedQuotaTitle": "Estos modelos no tienen un presupuesto mensual de tokens documentado, así que no hay restante que mostrar.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Problema en la última sincronización: {error}",
     "license": "Licencia",
     "planAnnual": "Premium Anual",
-    "planLifetime": "Premium de por vida",
     "expired": "Caducada",
     "inactive": "Inactiva",
-    "lifetimeNote": "Licencia de por vida: nunca caduca.",
     "renewsOn": "Se renueva el {date}.",
     "willNotRenew": "No se renovará. Premium hasta el {date}; después, esta instalación vuelve al catálogo mensual gratuito.",
     "keyInactive": "Esta clave ya no está activa. La aplicación sigue funcionando con el catálogo mensual gratuito.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Tu clave está en el correo de compra y en la página posterior al pago. ¿La perdiste?",
     "recoverKey": "Recupérala en el sitio web",
     "upsellTitle": "Pásate al directo por 19 $ al año",
-    "upsellDescription": "Nuevos modelos gratuitos en cuanto existen, en lugar de 30 días después. Una clave, todos tus dispositivos. Cancela cuando quieras; el enrutador sigue siendo gratis para siempre.",
+    "upsellDescription": "Nuevos modelos gratuitos en cuanto existen, en lugar de 15 días después. Una clave, todos tus dispositivos. Cancela cuando quieras; el enrutador sigue siendo gratis para siempre.",
     "goPremium": "Hazte Premium",
     "bundled": "incluido",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Hay una versión más reciente de FreeLLMAPI instalada.",
+    "newBuild": "Hay una versión más reciente de LibrePool instalada.",
     "reload": "Recargar"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

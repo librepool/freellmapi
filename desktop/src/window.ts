@@ -27,7 +27,7 @@ export function openDashboard(port: number, token: string): void {
     height: 800,
     minWidth: 720,
     minHeight: 480,
-    title: 'FreeLLMAPI',
+    title: 'LibrePool',
     ...platformChrome(process.platform),
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
@@ -36,7 +36,7 @@ export function openDashboard(port: number, token: string): void {
       nodeIntegration: false,
       // The dashboard has no other way to know which build is running: the
       // server's own package version is not the released app version (#703).
-      additionalArguments: [`--freeapi-token=${token}`, `--freeapi-version=${app.getVersion()}`],
+      additionalArguments: [`--librepool-token=${token}`, `--librepool-version=${app.getVersion()}`],
     },
   });
 

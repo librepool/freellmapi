@@ -1,11 +1,11 @@
-import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatCompletionChunk, ChatCompletionResponse, ChatMessage } from '@librepool/shared/types.js';
 import { providerHttpError, type CompletionOptions, type KeyValidationResult } from './base.js';
 import { OpenAICompatProvider } from './openai-compat.js';
 import { providerTimeoutMs } from '../lib/provider-timeout.js';
 import { recordQuotaObservationsFromResponse, type QuotaObservationContext } from '../services/provider-quota.js';
 
 export const LLMTR_BASE_URL = 'https://llmtr.com/v1';
-const VALIDATION_MODEL = '__freellmapi_key_validation__';
+const VALIDATION_MODEL = '__librepool_key_validation__';
 
 /**
  * Floor between the START of two key-validation probes (#1369).

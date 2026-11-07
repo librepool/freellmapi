@@ -60,7 +60,7 @@
     "emailChanged": "E-mailul a fost schimbat.",
     "passwordReset": "Parola a fost resetată. Autentifică-te.",
     "resetCodeDockerHint": "Rulezi în Docker? Codul se află în jurnalul containerului: docker logs <container>.",
-    "desktopSessionFailed": "Panoul de control nu s-a putut autentifica la serverul local. Închide FreeLLMAPI și deschide-l din nou."
+    "desktopSessionFailed": "Panoul de control nu s-a putut autentifica la serverul local. Închide LibrePool și deschide-l din nou."
   },
   "common": {
     "save": "Salvează",
@@ -160,16 +160,16 @@
     "notGitInstall": "Această instalare nu include informații despre commit.",
     "checkFailed": "Nu s-au putut verifica actualizările.",
     "autoUpdateCheck": "Verificare automată a actualizărilor",
-    "restartAfterUpdate": "Repornește FreeLLMAPI după finalizarea compilării.",
+    "restartAfterUpdate": "Repornește LibrePool după finalizarea compilării.",
     "downloadUpdate": "Descarcă actualizarea",
     "downloadingUpdate": "Se descarcă… {percent}%",
     "restartToUpdate": "Repornește pentru actualizare",
-    "updateReadyHint": "Descărcat. FreeLLMAPI face o copie de rezervă a datelor, repornește și deschide noua versiune.",
+    "updateReadyHint": "Descărcat. LibrePool face o copie de rezervă a datelor, repornește și deschide noua versiune.",
     "updateInstallFailed": "Actualizarea nu a putut fi instalată.",
     "updateNow": "Actualizează acum",
-    "updatingContainer": "Se descarcă noua imagine și se repornește. Pagina se reîncarcă când FreeLLMAPI revine.",
+    "updatingContainer": "Se descarcă noua imagine și se repornește. Pagina se reîncarcă când LibrePool revine.",
     "updateNowFailed": "Actualizatorul nu a acceptat cererea. Verifică dacă containerul watchtower rulează.",
-    "updateNowTimeout": "FreeLLMAPI nu a repornit după 5 minute. Verifică jurnalele containerului watchtower."
+    "updateNowTimeout": "LibrePool nu a repornit după 5 minute. Verifică jurnalele containerului watchtower."
   },
   "models": {
     "title": "Modele",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Buget lunar pentru tokenuri",
     "remaining": "rămas",
     "used": "Utilizare",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Ultima problemă de sincronizare: {error}",
     "license": "Licență",
     "planAnnual": "Premium anual",
-    "planLifetime": "Durata de viață premium",
     "expired": "Expirat",
     "inactive": "Inactiv",
-    "lifetimeNote": "Permis pe viață: nu expiră niciodată.",
     "renewsOn": "Se reînnoiește la {date}.",
     "willNotRenew": "Nu va reînnoi. Premium până la {date}, apoi această instalare revine la catalogul lunar gratuit.",
     "keyInactive": "Această cheie nu mai este activă. Aplicația continuă să lucreze la catalogul lunar gratuit.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Cheia ta este în adresa de email de achiziție și pe pagina de după finalizarea comenzii. Ai pierdut-o?",
     "recoverKey": "Recuperează-l pe site",
     "upsellTitle": "Mergi live pentru 19 dolari pe an",
-    "upsellDescription": "Modele noi gratuite imediat ce apar, nu după 30 de zile. O singură cheie, fiecare dispozitiv. Anulează oricând; Routerul rămâne liber pentru totdeauna.",
+    "upsellDescription": "Modele noi gratuite imediat ce apar, nu după 15 de zile. O singură cheie, fiecare dispozitiv. Anulează oricând; Routerul rămâne liber pentru totdeauna.",
     "goPremium": "Go Premium",
     "bundled": "Grupate",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Este instalată o versiune mai nouă de FreeLLMAPI.",
+    "newBuild": "Este instalată o versiune mai nouă de LibrePool.",
     "reload": "Reîncarcă"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

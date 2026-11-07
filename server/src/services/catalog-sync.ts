@@ -6,7 +6,7 @@ import { MEDIA_PLATFORMS, TRANSCRIPTION_PLATFORMS, VIDEO_PLATFORMS } from './med
 import { SEARCH_ENGINE_PLATFORMS, SEARCH_MODALITY } from './search.js';
 import { DECISION_MODALITY, DECISION_PLATFORMS } from './decision.js';
 import { EMBEDDING_PLATFORMS } from './embeddings.js';
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 import type { Scheduler } from '../lib/scheduler.js';
 import {
   applyAllModelOverrides,
@@ -39,13 +39,13 @@ const MEDIA_MODALITIES = new Set(['image', 'audio']);
  * app version added via migrations.
  */
 
-const DEFAULT_BASE_URL = 'https://api.freellmapi.co';
+const DEFAULT_BASE_URL = 'https://api.librepool.com';
 
 // The Ed25519 public key the production catalog is signed with. The private
 // half was generated on the catalog host and has never left it. Self-hosters
 // running their own catalog server can override both via env.
 const PINNED_CATALOG_PUBKEY = `-----BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAq9yv4+3EeyMHKsfVYBhkcz1lYgIXSUeHNnN6tNgYX3k=
+MCowBQYDK2VwAyEAbBDBPDq2VbDqTXylUtFrfmk0l3BaV1vanAD4dEmLzSg=
 -----END PUBLIC KEY-----
 `;
 
@@ -78,7 +78,7 @@ let fallbackFetch: FetchLike | null = null;
  * Register a second network stack for calls to the catalog service. The
  * desktop app passes Electron's net.fetch (Chromium: the OS certificate
  * verifier and system proxy, same as a browser). On some Windows PCs Node's
- * fetch could not complete the TLS handshake to api.freellmapi.co, so license
+ * fetch could not complete the TLS handshake to api.librepool.com, so license
  * activation always showed "HTTP 502" while the same URL opened fine in a
  * browser. Server and Docker installs never set this.
  */
@@ -114,7 +114,8 @@ function catalogPublicKey(): crypto.KeyObject {
 
 export interface LicenseStatus {
   valid: boolean;
-  plan: 'annual' | 'lifetime' | null;
+  /** LibrePool is annual-only ($19/yr) — there is no lifetime plan. */
+  plan: 'annual' | null;
   status: string | null;
   expiresAt: string | null;
   cancelAtPeriodEnd?: boolean;
@@ -212,7 +213,7 @@ interface CatalogSearchEngine {
   creditsPerQuery?: number | null;
   features?: { news?: boolean; answer?: boolean; fullContent?: boolean };
   /** When the engine entered the live (Premium) tier; free installs get it
-   *  30 days later through the monthly snapshot. */
+   *  15 days later through the monthly snapshot. */
   premiumSince?: string;
 }
 
@@ -660,7 +661,10 @@ function applyCatalogInner(db: Db, catalog: Catalog): NonNullable<SyncResult['co
         rpd: m.limits.rpd,
         tpm: m.limits.tpm,
         tpd: m.limits.tpd,
-        monthlyTokenBudget: m.monthlyTokenBudget,
+        // models.monthly_token_budget is TEXT NOT NULL DEFAULT '' — the
+        // catalog type allows null, so coerce it here rather than letting a
+        // null budget fail the whole sync transaction.
+        monthlyTokenBudget: m.monthlyTokenBudget ?? '',
         contextWindow: m.contextWindow,
         supportsVision: m.supportsVision ? 1 : 0,
         supportsTools: m.supportsTools ? 1 : 0,

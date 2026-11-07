@@ -9,10 +9,10 @@ import { cloudflareAccountId, benchCloudflareAccountId } from './cloudflare-dail
 // the account until midnight UTC. On Workers Paid that 429 never comes:
 // Cloudflare just bills $0.011 per 1,000 neurons over the allowance. An
 // account upgraded for any other reason (more Workers requests, say) turned
-// FreeLLMAPI's "free" Cloudflare route into a paid one with no warning. On
+// LibrePool's "free" Cloudflare route into a paid one with no warning. On
 // 2026-11-02/03 one bulk-generation run spent ~16.6M neurons (~$183) that way.
 //
-// So FreeLLMAPI meters neurons itself:
+// So LibrePool meters neurons itself:
 //   - Every Cloudflare call is charged an ESTIMATE in cloudflare_neuron_usage
 //     the moment it is dispatched (startCloudflareCall) and corrected to the
 //     real usage when it completes (settle). A call that aborts, times out or
@@ -278,8 +278,8 @@ export class CloudflareNeuronCapError extends Error {
   constructor(used: number, cap: number, now: number) {
     super(
       `Cloudflare API error 429: daily free allocation of neurons used up for this account `
-      + `(FreeLLMAPI meter: ${Math.round(used)} of ${cap} neurons today, resets 00:00 UTC). `
-      + 'Workers Paid would bill the overage, so FreeLLMAPI stops here; set CLOUDFLARE_DAILY_NEURON_CAP=0 to allow paid usage.',
+      + `(LibrePool meter: ${Math.round(used)} of ${cap} neurons today, resets 00:00 UTC). `
+      + 'Workers Paid would bill the overage, so LibrePool stops here; set CLOUDFLARE_DAILY_NEURON_CAP=0 to allow paid usage.',
     );
     this.name = 'CloudflareNeuronCapError';
     this.retryAfterSec = Math.ceil(msUntilUtcMidnight(now) / 1000);

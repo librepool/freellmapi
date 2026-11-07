@@ -19,9 +19,9 @@ const openDbs: Database.Database[] = [];
 const tempDirs: string[] = [];
 
 function fileDb(withApiKeys = true): { db: Database.Database; keyFile: string; dir: string } {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'freellmapi-selfcheck-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'librepool-selfcheck-'));
   tempDirs.push(dir);
-  const db = new Database(path.join(dir, 'freeapi.db'));
+  const db = new Database(path.join(dir, 'librepool.db'));
   db.exec('CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)');
   if (withApiKeys) {
     db.exec(`

@@ -60,7 +60,7 @@
     "emailChanged": "E-mail berhasil diubah.",
     "passwordReset": "Kata sandi telah direset. Silakan masuk.",
     "resetCodeDockerHint": "Menjalankan di Docker? Kode ada di log container: docker logs <container>.",
-    "desktopSessionFailed": "Dasbor tidak dapat masuk ke server lokal. Tutup FreeLLMAPI lalu buka lagi."
+    "desktopSessionFailed": "Dasbor tidak dapat masuk ke server lokal. Tutup LibrePool lalu buka lagi."
   },
   "common": {
     "save": "Simpan",
@@ -160,16 +160,16 @@
     "notGitInstall": "Instalasi ini tidak menyertakan informasi commit.",
     "checkFailed": "Tidak dapat memeriksa pembaruan.",
     "autoUpdateCheck": "Pemeriksaan pembaruan otomatis",
-    "restartAfterUpdate": "Mulai ulang FreeLLMAPI setelah proses build selesai.",
+    "restartAfterUpdate": "Mulai ulang LibrePool setelah proses build selesai.",
     "downloadUpdate": "Unduh pembaruan",
     "downloadingUpdate": "Mengunduh… {percent}%",
     "restartToUpdate": "Mulai ulang untuk memperbarui",
-    "updateReadyHint": "Selesai diunduh. FreeLLMAPI mencadangkan data Anda, memulai ulang, lalu membuka versi baru.",
+    "updateReadyHint": "Selesai diunduh. LibrePool mencadangkan data Anda, memulai ulang, lalu membuka versi baru.",
     "updateInstallFailed": "Pembaruan tidak dapat dipasang.",
     "updateNow": "Perbarui sekarang",
-    "updatingContainer": "Menarik image baru dan memulai ulang. Halaman ini dimuat ulang saat FreeLLMAPI kembali.",
+    "updatingContainer": "Menarik image baru dan memulai ulang. Halaman ini dimuat ulang saat LibrePool kembali.",
     "updateNowFailed": "Pembaru tidak menerima permintaan. Pastikan kontainer watchtower berjalan.",
-    "updateNowTimeout": "FreeLLMAPI belum dimulai ulang setelah 5 menit. Periksa log kontainer watchtower."
+    "updateNowTimeout": "LibrePool belum dimulai ulang setelah 5 menit. Periksa log kontainer watchtower."
   },
   "models": {
     "title": "Model",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Anggaran token bulanan",
     "remaining": "tersisa",
     "used": "digunakan",
-    "usedScopeHint": "Hanya permintaan chat, sejak awal bulan kalender ini, dijumlahkan atas semua model dalam rantai aktif — termasuk endpoint kustom. Lalu lintas yang Anda kirim ke penyedia di luar FreeLLMAPI tidak dihitung.",
+    "usedScopeHint": "Hanya permintaan chat, sejak awal bulan kalender ini, dijumlahkan atas semua model dalam rantai aktif — termasuk endpoint kustom. Lalu lintas yang Anda kirim ke penyedia di luar LibrePool tidak dihitung.",
     "legendRemainingTitle": "Sisa / anggaran bulanan untuk {name} ({platform})",
     "noPublishedQuota": "+{count} tanpa kuota yang dipublikasikan",
     "noPublishedQuotaTitle": "Model-model ini tidak memiliki anggaran token bulanan yang terdokumentasi, jadi tidak ada sisa yang bisa ditampilkan.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Masalah sinkronisasi terakhir: {error}",
     "license": "Lisensi",
     "planAnnual": "Premium Tahunan",
-    "planLifetime": "Seumur Hidup Premium",
     "expired": "Kedaluwarsa",
     "inactive": "Tidak aktif",
-    "lifetimeNote": "Lisensi seumur hidup: tidak pernah kedaluwarsa.",
     "renewsOn": "Diperbarui pada {date}.",
     "willNotRenew": "Tidak akan memperbarui. Premium hingga {date}, lalu pemasangan ini kembali ke katalog bulanan gratis.",
     "keyInactive": "Kunci ini sudah tidak aktif. Aplikasi ini terus mengerjakan katalog bulanan gratis.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Kunci Anda ada di email pembelian dan di halaman pasca-checkout. Kehilangannya?",
     "recoverKey": "Pulihkan di situs web",
     "upsellTitle": "Tayangkan seharga $19 setahun",
-    "upsellDescription": "Model gratis baru saat tersedia, bukan 30 hari kemudian. Satu kunci, setiap perangkat. Batalkan kapan saja; router tetap gratis selamanya.",
+    "upsellDescription": "Model gratis baru saat tersedia, bukan 15 hari kemudian. Satu kunci, setiap perangkat. Batalkan kapan saja; router tetap gratis selamanya.",
     "goPremium": "Gunakan Premium",
     "bundled": "dibundel",
     "planGeneric": "Premi"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Versi FreeLLMAPI yang lebih baru telah terpasang.",
+    "newBuild": "Versi LibrePool yang lebih baru telah terpasang.",
     "reload": "Muat ulang"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

@@ -60,7 +60,7 @@
     "emailChanged": "An canza imel.",
     "passwordReset": "An sake saita kalmar sirri. Da fatan shiga.",
     "resetCodeDockerHint": "Kana amfani da Docker? Lambar tana cikin tarihin kwantena: docker logs <container>.",
-    "desktopSessionFailed": "Dashboard ɗin bai iya shiga uwar garken gida ba. Rufe FreeLLMAPI ka sake buɗe shi."
+    "desktopSessionFailed": "Dashboard ɗin bai iya shiga uwar garken gida ba. Rufe LibrePool ka sake buɗe shi."
   },
   "common": {
     "save": "Ajiye",
@@ -160,16 +160,16 @@
     "notGitInstall": "Wannan shigarwar ba ta ƙunshi bayanan commit ba.",
     "checkFailed": "Ba a iya bincika sabuntawa ba.",
     "autoUpdateCheck": "Duba sabuntawa ta atomatik",
-    "restartAfterUpdate": "Sake kunna FreeLLMAPI bayan an gama build ɗin.",
+    "restartAfterUpdate": "Sake kunna LibrePool bayan an gama build ɗin.",
     "downloadUpdate": "Sauke sabuntawa",
     "downloadingUpdate": "Ana saukewa… {percent}%",
     "restartToUpdate": "Sake farawa don sabuntawa",
-    "updateReadyHint": "An sauke. FreeLLMAPI yana adana bayananka, sai ya sake farawa ya buɗe sabon sigar.",
+    "updateReadyHint": "An sauke. LibrePool yana adana bayananka, sai ya sake farawa ya buɗe sabon sigar.",
     "updateInstallFailed": "Ba a iya shigar da sabuntawar ba.",
     "updateNow": "Sabunta yanzu",
-    "updatingContainer": "Ana jan sabon hoto ana sake farawa. Wannan shafin zai sake lodawa idan FreeLLMAPI ya dawo.",
+    "updatingContainer": "Ana jan sabon hoto ana sake farawa. Wannan shafin zai sake lodawa idan LibrePool ya dawo.",
     "updateNowFailed": "Mai sabuntawa bai karɓi buƙatar ba. Duba ko kwantena watchtower yana aiki.",
-    "updateNowTimeout": "FreeLLMAPI bai sake farawa ba bayan minti 5. Duba bayanan log na kwantena watchtower."
+    "updateNowTimeout": "LibrePool bai sake farawa ba bayan minti 5. Duba bayanan log na kwantena watchtower."
   },
   "models": {
     "title": "Samfura",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Kasafin kudin alamar wata-wata",
     "remaining": "saura",
     "used": "amfani",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Matsalar daidaitawa ta ƙarshe: {error}",
     "license": "Lasisi",
     "planAnnual": "Premium Shekara-shekara",
-    "planLifetime": "Premium Rayuwa",
     "expired": "Karewa",
     "inactive": "Mara aiki",
-    "lifetimeNote": "Lasisin rayuwa: baya ƙarewa.",
     "renewsOn": "Sabuntawa akan {date}.",
     "willNotRenew": "Ba zai sabunta ba. Premium har zuwa {date}, to wannan shigarwar zata koma cikin kundin kyauta na kowane wata.",
     "keyInactive": "Wannan maɓalli baya aiki. App ɗin yana ci gaba da aiki akan kasida ta wata-wata kyauta.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Makullin ku yana cikin imel ɗin siyan ku da kuma akan shafin bayan-bincike. Bata shi?",
     "recoverKey": "Mai da shi a kan gidan yanar gizon",
     "upsellTitle": "Yi rayuwa akan $19 a shekara",
-    "upsellDescription": "Sabbin samfuran kyauta a lokacin da suke wanzuwa, maimakon kwanaki 30 daga baya. Maɓalli ɗaya, kowace na'ura. Soke kowane lokaci; na'ura mai ba da hanya tsakanin hanyoyin sadarwa zauna free har abada.",
+    "upsellDescription": "Sabbin samfuran kyauta a lokacin da suke wanzuwa, maimakon kwanaki 15 daga baya. Maɓalli ɗaya, kowace na'ura. Soke kowane lokaci; na'ura mai ba da hanya tsakanin hanyoyin sadarwa zauna free har abada.",
     "goPremium": "Go Premium",
     "bundled": "daure",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "An shigar da sabon sigar FreeLLMAPI.",
+    "newBuild": "An shigar da sabon sigar LibrePool.",
     "reload": "Sake lodawa"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

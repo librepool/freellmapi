@@ -111,14 +111,14 @@ function mergeYamlDocument(existing: string, value: Record<string, unknown>): st
 
 function markerPattern(): RegExp {
   return new RegExp(
-    `^[ \\t]*(?:#|//) freellmapi:start[\\s\\S]*?^[ \\t]*(?:#|//) freellmapi:end\\s*`,
+    `^[ \\t]*(?:#|//) librepool:start[\\s\\S]*?^[ \\t]*(?:#|//) librepool:end\\s*`,
     'm',
   );
 }
 
 function mergeMarked(existing: string, generated: string): string {
-  const start = generated.match(/^[ \t]*(?:#|\/\/) freellmapi:start$/m)?.[0];
-  const end = generated.match(/^[ \t]*(?:#|\/\/) freellmapi:end$/m)?.[0];
+  const start = generated.match(/^[ \t]*(?:#|\/\/) librepool:start$/m)?.[0];
+  const end = generated.match(/^[ \t]*(?:#|\/\/) librepool:end$/m)?.[0];
   if (!start || !end) return generated;
   const marked = markerPattern();
   if (marked.test(existing)) {
@@ -158,7 +158,7 @@ function continueModelLines(generated: string): string[] {
   const lines = generated.split(/\r?\n/);
   const modelsIndex = lines.findIndex(line => line === 'models:');
   const endIndex = lines.findIndex(
-    (line, index) => index > modelsIndex && line === '# freellmapi:end',
+    (line, index) => index > modelsIndex && line === '# librepool:end',
   );
   return lines.slice(modelsIndex + 1, endIndex < 0 ? undefined : endIndex);
 }
@@ -184,7 +184,7 @@ function mergeContinueYaml(existing: string, generated: string): string {
   const entryStart = lines.findIndex(
     (line, index) => index > modelsIndex
       && index < modelsEnd
-      && /^\s{2}-\s+name:\s+["']?FreeLLMAPI["']?\s*$/.test(line),
+      && /^\s{2}-\s+name:\s+["']?LibrePool["']?\s*$/.test(line),
   );
   if (entryStart >= 0) {
     let entryEnd = entryStart + 1;
@@ -204,12 +204,12 @@ function mergeContinueYaml(existing: string, generated: string): string {
 }
 
 function mergeYaml(existing: string, generated: string): string {
-  if (/^name: FreeLLMAPI$/m.test(generated) && /^models:$/m.test(generated)) {
+  if (/^name: LibrePool$/m.test(generated) && /^models:$/m.test(generated)) {
     const withoutOldBlock = existing.replace(markerPattern(), '').trimEnd();
     return mergeContinueYaml(withoutOldBlock, generated);
   }
   if (!existing.trim()) return generated;
-  if (/^# freellmapi:start$/m.test(existing)) return mergeMarked(existing, generated);
+  if (/^# librepool:start$/m.test(existing)) return mergeMarked(existing, generated);
   const withoutConflicts = removeYamlKeys(existing, generatedYamlKeys(generated));
   return mergeMarked(withoutConflicts, generated);
 }
@@ -253,7 +253,7 @@ function tomlRootKey(line: string): string | undefined {
 }
 
 function isTomlMarkerLine(line: string): boolean {
-  return /^[ \t]*# freellmapi:(?:start|end)$/.test(line);
+  return /^[ \t]*# librepool:(?:start|end)$/.test(line);
 }
 
 function trimBlankEdges(lines: string[]): string[] {
@@ -321,7 +321,7 @@ function mergeToml(existing: string, generated: string): string {
   }
 
   const wrap = (lines: string[]): string[] => (lines.length
-    ? ['# freellmapi:start', ...lines, '# freellmapi:end']
+    ? ['# librepool:start', ...lines, '# librepool:end']
     : []);
   const firstTable = kept.findIndex(isTomlHeader);
   const head = firstTable < 0 ? kept : kept.slice(0, firstTable);
@@ -409,7 +409,7 @@ function commitPlannedWrite(plan: PlannedWrite): ApplyResult {
     backupPath = `${file.path}.backup-${timestamp()}`;
     fs.copyFileSync(file.path, backupPath);
   }
-  const temporary = `${file.path}.freellmapi-${process.pid}.tmp`;
+  const temporary = `${file.path}.librepool-${process.pid}.tmp`;
   fs.writeFileSync(temporary, plan.rendered, { mode: file.sensitive ? 0o600 : 0o644 });
   fs.renameSync(temporary, file.path);
   if (file.sensitive) fs.chmodSync(file.path, 0o600);

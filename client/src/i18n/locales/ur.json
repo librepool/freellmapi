@@ -60,7 +60,7 @@
     "emailChanged": "ای میل کامیابی سے تبدیل ہوگئی۔",
     "passwordReset": "پاس ورڈ ری سیٹ ہوگیا۔ براہ کرم سائن اِن کریں۔",
     "resetCodeDockerHint": "Docker میں چلا رہے ہیں؟ کوڈ کنٹینر لاگ میں ہے: docker logs <container>۔",
-    "desktopSessionFailed": "ڈیش بورڈ لوکل سرور میں سائن اِن نہیں کر سکا۔ FreeLLMAPI بند کر کے دوبارہ کھولیں۔"
+    "desktopSessionFailed": "ڈیش بورڈ لوکل سرور میں سائن اِن نہیں کر سکا۔ LibrePool بند کر کے دوبارہ کھولیں۔"
   },
   "common": {
     "save": "محفوظ کریں۔",
@@ -160,16 +160,16 @@
     "notGitInstall": "اس انسٹالیشن میں commit کی معلومات شامل نہیں ہیں۔",
     "checkFailed": "اپ ڈیٹس کی جانچ نہیں ہو سکی۔",
     "autoUpdateCheck": "خودکار اپ ڈیٹ جانچ",
-    "restartAfterUpdate": "بلڈ مکمل ہونے کے بعد FreeLLMAPI کو دوبارہ شروع کریں۔",
+    "restartAfterUpdate": "بلڈ مکمل ہونے کے بعد LibrePool کو دوبارہ شروع کریں۔",
     "downloadUpdate": "اپ ڈیٹ ڈاؤن لوڈ کریں",
     "downloadingUpdate": "ڈاؤن لوڈ ہو رہا ہے… {percent}%",
     "restartToUpdate": "اپ ڈیٹ کے لیے دوبارہ شروع کریں",
-    "updateReadyHint": "ڈاؤن لوڈ ہو گیا۔ FreeLLMAPI آپ کے ڈیٹا کا بیک اپ لیتا ہے، دوبارہ شروع ہوتا ہے اور نیا ورژن کھولتا ہے۔",
+    "updateReadyHint": "ڈاؤن لوڈ ہو گیا۔ LibrePool آپ کے ڈیٹا کا بیک اپ لیتا ہے، دوبارہ شروع ہوتا ہے اور نیا ورژن کھولتا ہے۔",
     "updateInstallFailed": "اپ ڈیٹ انسٹال نہیں ہو سکا۔",
     "updateNow": "ابھی اپ ڈیٹ کریں",
-    "updatingContainer": "نئی امیج کھینچی جا رہی ہے اور دوبارہ شروع ہو رہا ہے۔ FreeLLMAPI واپس آنے پر یہ صفحہ دوبارہ لوڈ ہوگا۔",
+    "updatingContainer": "نئی امیج کھینچی جا رہی ہے اور دوبارہ شروع ہو رہا ہے۔ LibrePool واپس آنے پر یہ صفحہ دوبارہ لوڈ ہوگا۔",
     "updateNowFailed": "اپ ڈیٹر نے درخواست قبول نہیں کی۔ چیک کریں کہ watchtower کنٹینر چل رہا ہے۔",
-    "updateNowTimeout": "5 منٹ بعد بھی FreeLLMAPI دوبارہ شروع نہیں ہوا۔ watchtower کنٹینر کے لاگز دیکھیں۔"
+    "updateNowTimeout": "5 منٹ بعد بھی LibrePool دوبارہ شروع نہیں ہوا۔ watchtower کنٹینر کے لاگز دیکھیں۔"
   },
   "models": {
     "title": "ماڈلز",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "ماہانہ ٹوکن بجٹ",
     "remaining": "باقی",
     "used": "استعمال کیا جاتا ہے",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "آخری مطابقت پذیری کا مسئلہ: {error}",
     "license": "لائسنس",
     "planAnnual": "پریمیم سالانہ",
-    "planLifetime": "پریمیم لائف ٹائم",
     "expired": "میعاد ختم",
     "inactive": "غیر فعال",
-    "lifetimeNote": "لائف ٹائم لائسنس: کبھی ختم نہیں ہوتا۔",
     "renewsOn": "{date} پر تجدید۔",
     "willNotRenew": "تجدید نہیں کریں گے۔ {date} تک پریمیم، پھر یہ انسٹال مفت ماہانہ کیٹلاگ میں واپس آجاتا ہے۔",
     "keyInactive": "یہ کلید اب فعال نہیں ہے۔ ایپ مفت ماہانہ کیٹلاگ پر کام کرتی رہتی ہے۔",
@@ -1056,7 +1054,7 @@
     "keyHint": "آپ کی کلید آپ کی خریداری کے ای میل میں اور چیک آؤٹ کے بعد کے صفحہ پر ہے۔ اسے کھو دیا؟",
     "recoverKey": "ویب سائٹ پر اسے بازیافت کریں۔",
     "upsellTitle": "$19 ایک سال میں لائیو ہوں۔",
-    "upsellDescription": "30 دن بعد کے بجائے، نئے مفت ماڈل جس وقت وہ موجود ہیں۔ ایک کلید، ہر آلہ۔ کسی بھی وقت منسوخ کریں؛ راؤٹر ہمیشہ کے لیے مفت رہتا ہے۔",
+    "upsellDescription": "15 دن بعد کے بجائے، نئے مفت ماڈل جس وقت وہ موجود ہیں۔ ایک کلید، ہر آلہ۔ کسی بھی وقت منسوخ کریں؛ راؤٹر ہمیشہ کے لیے مفت رہتا ہے۔",
     "goPremium": "پریمیم جاؤ",
     "bundled": "بنڈل",
     "planGeneric": "پریمیم"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI کا نیا ورژن انسٹال ہو چکا ہے۔",
+    "newBuild": "LibrePool کا نیا ورژن انسٹال ہو چکا ہے۔",
     "reload": "دوبارہ لوڈ کریں"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

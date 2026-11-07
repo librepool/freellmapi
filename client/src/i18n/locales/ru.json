@@ -60,7 +60,7 @@
     "emailChanged": "E-mail успешно изменён.",
     "passwordReset": "Пароль сброшен. Войдите заново.",
     "resetCodeDockerHint": "Используете Docker? Код находится в логе контейнера: docker logs <container>.",
-    "desktopSessionFailed": "Панель управления не смогла войти на локальный сервер. Закройте FreeLLMAPI и откройте его снова."
+    "desktopSessionFailed": "Панель управления не смогла войти на локальный сервер. Закройте LibrePool и откройте его снова."
   },
   "common": {
     "save": "Сохранить",
@@ -160,16 +160,16 @@
     "notGitInstall": "Эта установка не содержит сведений о коммите.",
     "checkFailed": "Не удалось проверить наличие обновлений.",
     "autoUpdateCheck": "Автоматическая проверка обновлений",
-    "restartAfterUpdate": "Перезапустите FreeLLMAPI после завершения сборки.",
+    "restartAfterUpdate": "Перезапустите LibrePool после завершения сборки.",
     "downloadUpdate": "Скачать обновление",
     "downloadingUpdate": "Загрузка… {percent}%",
     "restartToUpdate": "Перезапустить для обновления",
-    "updateReadyHint": "Загружено. FreeLLMAPI создаёт резервную копию данных, перезапускается и открывает новую версию.",
+    "updateReadyHint": "Загружено. LibrePool создаёт резервную копию данных, перезапускается и открывает новую версию.",
     "updateInstallFailed": "Не удалось установить обновление.",
     "updateNow": "Обновить сейчас",
-    "updatingContainer": "Загружается новый образ и выполняется перезапуск. Страница перезагрузится, когда FreeLLMAPI вернётся.",
+    "updatingContainer": "Загружается новый образ и выполняется перезапуск. Страница перезагрузится, когда LibrePool вернётся.",
     "updateNowFailed": "Служба обновления не приняла запрос. Проверьте, что контейнер watchtower запущен.",
-    "updateNowTimeout": "FreeLLMAPI не перезапустился за 5 минут. Проверьте журналы контейнера watchtower."
+    "updateNowTimeout": "LibrePool не перезапустился за 5 минут. Проверьте журналы контейнера watchtower."
   },
   "models": {
     "title": "Модели",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Ежемесячный бюджет токенов",
     "remaining": "оставшееся",
     "used": "использованный",
-    "usedScopeHint": "Только чат-запросы с начала текущего календарного месяца, суммарно по всем моделям активной цепочки, включая пользовательские эндпоинты. Трафик, отправленный провайдеру в обход FreeLLMAPI, не учитывается.",
+    "usedScopeHint": "Только чат-запросы с начала текущего календарного месяца, суммарно по всем моделям активной цепочки, включая пользовательские эндпоинты. Трафик, отправленный провайдеру в обход LibrePool, не учитывается.",
     "legendRemainingTitle": "Остаток / месячный бюджет для {name} ({platform})",
     "noPublishedQuota": "+{count} без опубликованной квоты",
     "noPublishedQuotaTitle": "У этих моделей нет задокументированного месячного бюджета токенов, поэтому остаток показать нечем.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Последняя проблема с синхронизацией: {error}",
     "license": "Лицензия",
     "planAnnual": "Премиум годовой",
-    "planLifetime": "Премиум на всю жизнь",
     "expired": "Срок действия истек",
     "inactive": "Неактивный",
-    "lifetimeNote": "Пожизненная лицензия: срок действия никогда не истекает.",
     "renewsOn": "Обновление на {date}.",
     "willNotRenew": "Не будет продлеваться. Премиум до {date}, затем эта установка возвращается к бесплатному ежемесячному каталогу.",
     "keyInactive": "Этот ключ больше не активен. Приложение продолжает работать над бесплатным ежемесячным каталогом.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ваш ключ находится в электронном письме о покупке и на странице после оформления заказа. Потеряли?",
     "recoverKey": "Восстановить его на сайте",
     "upsellTitle": "Начните жить за 19 долларов в год",
-    "upsellDescription": "Новые бесплатные модели сразу после их появления, а не 30 дней спустя. Один ключ для каждого устройства. Отменить в любое время; маршрутизатор остается бесплатным навсегда.",
+    "upsellDescription": "Новые бесплатные модели сразу после их появления, а не 15 дней спустя. Один ключ для каждого устройства. Отменить в любое время; маршрутизатор остается бесплатным навсегда.",
     "goPremium": "Перейти Премиум",
     "bundled": "в комплекте",
     "planGeneric": "Премиум"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Установлена более новая версия FreeLLMAPI.",
+    "newBuild": "Установлена более новая версия LibrePool.",
     "reload": "Перезагрузить"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

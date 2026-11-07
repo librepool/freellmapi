@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { ChatMessage, ChatCompletionChoice, ChatCompletionResponse, ChatToolCall, TokenUsage } from '@freellmapi/shared/types.js';
+import type { ChatMessage, ChatCompletionChoice, ChatCompletionResponse, ChatToolCall, TokenUsage } from '@librepool/shared/types.js';
 import {
   routePinnedModel, routeRequest, getOrderedFusionChain, resolveFusionCandidate,
   pinnedModelFitsRequestSize,

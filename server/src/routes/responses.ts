@@ -8,7 +8,7 @@ import type {
   ChatToolDefinition,
   ChatToolChoice,
   Platform,
-} from '@freellmapi/shared/types.js';
+} from '@librepool/shared/types.js';
 import { routeRequest, hasEnabledVisionModel, hasEnabledToolsModel, resolveStickyPreference, routingReserveTokens, resolveModelGroupCandidates, resolveRoutingChain, failureAttributionFor, type RouteResult, type ResolvedChain, type ChainRow } from '../services/router.js';
 import { getDb } from '../db/index.js';
 import { resolveAuth, prependSystemPrompt } from '../lib/system-prompt.js';
@@ -770,12 +770,12 @@ export async function handleResponses(req: Request, res: Response): Promise<void
       && content.some(block => block && typeof block === 'object' && 'cache_control' in block);
   });
   const compressionResult = compressRequest(messages, {
-    header: req.headers['x-freellm-compress'],
+    header: req.headers['x-librepool-compress'],
     tools,
     cacheControlPrefixLength: hasCacheControl ? messages.length : 0,
   });
   messages = compressionResult.messages;
-  res.setHeader('X-FreeLLM-Compress', formatCompressionHeader(compressionResult));
+  res.setHeader('X-LibrePool-Compress', formatCompressionHeader(compressionResult));
 
   // Server-enforced system prompt (#411): after compression so it is never
   // compressed away, first in the list so the caller's own instructions
@@ -1203,7 +1203,7 @@ export async function handleResponses(req: Request, res: Response): Promise<void
   // this turn routes with. Skipped when the client pinned a model or the
   // conversation is sticky to one. Any doubt routes as Balanced.
   const routingPick = await applyDecisionRouting(messages, { pinned: !isAutoModel(routedModel) || preferredModel != null, preset: resolvedChain?.strategyOverride, signal: clientAbort.signal });
-  if (routingPick && !res.headersSent) res.setHeader('X-FreeLLM-Routing-Strategy', routingStrategyHeader(routingPick));
+  if (routingPick && !res.headersSent) res.setHeader('X-LibrePool-Routing-Strategy', routingStrategyHeader(routingPick));
 
   await runFallbackLoop({
     maxRetries: MAX_RETRIES,

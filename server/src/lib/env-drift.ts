@@ -11,13 +11,17 @@ const COMMENTED_ENV_RE = /^\s*#\s*(?:export\s+)?([A-Z][A-Z0-9_]*)\s*=/;
 const KNOWN_UNDOCUMENTED_ENV = new Set([
   'NODE_ENV',
   'DEV_MODE',
-  'FREELLMAPI_DIR',
+  'LIBREPOOL_DIR',
   'PROXY_URL',
   'CATALOG_BASE_URL',
   'CATALOG_PUBKEY',
   'CATALOG_SYNC_DISABLED',
-  'FREEAPI_DB_BACKUP_TARGET',
+  'LIBREPOOL_DB_BACKUP_TARGET',
   'PREMIUM_SITE_URL',
+  // Deprecated FreeLLMAPI-era aliases (see server/src/env.ts): a .env that
+  // still uses an old name is recognised, not flagged as unknown.
+  'FREELLMAPI_DIR',
+  'FREEAPI_DB_BACKUP_TARGET',
 ]);
 
 const KNOWN_UNDOCUMENTED_PATTERNS = [
@@ -37,7 +41,7 @@ export interface EnvDriftPaths {
 
 export function defaultEnvDriftPaths(): Required<EnvDriftPaths> {
   return {
-    envPath: process.env.FREEAPI_ENV_PATH ?? path.join(REPO_ROOT, '.env'),
+    envPath: process.env.LIBREPOOL_ENV_PATH ?? path.join(REPO_ROOT, '.env'),
     examplePath: path.join(REPO_ROOT, '.env.example'),
   };
 }

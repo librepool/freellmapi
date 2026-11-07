@@ -22,7 +22,7 @@ hard ceiling. Tools and vision are not advertised until separately tested.
 The model list is public, so it cannot validate credentials. Keys are tested by
 actual user requests, not automatic inference probes. Catalog models are not
 seeded in the app: Premium receives signed live updates and Free receives them
-through the unchanged 30-day catalog gate. Requires app v0.16.20 or later.
+through the unchanged 15-day catalog gate. Requires app v0.16.20 or later.
 
 ## Provider terms
 

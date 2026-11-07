@@ -126,7 +126,7 @@ No provider quota is spent on the `409` — it is returned directly from the loo
 # 1. First attempt — times out on the client side, but the gateway
 #    finishes and stores the response under the key hash.
 curl -X POST http://localhost:3001/v1/chat/completions \
-  -H "Authorization: Bearer freellmapi-your-unified-key" \
+  -H "Authorization: Bearer librepool-your-unified-key" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: 7f3a-2026-09-02-retry-1" \
   -d '{
@@ -136,7 +136,7 @@ curl -X POST http://localhost:3001/v1/chat/completions \
 
 # 2. Retry with the SAME key + SAME body → replay, zero provider cost
 curl -i http://localhost:3001/v1/chat/completions \
-  -H "Authorization: Bearer freellmapi-your-unified-key" \
+  -H "Authorization: Bearer librepool-your-unified-key" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: 7f3a-2026-09-02-retry-1" \
   -d '{
@@ -148,7 +148,7 @@ curl -i http://localhost:3001/v1/chat/completions \
 
 # 3. Same key with DIFFERENT content → 409
 curl -i http://localhost:3001/v1/chat/completions \
-  -H "Authorization: Bearer freellmapi-your-unified-key" \
+  -H "Authorization: Bearer librepool-your-unified-key" \
   -H "Content-Type: application/json" \
   -H "Idempotency-Key: 7f3a-2026-09-02-retry-1" \
   -d '{
@@ -162,7 +162,7 @@ Tips:
 
 - Use a **UUID v4** or KSUID per logical operation; do not reuse keys across unrelated calls.
 - Timeouts are the expected use case — set the client timeout shorter than the gateway's provider budget so retries actually fire.
-- A replay can be distinguished by `X-Routed-Via: idempotency` (normal hits use `X-Routed-Via: <platform>/<model>`); cache hits use `X-FreeLLM-Cache: HIT`.
+- A replay can be distinguished by `X-Routed-Via: idempotency` (normal hits use `X-Routed-Via: <platform>/<model>`); cache hits use `X-LibrePool-Cache: HIT`.
 
 ---
 
@@ -180,7 +180,7 @@ Tips:
 
 ## 10. Relationship to response cache & degraded mode
 
-- **Response cache** (`services/cache.ts`, `X-FreeLLM-Cache`) is orthogonal: global, temperature-gated, in-memory LRU covering streaming and non-streaming alike; idempotency is durable (SQLite), per-caller, fingerprint-bound, and non-streaming only. Both short-circuit provider calls.
+- **Response cache** (`services/cache.ts`, `X-LibrePool-Cache`) is orthogonal: global, temperature-gated, in-memory LRU covering streaming and non-streaming alike; idempotency is durable (SQLite), per-caller, fingerprint-bound, and non-streaming only. Both short-circuit provider calls.
 - **Degraded mode** ([`docs/en/architecture/04-degraded-mode-and-failover.md`](../architecture/04-degraded-mode-and-failover.md)) disables bandit exploration but does not affect idempotency — replays still bypass routing entirely.
 - **Failover**: only the final successful body is stored. If a request exhausts the fallback loop, nothing is stored for that key.
 

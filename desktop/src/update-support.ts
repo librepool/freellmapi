@@ -19,7 +19,7 @@ export type UpdateState =
  * can: the Windows NSIS install (it ships an uninstaller next to the exe; the
  * portable .zip does not), a mac .app that is not running from the mounted dmg,
  * and the Linux AppImage. deb/rpm/tar.xz belong to the package manager.
- * FREEAPI_UPDATE_FEED lets an unpackaged build exercise the real flow against
+ * LIBREPOOL_UPDATE_FEED lets an unpackaged build exercise the real flow against
  * a local feed during development.
  */
 export function updateSupport(

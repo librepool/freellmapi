@@ -60,7 +60,7 @@
     "emailChanged": "Az e-mail-cím módosult.",
     "passwordReset": "A jelszó visszaállt. Jelentkezzen be.",
     "resetCodeDockerHint": "Docker alatt fut? A kód a konténer naplójában található: docker logs <container>.",
-    "desktopSessionFailed": "Az irányítópult nem tudott bejelentkezni a helyi szerverre. Lépjen ki a FreeLLMAPI alkalmazásból, és nyissa meg újra."
+    "desktopSessionFailed": "Az irányítópult nem tudott bejelentkezni a helyi szerverre. Lépjen ki a LibrePool alkalmazásból, és nyissa meg újra."
   },
   "common": {
     "save": "Mentés",
@@ -160,16 +160,16 @@
     "notGitInstall": "Ez a telepítés nem tartalmaz commitinformációkat.",
     "checkFailed": "Nem sikerült ellenőrizni a frissítéseket.",
     "autoUpdateCheck": "Automatikus frissítésellenőrzés",
-    "restartAfterUpdate": "A build befejezése után indítsa újra a FreeLLMAPI-t.",
+    "restartAfterUpdate": "A build befejezése után indítsa újra a LibrePool-t.",
     "downloadUpdate": "Frissítés letöltése",
     "downloadingUpdate": "Letöltés… {percent}%",
     "restartToUpdate": "Újraindítás a frissítéshez",
-    "updateReadyHint": "Letöltve. A FreeLLMAPI biztonsági mentést készít az adatairól, újraindul, és megnyitja az új verziót.",
+    "updateReadyHint": "Letöltve. A LibrePool biztonsági mentést készít az adatairól, újraindul, és megnyitja az új verziót.",
     "updateInstallFailed": "A frissítést nem sikerült telepíteni.",
     "updateNow": "Frissítés most",
-    "updatingContainer": "Az új image letöltése és újraindítás. Az oldal újratöltődik, amikor a FreeLLMAPI visszatér.",
+    "updatingContainer": "Az új image letöltése és újraindítás. Az oldal újratöltődik, amikor a LibrePool visszatér.",
     "updateNowFailed": "A frissítő nem fogadta el a kérést. Ellenőrizze, hogy fut-e a watchtower konténer.",
-    "updateNowTimeout": "A FreeLLMAPI 5 perc után sem indult újra. Nézze meg a watchtower konténer naplóit."
+    "updateNowTimeout": "A LibrePool 5 perc után sem indult újra. Nézze meg a watchtower konténer naplóit."
   },
   "models": {
     "title": "Modellek",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Havi token költségvetés",
     "remaining": "Maradék",
     "used": "Használt",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Utolsó szinkronizációs probléma: {error}",
     "license": "Engedély",
     "planAnnual": "Premium Annual",
-    "planLifetime": "Prémium élettartam",
     "expired": "Lejárt",
     "inactive": "Inaktív",
-    "lifetimeNote": "Életre szóló jogosítvány: soha nem jár le.",
     "renewsOn": "Megújítsa {date}.",
     "willNotRenew": "Nem fogja megújítani. Premium {date}-ig, majd ez a telepítés visszatér az ingyenes havi katalógusba.",
     "keyInactive": "Ez a kulcs már nem aktív. Az alkalmazás folyamatosan dolgozik az ingyenes havi katalóguson.",
@@ -1056,7 +1054,7 @@
     "keyHint": "A kulcsod a vásárlási e-mailben és a fizetés utáni oldalon található. Elvesztetted?",
     "recoverKey": "Szerezd vissza a weboldalon",
     "upsellTitle": "Élj évi 19 dollárért",
-    "upsellDescription": "Új ingyenes modellek már abban a pillanatban, amikor megvannak, nem pedig 30 nappal később. Egy kulcs, minden eszköz. Bármikor lemondhatod; A router örökre szabad marad.",
+    "upsellDescription": "Új ingyenes modellek már abban a pillanatban, amikor megvannak, nem pedig 15 nappal később. Egy kulcs, minden eszköz. Bármikor lemondhatod; A router örökre szabad marad.",
     "goPremium": "Go Premium",
     "bundled": "csomagolt",
     "planGeneric": "Prémium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "A FreeLLMAPI újabb verziója van telepítve.",
+    "newBuild": "A LibrePool újabb verziója van telepítve.",
     "reload": "Újratöltés"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

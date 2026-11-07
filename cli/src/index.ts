@@ -14,6 +14,19 @@ import { DOCTOR_TOOLS, diagnose, exitCodeFor, formatReport, type ToolReport } fr
 import { keysHelp, runKeys, type KeyCommandOptions } from './keys.js';
 import type { CatalogModel, GenerateContext } from './types.js';
 
+// Deprecated FreeLLMAPI-era names, accepted for one release (new LIBREPOOL_*
+// name wins when both are set).
+for (const [oldName, newName] of [
+  ['FREELLMAPI_URL', 'LIBREPOOL_URL'],
+  ['FREELLMAPI_API_KEY', 'LIBREPOOL_API_KEY'],
+  ['FREELLMAPI_DASHBOARD_TOKEN', 'LIBREPOOL_DASHBOARD_TOKEN'],
+] as const) {
+  if (process.env[oldName] !== undefined) {
+    if (process.env[newName] === undefined) process.env[newName] = process.env[oldName] as string;
+    console.warn(`${oldName} is deprecated; use ${newName} instead.`);
+  }
+}
+
 interface CliOptions extends KeyCommandOptions {
   apiKey?: string;
   profile: string;
@@ -50,9 +63,9 @@ function parseTimeout(value: string): number {
 
 export function parseArgs(argv: string[]): { command?: string; options: CliOptions } {
   const options: CliOptions = {
-    url: process.env.FREELLMAPI_URL || 'http://localhost:3001',
-    apiKey: process.env.FREELLMAPI_API_KEY,
-    token: process.env.FREELLMAPI_DASHBOARD_TOKEN,
+    url: process.env.LIBREPOOL_URL || 'http://localhost:3001',
+    apiKey: process.env.LIBREPOOL_API_KEY,
+    token: process.env.LIBREPOOL_DASHBOARD_TOKEN,
     profile: 'default',
     dryRun: false,
     args: [],
@@ -113,12 +126,12 @@ async function promptForKey(provider = false): Promise<string> {
     throw new Error(
       provider
         ? 'No provider key supplied. Pass --key or use an interactive terminal for hidden input.'
-        : 'No API key supplied. Pass --api-key or set FREELLMAPI_API_KEY.',
+        : 'No API key supplied. Pass --api-key or set LIBREPOOL_API_KEY.',
     );
   }
   // Imported lazily, not statically: `node:readline/promises` only exists on
   // Node >=17.4, and a static import of it crashes the whole CLI at load time
-  // on older runtimes (#1283) — `npx freellmapi --help` died with
+  // on older runtimes (#1283) — `npx librepool --help` died with
   // ERR_UNKNOWN_BUILTIN_MODULE before main() or the engines check could say
   // anything useful. Deferring it means only the interactive key prompt needs
   // a modern Node; every other command degrades to the readable error below.
@@ -140,7 +153,7 @@ async function promptForKey(provider = false): Promise<string> {
   rl.on('SIGINT', cancel);
   rl.on('close', cancel);
   try {
-    const answer = rl.question(provider ? 'Provider API key: ' : 'FreeLLMAPI unified API key: ', {
+    const answer = rl.question(provider ? 'Provider API key: ' : 'LibrePool unified API key: ', {
       signal: controller.signal,
     });
     muted = true;
@@ -173,8 +186,8 @@ async function catalog(url: string, apiKey: string, availableOnly = true): Promi
       : undefined;
     const reason = cause ?? (error instanceof Error ? error.message : String(error));
     throw new Error(
-      `Could not reach the FreeLLMAPI gateway at ${rootUrl(url)} (${reason}). `
-      + 'Check that the server is running, or point the CLI at it with --url or FREELLMAPI_URL.',
+      `Could not reach the LibrePool gateway at ${rootUrl(url)} (${reason}). `
+      + 'Check that the server is running, or point the CLI at it with --url or LIBREPOOL_URL.',
     );
   }
   if (!response.ok) {
@@ -241,7 +254,7 @@ export function resolvePinnedModel(
   // to be told which roster the verdict below came from.
   if (rosters.degradedReason) {
     warn(
-      `freellmapi: could not fetch the unfiltered model catalog (${rosters.degradedReason}). `
+      `librepool: could not fetch the unfiltered model catalog (${rosters.degradedReason}). `
       + `Checking '${requested}' against the available-only roster instead — a model that `
       + 'exists but is out of quota may be reported as unknown.\n',
     );
@@ -253,7 +266,7 @@ export function resolvePinnedModel(
   // we should make silently.
   if (resolved.unavailable) {
     warn(
-      `freellmapi: '${resolved.id}' is registered but not currently available `
+      `librepool: '${resolved.id}' is registered but not currently available `
       + '(out of quota, cooling down, or its key is disabled). Launching anyway.\n',
     );
   }
@@ -262,10 +275,10 @@ export function resolvePinnedModel(
 
 function help(): string {
   return [
-    'FreeLLMAPI coding-agent setup and provider key management',
+    'LibrePool coding-agent setup and provider key management',
     '',
     'Usage:',
-    '  freellmapi <command> [--url URL] [--api-key KEY] [--profile NAME] [--model ID] [--dry-run]',
+    '  librepool <command> [--url URL] [--api-key KEY] [--profile NAME] [--model ID] [--dry-run]',
     '',
     'Commands:',
     ...tools.map(tool => `  ${tool.command.padEnd(17)} ${tool.name}`),
@@ -277,7 +290,7 @@ function help(): string {
     '  keys              Add, list, remove, or test provider keys (keys --help)',
     '',
     'Environment:',
-    '  FREELLMAPI_URL, FREELLMAPI_API_KEY, FREELLMAPI_DASHBOARD_TOKEN (keys only)',
+    '  LIBREPOOL_URL, LIBREPOOL_API_KEY, LIBREPOOL_DASHBOARD_TOKEN (keys only)',
   ].join('\n');
 }
 
@@ -373,7 +386,7 @@ export function claudeLaunchEnv(
     if (!fs.existsSync(directory)) {
       throw new Error(
         `Claude profile '${options.profile}' has no configuration directory at ${directory}. `
-        + `Create it with: freellmapi setup-claude --profile ${options.profile}`,
+        + `Create it with: librepool setup-claude --profile ${options.profile}`,
       );
     }
     env.CLAUDE_CONFIG_DIR = directory;
@@ -417,13 +430,13 @@ async function launchClaude(options: CliOptions): Promise<number> {
 
 export function codexArgs(url: string, selected: string): string[] {
   return [
-    '-c', 'model_provider="freellmapi"',
+    '-c', 'model_provider="librepool"',
     '-c', `model=${JSON.stringify(selected)}`,
-    '-c', 'model_providers.freellmapi.name="FreeLLMAPI"',
-    '-c', `model_providers.freellmapi.base_url=${JSON.stringify(`${rootUrl(url)}/v1`)}`,
-    '-c', 'model_providers.freellmapi.wire_api="responses"',
-    '-c', 'model_providers.freellmapi.env_key="FREELLMAPI_API_KEY"',
-    '-c', 'model_providers.freellmapi.requires_openai_auth=false',
+    '-c', 'model_providers.librepool.name="LibrePool"',
+    '-c', `model_providers.librepool.base_url=${JSON.stringify(`${rootUrl(url)}/v1`)}`,
+    '-c', 'model_providers.librepool.wire_api="responses"',
+    '-c', 'model_providers.librepool.env_key="LIBREPOOL_API_KEY"',
+    '-c', 'model_providers.librepool.requires_openai_auth=false',
   ];
 }
 
@@ -434,7 +447,7 @@ async function launchCodex(options: CliOptions): Promise<number> {
     resolvePinnedModel(options.model, rosters)
     ?? resolveLaunchModel(undefined, rosters.available, rosters.full)
   ).id;
-  const env = { ...process.env, FREELLMAPI_API_KEY: apiKey };
+  const env = { ...process.env, LIBREPOOL_API_KEY: apiKey };
   const args = codexArgs(options.url, selected);
   return runChild('codex', args, env);
 }
@@ -514,19 +527,19 @@ export function unsupportedNodeVersion(
 ): string | null {
   if (!version || !Number.isFinite(major)) return null; // Non-Node runtimes: don't guess.
   if (major >= 20) return null;
-  return `freellmapi requires Node.js 20 or newer (found ${version}). Install one from https://nodejs.org and re-run.`;
+  return `librepool requires Node.js 20 or newer (found ${version}). Install one from https://nodejs.org and re-run.`;
 }
 
 if (isDirectExecution()) {
   const unsupported = unsupportedNodeVersion();
   if (unsupported) {
-    process.stderr.write(`freellmapi: ${unsupported}\n`);
+    process.stderr.write(`librepool: ${unsupported}\n`);
     process.exitCode = 1;
   } else {
     main().then(
       code => { process.exitCode = code; },
       error => {
-        process.stderr.write(`freellmapi: ${error instanceof Error ? error.message : String(error)}\n`);
+        process.stderr.write(`librepool: ${error instanceof Error ? error.message : String(error)}\n`);
         process.exitCode = 1;
       },
     );

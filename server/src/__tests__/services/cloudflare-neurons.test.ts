@@ -19,7 +19,7 @@ import { reserveProviderCredential } from '../../services/provider-credential.js
 import { clearAllCooldowns, isOnCooldown } from '../../services/ratelimit.js';
 
 // Workers AI's 10K free neurons/day are per account. On Workers Paid Cloudflare
-// never 429s once they are gone, it bills, so FreeLLMAPI meters neurons itself
+// never 429s once they are gone, it bills, so LibrePool meters neurons itself
 // and stops at the cap. These tests pin the "free neurons stay free" contract.
 
 const KEY_A1 = 'account-a:token-one';

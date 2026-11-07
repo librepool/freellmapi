@@ -10,26 +10,26 @@ import { getAppVersion, resetAppVersionCache } from '../../lib/app-version.js';
 // and the OpenAPI spec (0.4.x) both track something else and would be wrong.
 
 describe('app version resolution', () => {
-  const saved = process.env.FREEAPI_VERSION;
+  const saved = process.env.LIBREPOOL_VERSION;
 
   beforeEach(() => {
     resetAppVersionCache();
-    delete process.env.FREEAPI_VERSION;
+    delete process.env.LIBREPOOL_VERSION;
   });
 
   afterEach(() => {
     resetAppVersionCache();
-    if (saved === undefined) delete process.env.FREEAPI_VERSION;
-    else process.env.FREEAPI_VERSION = saved;
+    if (saved === undefined) delete process.env.LIBREPOOL_VERSION;
+    else process.env.LIBREPOOL_VERSION = saved;
   });
 
-  it('prefers FREEAPI_VERSION — the desktop shell states its own version', () => {
-    process.env.FREEAPI_VERSION = '9.9.9';
+  it('prefers LIBREPOOL_VERSION — the desktop shell states its own version', () => {
+    process.env.LIBREPOOL_VERSION = '9.9.9';
     expect(getAppVersion()).toBe('9.9.9');
   });
 
-  it('ignores a blank FREEAPI_VERSION rather than reporting an empty version', () => {
-    process.env.FREEAPI_VERSION = '   ';
+  it('ignores a blank LIBREPOOL_VERSION rather than reporting an empty version', () => {
+    process.env.LIBREPOOL_VERSION = '   ';
     // Falls through to the manifest, which exists in a source checkout.
     expect(getAppVersion()).not.toBe('');
     expect(getAppVersion()).toMatch(/^\d+\.\d+\.\d+/);
@@ -57,7 +57,7 @@ describe('app version resolution', () => {
 
   it('caches, so the resolver is not re-reading a manifest on every request', () => {
     const first = getAppVersion();
-    process.env.FREEAPI_VERSION = 'ignored-because-cached';
+    process.env.LIBREPOOL_VERSION = 'ignored-because-cached';
     expect(getAppVersion()).toBe(first);
   });
 });

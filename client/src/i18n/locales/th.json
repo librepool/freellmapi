@@ -60,7 +60,7 @@
     "emailChanged": "เปลี่ยนอีเมลเรียบร้อยแล้ว",
     "passwordReset": "รีเซ็ตรหัสผ่านแล้ว กรุณาเข้าสู่ระบบ",
     "resetCodeDockerHint": "ใช้งานใน Docker อยู่ใช่ไหม รหัสอยู่ในบันทึกของคอนเทนเนอร์: docker logs <container>",
-    "desktopSessionFailed": "แดชบอร์ดไม่สามารถลงชื่อเข้าใช้เซิร์ฟเวอร์ในเครื่องได้ ปิด FreeLLMAPI แล้วเปิดใหม่อีกครั้ง"
+    "desktopSessionFailed": "แดชบอร์ดไม่สามารถลงชื่อเข้าใช้เซิร์ฟเวอร์ในเครื่องได้ ปิด LibrePool แล้วเปิดใหม่อีกครั้ง"
   },
   "common": {
     "save": "บันทึก",
@@ -160,16 +160,16 @@
     "notGitInstall": "การติดตั้งนี้ไม่มีข้อมูล commit",
     "checkFailed": "ไม่สามารถตรวจสอบการอัปเดตได้",
     "autoUpdateCheck": "ตรวจสอบการอัปเดตอัตโนมัติ",
-    "restartAfterUpdate": "รีสตาร์ต FreeLLMAPI หลังจากบิลด์เสร็จสิ้น",
+    "restartAfterUpdate": "รีสตาร์ต LibrePool หลังจากบิลด์เสร็จสิ้น",
     "downloadUpdate": "ดาวน์โหลดอัปเดต",
     "downloadingUpdate": "กำลังดาวน์โหลด… {percent}%",
     "restartToUpdate": "รีสตาร์ตเพื่ออัปเดต",
-    "updateReadyHint": "ดาวน์โหลดแล้ว FreeLLMAPI จะสำรองข้อมูลของคุณ รีสตาร์ต และเปิดเวอร์ชันใหม่",
+    "updateReadyHint": "ดาวน์โหลดแล้ว LibrePool จะสำรองข้อมูลของคุณ รีสตาร์ต และเปิดเวอร์ชันใหม่",
     "updateInstallFailed": "ไม่สามารถติดตั้งอัปเดตได้",
     "updateNow": "อัปเดตตอนนี้",
-    "updatingContainer": "กำลังดึงอิมเมจใหม่และรีสตาร์ต หน้านี้จะโหลดใหม่เมื่อ FreeLLMAPI กลับมา",
+    "updatingContainer": "กำลังดึงอิมเมจใหม่และรีสตาร์ต หน้านี้จะโหลดใหม่เมื่อ LibrePool กลับมา",
     "updateNowFailed": "ตัวอัปเดตไม่รับคำขอ ตรวจสอบว่าคอนเทนเนอร์ watchtower กำลังทำงาน",
-    "updateNowTimeout": "FreeLLMAPI ยังไม่รีสตาร์ตหลังผ่านไป 5 นาที ตรวจสอบบันทึกของคอนเทนเนอร์ watchtower"
+    "updateNowTimeout": "LibrePool ยังไม่รีสตาร์ตหลังผ่านไป 5 นาที ตรวจสอบบันทึกของคอนเทนเนอร์ watchtower"
   },
   "models": {
     "title": "โมเดล",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "งบประมาณโทเค็นรายเดือน",
     "remaining": "ที่เหลืออยู่",
     "used": "ใช้แล้ว",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "ปัญหาการซิงค์ครั้งล่าสุด: {error}",
     "license": "ใบอนุญาต",
     "planAnnual": "เบี้ยประกันภัยรายปี",
-    "planLifetime": "อายุการใช้งานระดับพรีเมียม",
     "expired": "หมดอายุแล้ว",
     "inactive": "ไม่ได้ใช้งาน",
-    "lifetimeNote": "ใบอนุญาตตลอดชีพ: ไม่มีวันหมดอายุ",
     "renewsOn": "ต่ออายุบน {date}",
     "willNotRenew": "จะไม่ต่ออายุ พรีเมียมจนถึง {date} จากนั้นการติดตั้งนี้จะกลับไปอยู่ในแค็ตตาล็อกรายเดือนฟรี",
     "keyInactive": "คีย์นี้ใช้งานไม่ได้อีกต่อไป แอปยังคงทำงานกับแคตตาล็อกรายเดือนฟรีต่อไป",
@@ -1056,7 +1054,7 @@
     "keyHint": "รหัสของคุณอยู่ในอีเมลการซื้อและในหน้าชำระเงินหลังการชำระเงิน ลืมมันไปเหรอ?",
     "recoverKey": "กู้คืนได้บนเว็บไซต์",
     "upsellTitle": "ถ่ายทอดสดในราคา $19 ต่อปี",
-    "upsellDescription": "รุ่นฟรีใหม่ทันทีที่มีอยู่ แทนที่จะเป็น 30 วันต่อมา กุญแจดอกเดียวทุกอุปกรณ์ ยกเลิกได้ตลอดเวลา เราเตอร์จะใช้งานได้ฟรีตลอดไป",
+    "upsellDescription": "รุ่นฟรีใหม่ทันทีที่มีอยู่ แทนที่จะเป็น 15 วันต่อมา กุญแจดอกเดียวทุกอุปกรณ์ ยกเลิกได้ตลอดเวลา เราเตอร์จะใช้งานได้ฟรีตลอดไป",
     "goPremium": "ไปแบบพรีเมียม",
     "bundled": "รวมกลุ่ม",
     "planGeneric": "พรีเมี่ยม"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "ติดตั้ง FreeLLMAPI เวอร์ชันใหม่กว่าแล้ว",
+    "newBuild": "ติดตั้ง LibrePool เวอร์ชันใหม่กว่าแล้ว",
     "reload": "โหลดใหม่"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

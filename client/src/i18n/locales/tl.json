@@ -60,7 +60,7 @@
     "emailChanged": "Matagumpay na napalitan ang e-mail.",
     "passwordReset": "Na-reset ang password. Mag-sign in po.",
     "resetCodeDockerHint": "Tumatakbo sa Docker? Nasa container log ang code: docker logs <container>.",
-    "desktopSessionFailed": "Hindi nakapag-sign in ang dashboard sa lokal na server. Isara ang FreeLLMAPI at buksan itong muli."
+    "desktopSessionFailed": "Hindi nakapag-sign in ang dashboard sa lokal na server. Isara ang LibrePool at buksan itong muli."
   },
   "common": {
     "save": "I-save",
@@ -160,16 +160,16 @@
     "notGitInstall": "Walang impormasyon ng commit ang installation na ito.",
     "checkFailed": "Hindi masuri kung may mga update.",
     "autoUpdateCheck": "Awtomatikong pagsusuri ng update",
-    "restartAfterUpdate": "I-restart ang FreeLLMAPI kapag natapos ang build.",
+    "restartAfterUpdate": "I-restart ang LibrePool kapag natapos ang build.",
     "downloadUpdate": "I-download ang update",
     "downloadingUpdate": "Nagda-download… {percent}%",
     "restartToUpdate": "I-restart para mag-update",
-    "updateReadyHint": "Na-download na. Iba-backup ng FreeLLMAPI ang iyong data, magre-restart, at bubuksan ang bagong bersyon.",
+    "updateReadyHint": "Na-download na. Iba-backup ng LibrePool ang iyong data, magre-restart, at bubuksan ang bagong bersyon.",
     "updateInstallFailed": "Hindi ma-install ang update.",
     "updateNow": "I-update ngayon",
-    "updatingContainer": "Kinukuha ang bagong image at nagre-restart. Magre-reload ang page na ito kapag bumalik ang FreeLLMAPI.",
+    "updatingContainer": "Kinukuha ang bagong image at nagre-restart. Magre-reload ang page na ito kapag bumalik ang LibrePool.",
     "updateNowFailed": "Hindi tinanggap ng updater ang request. Tingnan kung tumatakbo ang watchtower container.",
-    "updateNowTimeout": "Hindi pa nagre-restart ang FreeLLMAPI pagkalipas ng 5 minuto. Tingnan ang logs ng watchtower container."
+    "updateNowTimeout": "Hindi pa nagre-restart ang LibrePool pagkalipas ng 5 minuto. Tingnan ang logs ng watchtower container."
   },
   "models": {
     "title": "Mga Modelo",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Buwanang badyet ng token",
     "remaining": "natitirang",
     "used": "ginamit",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Huling problema sa sync: {error}",
     "license": "Lisensya",
     "planAnnual": "Premium Taunang Taon",
-    "planLifetime": "Premium na Haba ng Buhay",
     "expired": "nag-expire",
     "inactive": "Hindi Aktibo",
-    "lifetimeNote": "Lifetime license: hindi kailanman nag-e-expire.",
     "renewsOn": "Ire-renew sa {date}.",
     "willNotRenew": "Hindi magre-renew. Premium hanggang {date}, saka babalik ang install na ito sa libreng buwanang katalogo.",
     "keyInactive": "Hindi na aktibo ang susi na ito. Patuloy na gumagana ang app sa libreng buwanang katalogo.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Ang iyong susi ay nasa iyong purchase email at nasa post-checkout page. Nawala?",
     "recoverKey": "I-recover ito sa website",
     "upsellTitle": "Mag-live sa halagang $19 kada taon",
-    "upsellDescription": "Bagong libreng modelo agad sa sandaling umiiral, imbes na 30 araw pagkatapos. Isang susi, bawat device. Kanselahin kahit kailan; Mananatiling libre ang router magpakailanman.",
+    "upsellDescription": "Bagong libreng modelo agad sa sandaling umiiral, imbes na 15 araw pagkatapos. Isang susi, bawat device. Kanselahin kahit kailan; Mananatiling libre ang router magpakailanman.",
     "goPremium": "Mag-Premium",
     "bundled": "nakabundle",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "May mas bagong bersyon ng FreeLLMAPI na naka-install.",
+    "newBuild": "May mas bagong bersyon ng LibrePool na naka-install.",
     "reload": "I-reload"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

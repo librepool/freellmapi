@@ -6,14 +6,14 @@
 
 ## 1. Overview
 
-The catalog sync keeps the local model catalog in step with the published catalog at `freellmapi.co`. It runs **twice daily** (and on demand), fetches a **signed catalog**, verifies it against a **pinned Ed25519 public key**, and applies it **transactionally** to the local SQLite database.
+The catalog sync keeps the local model catalog in step with the published catalog at `librepool.com`. It runs **twice daily** (and on demand), fetches a **signed catalog**, verifies it against a **pinned Ed25519 public key**, and applies it **transactionally** to the local SQLite database.
 
 ### Two Tiers
 
 | Tier | Audience | Refresh Cadence | Auth |
 |------|----------|-----------------|------|
 | **Live** | Premium license holders | Every 2–3 days | Bearer `premium_license_key` |
-| **Monthly** | Free installs | ~30 days | None (public) |
+| **Monthly** | Free installs | 15-day-old snapshot | None (public) |
 
 Free installs still self-heal, just on a slower cadence. The bundled migrations remain the **baseline** — a fetched catalog is applied only when **newer than `MIN_CATALOG_VERSION`** (bumped on every model migration), so a stale monthly snapshot can never roll back models added by a newer app version.
 
@@ -63,7 +63,7 @@ interface Catalog {
 
 ```typescript
 const PINNED_CATALOG_PUBKEY = `-----BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAq9yv4+3EeyMHKsfVYBhkcz1lYgIXSUeHNnN6tNgYX3k=
+MCowBQYDK2VwAyEAbBDBPDq2VbDqTXylUtFrfmk0l3BaV1vanAD4dEmLzSg=
 -----END PUBLIC KEY-----`;
 
 // Fetch
@@ -134,9 +134,9 @@ reapplyCachedCatalog()
 
 ---
 
-## 6. Model-Age Gate (30 Days)
+## 6. Model-Age Gate (15 Days)
 
-Models older than 30 days from `generatedAt` are **excluded from the live tier** (free tier trailing snapshot). The catalog service enforces this; the client just receives what the tier provides.
+The monthly snapshot is the catalog as it stood 15 days ago: a model (or search engine, decision model, or other registry entry) that entered the live tier less than 15 days ago is left out of the free tier's document, and reaches free installs once it is 15 days old. The catalog service enforces this; the client just receives what the tier provides. For chat models the entry date (`premiumSince`) is feed-internal — the router does not store it; search and decision entries carry it in `meta_json`, where the dashboard's `freeFrom` display reads it.
 
 ---
 
@@ -145,7 +145,7 @@ Models older than 30 days from `generatedAt` are **excluded from the live tier**
 ```typescript
 interface LicenseStatus {
   valid: boolean;
-  plan: 'annual' | 'lifetime' | null;
+  plan: 'annual' | null; // LibrePool is annual-only ($19/yr) — no lifetime plan
   status: string | null;
   expiresAt: string | null;
   checkedAtMs: number;
@@ -260,7 +260,7 @@ startCatalogSync(scheduler: Scheduler)
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `CATALOG_BASE_URL` | `https://api.freellmapi.co` | Catalog service endpoint |
+| `CATALOG_BASE_URL` | `https://api.librepool.com` | Catalog service endpoint |
 | `CATALOG_PUBKEY` | Pinned Ed25519 key | Override for self-hosted catalog |
 | `CATALOG_SYNC_DISABLED` | `0` | Kill switch (`1` = disabled) |
 

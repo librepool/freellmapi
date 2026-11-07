@@ -21,7 +21,7 @@ interface DesktopUpdaterBridge {
 
 function bridge(): DesktopUpdaterBridge | null {
   if (typeof window === 'undefined') return null
-  return (window as { __FREEAPI_UPDATER__?: DesktopUpdaterBridge }).__FREEAPI_UPDATER__ ?? null
+  return (window as { __LIBREPOOL_UPDATER__?: DesktopUpdaterBridge }).__LIBREPOOL_UPDATER__ ?? null
 }
 
 /** True when this page runs in a desktop build with the updater bridge. */

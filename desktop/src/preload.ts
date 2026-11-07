@@ -5,11 +5,11 @@
 // which avoids templating strings into executeJavaScript.
 import { contextBridge, ipcRenderer } from 'electron';
 
-const TOKEN_KEY = 'freellmapi_dashboard_token';
-const arg = process.argv.find((a) => a.startsWith('--freeapi-token='));
+const TOKEN_KEY = 'librepool_dashboard_token';
+const arg = process.argv.find((a) => a.startsWith('--librepool-token='));
 if (arg) {
   try {
-    window.localStorage.setItem(TOKEN_KEY, arg.slice('--freeapi-token='.length));
+    window.localStorage.setItem(TOKEN_KEY, arg.slice('--librepool-token='.length));
   } catch {
     // localStorage unavailable — the dashboard will show its login screen.
   }
@@ -17,8 +17,8 @@ if (arg) {
 
 // Lets the client adapt its chrome (drag region, traffic-light padding,
 // no Sign out) when running inside the desktop shell.
-contextBridge.exposeInMainWorld('__FREEAPI_DESKTOP__', true);
-contextBridge.exposeInMainWorld('__FREEAPI_PLATFORM__', process.platform);
+contextBridge.exposeInMainWorld('__LIBREPOOL_DESKTOP__', true);
+contextBridge.exposeInMainWorld('__LIBREPOOL_PLATFORM__', process.platform);
 
 // The dashboard window signs in as the hidden machine account, whose password
 // is random and never shown, so it must never land on the login form. When the
@@ -28,31 +28,31 @@ contextBridge.exposeInMainWorld('__FREEAPI_PLATFORM__', process.platform);
 // and every extra capability handed to that world is one an XSS could use —
 // this one only ever hands back a session for the account the window already
 // runs as.
-contextBridge.exposeInMainWorld('__FREEAPI_SESSION__', () => ipcRenderer.invoke('freeapi:session-token'));
+contextBridge.exposeInMainWorld('__LIBREPOOL_SESSION__', () => ipcRenderer.invoke('librepool:session-token'));
 
 // The running build's version, so the dashboard can show which one it is and
 // offer a check against the published releases (#703). Arrives the same way the
 // token does; absent in a browser, where the dashboard simply omits the row
 // rather than guessing from the server's own (unrelated) package version.
-const versionArg = process.argv.find((a) => a.startsWith('--freeapi-version='));
+const versionArg = process.argv.find((a) => a.startsWith('--librepool-version='));
 contextBridge.exposeInMainWorld(
-  '__FREEAPI_VERSION__',
-  versionArg ? versionArg.slice('--freeapi-version='.length) : null,
+  '__LIBREPOOL_VERSION__',
+  versionArg ? versionArg.slice('--librepool-version='.length) : null,
 );
 
 // The in-app updater (the Settings update dialog and the update reminder). Like the session bridge above, deliberately
 // narrow: it can only check for, download and install the release published at
-// tashfeenahmed/freellmapi — the feed URL and signature checks live in the main
+// librepool/freellmapi — the feed URL and signature checks live in the main
 // process and nothing here can point them anywhere else.
-contextBridge.exposeInMainWorld('__FREEAPI_UPDATER__', {
-  state: () => ipcRenderer.invoke('freeapi:update-state'),
-  check: () => ipcRenderer.invoke('freeapi:update-check'),
-  download: () => ipcRenderer.invoke('freeapi:update-download'),
-  install: () => ipcRenderer.invoke('freeapi:update-install'),
+contextBridge.exposeInMainWorld('__LIBREPOOL_UPDATER__', {
+  state: () => ipcRenderer.invoke('librepool:update-state'),
+  check: () => ipcRenderer.invoke('librepool:update-check'),
+  download: () => ipcRenderer.invoke('librepool:update-download'),
+  install: () => ipcRenderer.invoke('librepool:update-install'),
   subscribe: (listener: (state: unknown) => void) => {
     const handler = (_event: unknown, state: unknown) => listener(state);
-    ipcRenderer.on('freeapi:update-state', handler);
-    return () => { ipcRenderer.removeListener('freeapi:update-state', handler); };
+    ipcRenderer.on('librepool:update-state', handler);
+    return () => { ipcRenderer.removeListener('librepool:update-state', handler); };
   },
 });
 
@@ -79,7 +79,7 @@ try {
 // worlds into localStorage. The choice lets the main process hand
 // nativeTheme.themeSource back to the OS when the user picks System.
 function reportTheme() {
-  ipcRenderer.send('freeapi:theme-changed', {
+  ipcRenderer.send('librepool:theme-changed', {
     resolved: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
     choice: document.documentElement.dataset.themeChoice,
   });
@@ -91,7 +91,7 @@ function reportTheme() {
 // localStorage from this preload world.
 function reportLocale() {
   const lang = document.documentElement.lang;
-  if (lang) ipcRenderer.send('freeapi:locale-changed', lang);
+  if (lang) ipcRenderer.send('librepool:locale-changed', lang);
 }
 window.addEventListener('DOMContentLoaded', () => {
   applyDesktopClass();

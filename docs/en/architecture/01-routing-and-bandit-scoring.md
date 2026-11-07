@@ -259,7 +259,7 @@ With `decision` selected, a decision model (Models → Decision: Clef on Cloudfl
 - **When it asks:** once per user turn. The answer is cached on the text it judged (30 min), so an agent's tool-call loop inside one turn costs one decision. Requests that pin a model, or that a sticky session already maps to one, are never asked about.
 - **When in doubt, Balanced:** the top probability is below the minimum confidence (`routing_decision_min_probability`, default 0.5), the decision takes longer than 1.5 s, no decision model has a usable key, or the call fails.
 - **Which model decides:** `routing_decision_model`, `auto` by default (first enabled decision model with a key). `auto` skips BeatAPI's free JEV routes, whose 1 request/minute cannot keep up with chat traffic; pinning one explicitly still works.
-- **Visibility:** each routed response carries `X-FreeLLM-Routing-Strategy: <preset>` (or `balanced; fallback=<reason>`), decisions are logged under Models → Decision with client `freellmapi-router`, and `GET /api/fallback/routing` returns `decision: { model, minProbability, ready, counts, fallbacks, recent }`.
+- **Visibility:** each routed response carries `X-LibrePool-Routing-Strategy: <preset>` (or `balanced; fallback=<reason>`), decisions are logged under Models → Decision with client `librepool-router`, and `GET /api/fallback/routing` returns `decision: { model, minProbability, ready, counts, fallbacks, recent }`.
 
 ### Key Selection Strategy (#919, #930)
 

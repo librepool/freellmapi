@@ -60,7 +60,7 @@
     "emailChanged": "E-mailadres gewijzigd.",
     "passwordReset": "Wachtwoord gereset. Log opnieuw in.",
     "resetCodeDockerHint": "Draait het in Docker? De code staat in de containerlog: docker logs <container>.",
-    "desktopSessionFailed": "Het dashboard kon niet inloggen op de lokale server. Sluit FreeLLMAPI af en open het opnieuw."
+    "desktopSessionFailed": "Het dashboard kon niet inloggen op de lokale server. Sluit LibrePool af en open het opnieuw."
   },
   "common": {
     "save": "Sla op",
@@ -160,16 +160,16 @@
     "notGitInstall": "Deze installatie bevat geen commitinformatie.",
     "checkFailed": "Kan niet controleren op updates.",
     "autoUpdateCheck": "Automatische updatecontrole",
-    "restartAfterUpdate": "Start FreeLLMAPI opnieuw nadat de build is voltooid.",
+    "restartAfterUpdate": "Start LibrePool opnieuw nadat de build is voltooid.",
     "downloadUpdate": "Update downloaden",
     "downloadingUpdate": "Downloaden… {percent}%",
     "restartToUpdate": "Herstarten om bij te werken",
-    "updateReadyHint": "Gedownload. FreeLLMAPI maakt een back-up van je gegevens, herstart en opent de nieuwe versie.",
+    "updateReadyHint": "Gedownload. LibrePool maakt een back-up van je gegevens, herstart en opent de nieuwe versie.",
     "updateInstallFailed": "De update kon niet worden geïnstalleerd.",
     "updateNow": "Nu bijwerken",
-    "updatingContainer": "De nieuwe image wordt opgehaald en herstart. Deze pagina laadt opnieuw zodra FreeLLMAPI terug is.",
+    "updatingContainer": "De nieuwe image wordt opgehaald en herstart. Deze pagina laadt opnieuw zodra LibrePool terug is.",
     "updateNowFailed": "De updater heeft het verzoek niet geaccepteerd. Controleer of de watchtower-container draait.",
-    "updateNowTimeout": "FreeLLMAPI is na 5 minuten niet herstart. Bekijk de logs van de watchtower-container."
+    "updateNowTimeout": "LibrePool is na 5 minuten niet herstart. Bekijk de logs van de watchtower-container."
   },
   "models": {
     "title": "Modellen",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Maandelijks tokenbudget",
     "remaining": "Overblijft",
     "used": "Gebruikt",
-    "usedScopeHint": "Alleen chatverzoeken, vanaf het begin van deze kalendermaand, opgeteld over alle modellen in de actieve keten — aangepaste endpoints inbegrepen. Verkeer dat je buiten FreeLLMAPI om naar een provider stuurt, telt niet mee.",
+    "usedScopeHint": "Alleen chatverzoeken, vanaf het begin van deze kalendermaand, opgeteld over alle modellen in de actieve keten — aangepaste endpoints inbegrepen. Verkeer dat je buiten LibrePool om naar een provider stuurt, telt niet mee.",
     "legendRemainingTitle": "Resterend / maandbudget voor {name} ({platform})",
     "noPublishedQuota": "+{count} zonder gepubliceerd quotum",
     "noPublishedQuotaTitle": "Voor deze modellen is geen maandelijks tokenbudget gedocumenteerd, dus er is geen resterend bedrag te tonen.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Laatste synchronisatieprobleem: {error}",
     "license": "Licentie",
     "planAnnual": "Premium Jaarlijks",
-    "planLifetime": "Premium Levenslange Waarde",
     "expired": "Verlopen",
     "inactive": "Inactief",
-    "lifetimeNote": "Levenslange licentie: verloopt nooit.",
     "renewsOn": "Verlengt op {date}.",
     "willNotRenew": "Zal niet verlengen. Premium tot {date}, daarna valt deze installatie terug op de gratis maandelijkse catalogus.",
     "keyInactive": "Deze sleutel is niet langer actief. De app blijft werken aan de gratis maandelijkse catalogus.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Je sleutel staat in je aankoopmail en op de pagina na afrekenen. Kwijtgeraakt?",
     "recoverKey": "Herstel het op de website",
     "upsellTitle": "Go live voor $19 per jaar",
-    "upsellDescription": "Nieuwe gratis modellen zodra ze bestaan, in plaats van 30 dagen later. Eén sleutel, elk apparaat. Annuleer op elk moment; De router blijft voor altijd vrij.",
+    "upsellDescription": "Nieuwe gratis modellen zodra ze bestaan, in plaats van 15 dagen later. Eén sleutel, elk apparaat. Annuleer op elk moment; De router blijft voor altijd vrij.",
     "goPremium": "Ga voor Premium",
     "bundled": "gebundeld",
     "planGeneric": "Premie"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Er is een nieuwere versie van FreeLLMAPI geïnstalleerd.",
+    "newBuild": "Er is een nieuwere versie van LibrePool geïnstalleerd.",
     "reload": "Opnieuw laden"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

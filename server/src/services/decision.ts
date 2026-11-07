@@ -376,7 +376,7 @@ const ADAPTERS: Record<string, Adapter> = {
           Authorization: `Bearer ${cred.key}`,
           'Content-Type': 'application/json',
           'HTTP-Referer': 'http://localhost:3001',
-          'X-Title': 'FreeLLMAPI',
+          'X-Title': 'LibrePool',
         },
         body: JSON.stringify({ model: modelId, state: body.state, questions: body.questions }),
       },

@@ -18,7 +18,7 @@ import {
   ROUTER_CLIENT,
 } from '../../services/routing-decision.js';
 import { seedDecisionModels } from '../helpers/decision-models.js';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 
 const realFetch = globalThis.fetch;
 

@@ -60,7 +60,7 @@
     "emailChanged": "E-mail byl změněn.",
     "passwordReset": "Heslo bylo resetováno. Přihlaste se.",
     "resetCodeDockerHint": "Používáte Docker? Kód je v logu kontejneru: docker logs <container>.",
-    "desktopSessionFailed": "Řídicí panel se nedokázal přihlásit k místnímu serveru. Ukončete FreeLLMAPI a spusťte jej znovu."
+    "desktopSessionFailed": "Řídicí panel se nedokázal přihlásit k místnímu serveru. Ukončete LibrePool a spusťte jej znovu."
   },
   "common": {
     "save": "Uložit",
@@ -160,16 +160,16 @@
     "notGitInstall": "Tato instalace neobsahuje informace o commitu.",
     "checkFailed": "Aktualizace se nepodařilo zkontrolovat.",
     "autoUpdateCheck": "Automatická kontrola aktualizací",
-    "restartAfterUpdate": "Po dokončení sestavení restartujte FreeLLMAPI.",
+    "restartAfterUpdate": "Po dokončení sestavení restartujte LibrePool.",
     "downloadUpdate": "Stáhnout aktualizaci",
     "downloadingUpdate": "Stahování… {percent} %",
     "restartToUpdate": "Restartovat a aktualizovat",
-    "updateReadyHint": "Staženo. FreeLLMAPI zálohuje vaše data, restartuje se a otevře novou verzi.",
+    "updateReadyHint": "Staženo. LibrePool zálohuje vaše data, restartuje se a otevře novou verzi.",
     "updateInstallFailed": "Aktualizaci se nepodařilo nainstalovat.",
     "updateNow": "Aktualizovat nyní",
-    "updatingContainer": "Stahuje se nový obraz a probíhá restart. Stránka se znovu načte, až bude FreeLLMAPI zpět.",
+    "updatingContainer": "Stahuje se nový obraz a probíhá restart. Stránka se znovu načte, až bude LibrePool zpět.",
     "updateNowFailed": "Aktualizátor požadavek nepřijal. Zkontrolujte, že kontejner watchtower běží.",
-    "updateNowTimeout": "FreeLLMAPI se ani po 5 minutách nerestartoval. Zkontrolujte logy kontejneru watchtower."
+    "updateNowTimeout": "LibrePool se ani po 5 minutách nerestartoval. Zkontrolujte logy kontejneru watchtower."
   },
   "models": {
     "title": "Modely",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Měsíční rozpočet žetonů",
     "remaining": "Zbývající",
     "used": "Používané",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Problém s poslední synchronizací: {error}",
     "license": "Licence",
     "planAnnual": "Prémiový ročenec",
-    "planLifetime": "Životnost pojistného",
     "expired": "Expirace",
     "inactive": "Neaktivní",
-    "lifetimeNote": "Doživotní licence: nikdy nevyprší.",
     "renewsOn": "Obnovuje se {date}.",
     "willNotRenew": "Neobnovím to. Premium do {date}, pak se tato instalace vrací zpět do bezplatného měsíčního katalogu.",
     "keyInactive": "Tento klíč již není aktivní. Aplikace stále pracuje na bezplatném měsíčním katalogu.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Klíč je v e-mailu k nákupu a na stránce po dokončení objednávky. Ztratil jsi to?",
     "recoverKey": "Obnovte ho na webu",
     "upsellTitle": "Jděte živě za 19 dolarů ročně",
-    "upsellDescription": "Nové bezplatné modely hned, jak vzniknou, místo 30 dní poté. Jeden klíč, každé zařízení. Zrušit kdykoliv; Router zůstává navždy volný.",
+    "upsellDescription": "Nové bezplatné modely hned, jak vzniknou, místo 15 dní poté. Jeden klíč, každé zařízení. Zrušit kdykoliv; Router zůstává navždy volný.",
     "goPremium": "Go Premium",
     "bundled": "Svazek",
     "planGeneric": "Prémiové"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Je nainstalována novější verze FreeLLMAPI.",
+    "newBuild": "Je nainstalována novější verze LibrePool.",
     "reload": "Načíst znovu"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

@@ -4,7 +4,7 @@ import type {
   ChatCompletionChunk,
   ChatToolCall,
   Platform,
-} from '@freellmapi/shared/types.js';
+} from '@librepool/shared/types.js';
 import { BaseProvider, providerHttpError, type CompletionOptions, type KeyValidationResult } from './base.js';
 import { extendedBodyParams, resolveMaxTokens } from '../lib/sampling-params.js';
 import { rescueInlineToolCalls } from '../lib/tool-call-rescue.js';
@@ -12,7 +12,7 @@ import { extractThinkFromMessage } from '../lib/think-tags.js';
 import { repairToolArguments, toolSchemaMap } from '../lib/tool-args.js';
 import { invalidToolCallReasons, isToolArgumentValidationEnabled } from '../lib/tool-validate.js';
 import { recordQuotaObservation, recordQuotaObservationsFromResponse, type QuotaObservationContext } from '../services/provider-quota.js';
-import type { QuotaMetric } from '@freellmapi/shared/types.js';
+import type { QuotaMetric } from '@librepool/shared/types.js';
 import { providerTimeoutMs } from '../lib/provider-timeout.js';
 import { isAbortLikeError } from '../lib/error-classify.js';
 import { contentToString } from '../lib/content.js';

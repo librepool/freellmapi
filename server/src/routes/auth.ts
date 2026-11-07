@@ -141,7 +141,7 @@ function isLoopbackRemote(req: Request): boolean {
 // window would have got, so the form never shows.
 //
 // Guards, all required:
-//  - FREEAPI_DESKTOP=1: only the desktop embedder sets it; web/Docker installs
+//  - LIBREPOOL_DESKTOP=1: only the desktop embedder sets it; web/Docker installs
 //    keep their login.
 //  - Loopback socket with no remote forwarded hop (isLoopbackRemote), so LAN
 //    access mode and a local reverse proxy never hand out sessions.
@@ -177,7 +177,7 @@ function isCrossSite(req: Request): boolean {
 }
 
 export function desktopSignInAllowed(req: Request): boolean {
-  if (process.env.FREEAPI_DESKTOP !== '1') return false;
+  if (process.env.LIBREPOOL_DESKTOP !== '1') return false;
   if (!isLoopbackRemote(req)) return false;
   const host = hostnameOf(req.headers.host);
   if (!host || !LOCAL_HOSTNAMES.has(host)) return false;
@@ -222,7 +222,7 @@ authRouter.post('/setup', (req: Request, res: Response) => {
     res.status(403).json({
       error: {
         message: 'A setup code is required to create the first account from a remote device. ' +
-          'Check the server logs for the code, or open the dashboard from a browser on the machine running FreeLLMAPI.',
+          'Check the server logs for the code, or open the dashboard from a browser on the machine running LibrePool.',
         type: 'setup_code_required',
       },
     });

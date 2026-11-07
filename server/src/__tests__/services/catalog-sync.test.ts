@@ -120,6 +120,22 @@ describe('applyCatalog', () => {
     expect(fb).toBeTruthy();
   });
 
+  it('stores a null monthlyTokenBudget as empty string (NOT NULL column)', () => {
+    // The catalog type allows monthlyTokenBudget: null, but
+    // models.monthly_token_budget is TEXT NOT NULL DEFAULT '' — a null
+    // budget must not fail the whole sync transaction.
+    const models = existingAsCatalogModels();
+    models.push(baseModel({ modelId: 'null-budget-model', displayName: 'Null Budget', monthlyTokenBudget: null }));
+
+    const counts = applyCatalog(getDb(), catalogOf(models));
+    expect(counts.inserted).toBe(1);
+
+    const row = getDb()
+      .prepare("SELECT monthly_token_budget FROM models WHERE platform = 'groq' AND model_id = 'null-budget-model'")
+      .get() as { monthly_token_budget: string };
+    expect(row.monthly_token_budget).toBe('');
+  });
+
   it('updates metadata in place and respects the enabled policy', () => {
     const models = existingAsCatalogModels();
     const target = models.find((m) => m.modelId === 'brand-new-model')!;

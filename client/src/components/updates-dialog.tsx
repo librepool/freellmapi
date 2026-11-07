@@ -27,7 +27,7 @@ function isNetworkError(message: string): boolean {
 }
 
 const DOCKER_COMMAND = 'docker compose pull && docker compose up -d'
-const SOURCE_COMMAND = 'git fetch https://github.com/tashfeenahmed/freellmapi.git main && git merge --ff-only FETCH_HEAD && npm ci && npm run build'
+const SOURCE_COMMAND = 'git fetch https://github.com/librepool/freellmapi.git main && git merge --ff-only FETCH_HEAD && npm ci && npm run build'
 
 /**
  * The one place updates live: opened from the ⋯ menu or the update pill.
@@ -51,7 +51,7 @@ function UpdatesContent() {
   const desktop = useDesktopUpdater()
   const docker = useDockerUpdate()
   const shellVersion = typeof window !== 'undefined'
-    ? (window as { __FREEAPI_VERSION__?: string | null }).__FREEAPI_VERSION__ ?? null
+    ? (window as { __LIBREPOOL_VERSION__?: string | null }).__LIBREPOOL_VERSION__ ?? null
     : null
   const [result, setResult] = useState<CheckResult | null>(null)
   const [checking, setChecking] = useState(true)
@@ -109,7 +109,7 @@ function UpdatesContent() {
   }
 
   const version = shellVersion ?? result?.version ?? serverVersion
-  const subtitle = version ? `FreeLLMAPI v${version}` : result?.localSha ? `FreeLLMAPI ${result.localSha}` : 'FreeLLMAPI'
+  const subtitle = version ? `LibrePool v${version}` : result?.localSha ? `LibrePool ${result.localSha}` : 'LibrePool'
   const releaseNotes = (
     <a href={RELEASES_URL} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-0.5 text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
       {t('updates.releaseNotes')}

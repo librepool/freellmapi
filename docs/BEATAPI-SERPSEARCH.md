@@ -2,7 +2,7 @@
 
 These integrations add credential and request handling only. Model/engine rows
 are delivered by the signed catalog, retaining Premium access immediately and
-Free access after the existing 30-day promotion gate. No bundled seeds or
+Free access after the existing 15-day promotion gate. No bundled seeds or
 release-gate changes are included.
 
 ## BeatAPI

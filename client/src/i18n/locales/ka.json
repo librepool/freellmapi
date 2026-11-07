@@ -60,7 +60,7 @@
     "emailChanged": "ელფოსტა წარმატებით შეიცვალა.",
     "passwordReset": "პაროლი აღდგა. გთხოვთ, შედით.",
     "resetCodeDockerHint": "Docker-ში მუშაობთ? კოდი კონტეინერის ჟურნალშია: docker logs <container>.",
-    "desktopSessionFailed": "პანელმა ლოკალურ სერვერზე შესვლა ვერ შეძლო. დახურეთ FreeLLMAPI და ხელახლა გახსენით."
+    "desktopSessionFailed": "პანელმა ლოკალურ სერვერზე შესვლა ვერ შეძლო. დახურეთ LibrePool და ხელახლა გახსენით."
   },
   "common": {
     "save": "შენახვა",
@@ -160,16 +160,16 @@
     "notGitInstall": "ეს ინსტალაცია კომიტების შესახებ ინფორმაციას არ შეიცავს.",
     "checkFailed": "განახლებების შემოწმება ვერ მოხერხდა.",
     "autoUpdateCheck": "განახლებების ავტომატური შემოწმება",
-    "restartAfterUpdate": "ბილდის დასრულების შემდეგ გადატვირთეთ FreeLLMAPI.",
+    "restartAfterUpdate": "ბილდის დასრულების შემდეგ გადატვირთეთ LibrePool.",
     "downloadUpdate": "განახლების ჩამოტვირთვა",
     "downloadingUpdate": "იტვირთება… {percent}%",
     "restartToUpdate": "გადატვირთვა განახლებისთვის",
-    "updateReadyHint": "ჩამოიტვირთა. FreeLLMAPI ქმნის თქვენი მონაცემების სარეზერვო ასლს, გადაიტვირთება და გახსნის ახალ ვერსიას.",
+    "updateReadyHint": "ჩამოიტვირთა. LibrePool ქმნის თქვენი მონაცემების სარეზერვო ასლს, გადაიტვირთება და გახსნის ახალ ვერსიას.",
     "updateInstallFailed": "განახლების დაყენება ვერ მოხერხდა.",
     "updateNow": "ახლავე განახლება",
-    "updatingContainer": "ახალი იმიჯის ჩამოტვირთვა და გადატვირთვა. გვერდი გადაიტვირთება, როცა FreeLLMAPI დაბრუნდება.",
+    "updatingContainer": "ახალი იმიჯის ჩამოტვირთვა და გადატვირთვა. გვერდი გადაიტვირთება, როცა LibrePool დაბრუნდება.",
     "updateNowFailed": "განახლების სერვისმა მოთხოვნა არ მიიღო. შეამოწმეთ, მუშაობს თუ არა watchtower კონტეინერი.",
-    "updateNowTimeout": "FreeLLMAPI 5 წუთის შემდეგაც არ გადაიტვირთა. შეამოწმეთ watchtower კონტეინერის ჟურნალები."
+    "updateNowTimeout": "LibrePool 5 წუთის შემდეგაც არ გადაიტვირთა. შეამოწმეთ watchtower კონტეინერის ჟურნალები."
   },
   "models": {
     "title": "მოდელები",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "ყოველთვიური სიმბოლური ბიუჯეტი",
     "remaining": "დარჩენილი",
     "used": "გამოყენებულია",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "ბოლო სინქრონიზაციის პრობლემა: {error}",
     "license": "ლიცენზია",
     "planAnnual": "პრემიუმ წლიური",
-    "planLifetime": "პრემიუმ სიცოცხლის ხანგრძლივობა",
     "expired": "ვადა გაუვიდა",
     "inactive": "არააქტიური",
-    "lifetimeNote": "უვადო ლიცენზია: არასოდეს იწურება.",
     "renewsOn": "განახლდება {date}-ზე.",
     "willNotRenew": "არ განახლდება. პრემია {date}-მდე, შემდეგ ეს ინსტალაცია დაუბრუნდება უფასო ყოველთვიურ კატალოგს.",
     "keyInactive": "ეს გასაღები აღარ არის აქტიური. აპლიკაცია განაგრძობს მუშაობას ყოველთვიურ უფასო კატალოგზე.",
@@ -1056,7 +1054,7 @@
     "keyHint": "თქვენი გასაღები არის შესყიდვის ელფოსტაში და შეკვეთის შემდგომ გვერდზე. დაკარგე?",
     "recoverKey": "აღადგინეთ იგი საიტზე",
     "upsellTitle": "იცხოვრე 19 დოლარად წელიწადში",
-    "upsellDescription": "ახალი უფასო მოდელები მათი არსებობის მომენტში, ნაცვლად 30 დღის შემდეგ. ერთი გასაღები, ყველა მოწყობილობა. გააუქმეთ ნებისმიერ დროს; როუტერი სამუდამოდ თავისუფალი რჩება.",
+    "upsellDescription": "ახალი უფასო მოდელები მათი არსებობის მომენტში, ნაცვლად 15 დღის შემდეგ. ერთი გასაღები, ყველა მოწყობილობა. გააუქმეთ ნებისმიერ დროს; როუტერი სამუდამოდ თავისუფალი რჩება.",
     "goPremium": "გადადით პრემიუმზე",
     "bundled": "შეფუთული",
     "planGeneric": "პრემიუმი"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "დაყენებულია FreeLLMAPI-ის უფრო ახალი ვერსია.",
+    "newBuild": "დაყენებულია LibrePool-ის უფრო ახალი ვერსია.",
     "reload": "გადატვირთვა"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

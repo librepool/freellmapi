@@ -1,6 +1,6 @@
 import type { Db } from '../db/types.js';
 import type { Scheduler } from '../lib/scheduler.js';
-import type { Platform } from '@freellmapi/shared/types.js';
+import type { Platform } from '@librepool/shared/types.js';
 import { getProvider } from '../providers/index.js';
 import { OpenAICompatProvider } from '../providers/openai-compat.js';
 import { decrypt } from '../lib/crypto.js';
@@ -25,7 +25,7 @@ import { customModelSyncFreePatterns, customModelSyncIntervalMs } from './custom
 //  - Only an explicit allowlist of platforms is eligible. The rule behind the
 //    list is "zero rows in the signed catalog on every tier". A free install
 //    cannot see the Premium (live) catalog, so it cannot tell a provider the
-//    catalog has never carried from one still inside its 30-day Premium window
+//    catalog has never carried from one still inside its 15-day Premium window
 //    (radeon, routeway) or one the audit keeps switched off with disabled rows
 //    (reka, navy, opencode, orcarouter, xfyun). Discovering those would hand
 //    free installs models the catalog gates or has ruled out, so the list is

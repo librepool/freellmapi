@@ -137,7 +137,7 @@ export type Platform =
   // AnyAPI — OpenAI-compatible gateway. Free tier is $0/no card/recurring but
   // capped at 100K tokens/day over "free and basic" models only; no RPM/RPD is
   // published. Catalog rows live in the hosted catalog (premium now, free after
-  // 30 days).
+  // 15 days).
   | 'anyapi'
   // AMD Radeon Cloud TokenFactory — OpenAI-compatible shared inference. Its
   // rotating public-model roster is free without consuming instance credits,
@@ -199,26 +199,26 @@ export type Platform =
   // ainative.studio.
   | 'ainative'
   // Aion Labs — OpenAI-compatible aggregator with a no-card free API key.
-  // Catalog rows live in the Oracle catalog (premium now, free after 30 days).
+  // Catalog rows live in the Oracle catalog (premium now, free after 15 days).
   | 'aion'
   // Requesty — OpenAI-compatible router with no-card free models/credits.
-  // Catalog rows live in the Oracle catalog (premium now, free after 30 days).
+  // Catalog rows live in the Oracle catalog (premium now, free after 15 days).
   | 'requesty'
   // NavyAI — OpenAI-compatible unified API. Free plan is 150K tokens/day and
-  // 20 RPM; catalog rows live in the Oracle catalog (premium now, free after 30 days).
+  // 20 RPM; catalog rows live in the Oracle catalog (premium now, free after 15 days).
   | 'navy'
   // NaraRouter — OpenAI-compatible aggregator. Free account key from
   // router.bynara.id after Telegram channel/link verification; free-plan routes
-  // reset daily and are catalog-managed (premium now, free after 30 days).
+  // reset daily and are catalog-managed (premium now, free after 15 days).
   | 'nara'
   // SEA-LION (AI Singapore) — OpenAI-compatible first-party API. Free key
   // (Google sign-in, no card, no region wall) at 10 RPM; catalog rows live in
-  // the Oracle catalog (premium now, free after 30 days).
+  // the Oracle catalog (premium now, free after 15 days).
   | 'sealion'
   // OrcaRouter — OpenAI-compatible aggregator (api.orcarouter.ai/v1). Free key
   // from orcarouter.ai (no card); recurring rate-limited free aliases at $0
   // (never fall back to paid). Catalog rows live in the Oracle catalog
-  // (premium now, free after the 30-day model-age gate).
+  // (premium now, free after the 15-day model-age gate).
   | 'orcarouter'
   // UnoRouter (unorouter.com) — OpenAI-compatible aggregator. The web app is a
   // Next.js site at unorouter.com; the API lives at api.unorouter.com/v1. Free
@@ -227,14 +227,14 @@ export type Platform =
   // Live-probed 2026-08-23: /v1/models is public without a key but 401s on a
   // wrong key, and /v1/chat/completions 401s without a key, so default key
   // validation works. Catalog rows live in the hosted catalog (premium now,
-  // free after the 30-day model-age gate).
+  // free after the 15-day model-age gate).
   | 'unorouter'
   // xKiro (xkiro.com) — OpenAI-compatible gateway at api.xkiro.com/v1. Free key
   // from xkiro.com (no card); free plan is 5M tokens/day on its free models,
   // paid models 403 on a free key.
   // /v1/models is public (200 with no key), so key validation must probe
   // /v1/usage, which 401s on a missing/invalid ClientApiKey. Catalog rows live
-  // in the hosted catalog (premium now, free after the 30-day model-age gate).
+  // in the hosted catalog (premium now, free after the 15-day model-age gate).
   | 'xkiro'
   // ModelScope (魔搭社区, Alibaba) — OpenAI-compatible inference API
   // (api-inference.modelscope.cn/v1). Free tier moved to magic-grain (魔粒)

@@ -1,13 +1,9 @@
 {
-  "name": "freellmapi-desktop",
+  "name": "librepool-desktop",
   "version": "0.16.21",
-  "description": "FreeLLMAPI menu-bar app — local OpenAI-compatible LLM router",
-  "author": {
-    "name": "tashfeenahmed",
-    "email": "tashfene@gmail.com",
-    "url": "https://github.com/tashfeenahmed"
-  },
-  "homepage": "https://freellmapi.co/",
+  "description": "LibrePool menu-bar app — local OpenAI-compatible LLM router",
+  "author": "LibrePool",
+  "homepage": "https://librepool.com/",
   "private": true,
   "type": "module",
   "main": "build/main.mjs",

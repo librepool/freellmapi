@@ -131,9 +131,7 @@ export default function PremiumPage() {
                   <Badge className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-transparent">
                     {license?.plan === 'annual'
                       ? t('premium.planAnnual')
-                      : license?.plan === 'lifetime'
-                        ? t('premium.planLifetime')
-                        : t('premium.planGeneric')}
+                      : t('premium.planGeneric')}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-destructive border-destructive/40">
@@ -143,7 +141,6 @@ export default function PremiumPage() {
               </div>
 
               <p className="text-xs text-muted-foreground">
-                {licensed && license?.plan === 'lifetime' && t('premium.lifetimeNote')}
                 {licensed && license?.plan === 'annual' && !license.cancelAtPeriodEnd && license.expiresAt &&
                   t('premium.renewsOn', { date: fmtDate(license.expiresAt) })}
                 {licensed && license?.plan === 'annual' && license.cancelAtPeriodEnd && license.expiresAt &&

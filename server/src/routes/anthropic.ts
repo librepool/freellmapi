@@ -8,7 +8,7 @@ import type {
   ChatToolDefinition,
   ChatToolChoice,
   ChatContentBlock,
-} from '@freellmapi/shared/types.js';
+} from '@librepool/shared/types.js';
 import { routeRequest, resolveModelGroupCandidates, resolveRoutingChain, resolveStickyPreference, routingReserveTokens, failureAttributionFor, type RouteResult, type ResolvedChain, type ChainRow } from '../services/router.js';
 import { getSetting } from '../db/index.js';
 import { resolveAuth, prependSystemPrompt, type ResolvedAuth } from '../lib/system-prompt.js';
@@ -516,7 +516,7 @@ export async function handleMessages(req: Request, res: Response): Promise<void>
     Array.isArray(message.content)
     && message.content.some(block => block && typeof block === 'object' && 'cache_control' in block));
   const compressionResult = compressRequest(messages, {
-    header: req.headers['x-freellm-compress'],
+    header: req.headers['x-librepool-compress'],
     tools,
     // Claude Code normally marks the system prefix. If a later native message
     // carries a breakpoint, conservatively cap the translated prefix at
@@ -524,7 +524,7 @@ export async function handleMessages(req: Request, res: Response): Promise<void>
     cacheControlPrefixLength: messageHasCacheControl ? messages.length : (systemHasCacheControl ? 1 : 0),
   });
   messages = compressionResult.messages;
-  res.setHeader('X-FreeLLM-Compress', formatCompressionHeader(compressionResult));
+  res.setHeader('X-LibrePool-Compress', formatCompressionHeader(compressionResult));
 
   // Server-enforced system prompt (#411): injected AFTER compression so it is
   // never compressed away, and FIRST in the list so a caller-supplied system
@@ -694,7 +694,7 @@ export async function handleMessages(req: Request, res: Response): Promise<void>
   // this turn routes with. Skipped when the client pinned a model or the
   // conversation is sticky to one. Any doubt routes as Balanced.
   const routingPick = await applyDecisionRouting(messages, { pinned: pinnedModelId != null || preferredModel != null, preset: resolvedChain?.strategyOverride, signal: clientAbort.signal });
-  if (routingPick && !res.headersSent) res.setHeader('X-FreeLLM-Routing-Strategy', routingStrategyHeader(routingPick));
+  if (routingPick && !res.headersSent) res.setHeader('X-LibrePool-Routing-Strategy', routingStrategyHeader(routingPick));
 
   await runFallbackLoop({
     maxRetries: MAX_RETRIES,
@@ -1212,11 +1212,11 @@ anthropicRouter.post('/messages/count_tokens', (req: Request, res: Response) => 
   }
   const { messages, tools } = converted;
   const compressionResult = compressRequest(messages, {
-    header: req.headers['x-freellm-compress'],
+    header: req.headers['x-librepool-compress'],
     tools,
     recordStats: false,
   });
-  res.setHeader('X-FreeLLM-Compress', formatCompressionHeader(compressionResult));
+  res.setHeader('X-LibrePool-Compress', formatCompressionHeader(compressionResult));
   res.json({ input_tokens: estimateInputTokens(compressionResult.messages, tools) });
 });
 

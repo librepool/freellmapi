@@ -24,7 +24,7 @@ appears in documentation but returned `400: Model not found` during testing.
 
 Model rows are published only through the signed hosted catalog. No migration,
 bundled seed, or automatic model discovery bypasses the existing Premium-now /
-Free-after-30-days gate. Older app versions must update to recognize Typhoon.
+Free-after-15-days gate. Older app versions must update to recognize Typhoon.
 
 Key validation deliberately requests a nonexistent model against the chat
 endpoint: the public `/models` endpoint cannot validate a key. Live controls

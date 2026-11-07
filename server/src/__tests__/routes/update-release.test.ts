@@ -8,8 +8,8 @@ import { createUpdateRouter, UPDATE_CHECK_SETTING } from '../../routes/update.js
 import { mintDashboardToken } from '../helpers/auth.js';
 
 const NOW = Date.parse('2026-08-09T14:00:00.000Z');
-const RELEASE_URL = 'https://api.github.com/repos/tashfeenahmed/freellmapi/releases/latest';
-const RELEASES_PAGE = 'https://github.com/tashfeenahmed/freellmapi/releases';
+const RELEASE_URL = 'https://api.github.com/repos/librepool/freellmapi/releases/latest';
+const RELEASES_PAGE = 'https://github.com/librepool/freellmapi/releases';
 
 function httpGet(app: Express, path: string): Promise<{ status: number; body: any }> {
   return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ function response(body: unknown, status = 200): Response {
 function releaseBody(overrides: Record<string, unknown> = {}) {
   return {
     tag_name: 'v0.7.0',
-    name: 'FreeLLMAPI v0.7.0',
+    name: 'LibrePool v0.7.0',
     body: '## What changed\n- Routing fixes',
     html_url: `${RELEASES_PAGE}/tag/v0.7.0`,
     published_at: '2026-08-08T09:30:00Z',
@@ -155,7 +155,7 @@ describe('GET /api/update/release', () => {
   it('stays disabled when the deployment kill switch is set, opt-in or not', async () => {
     const fetchMock = vi.fn();
     const { app } = createTestApp({
-      env: { FREELLMAPI_UPDATE_CHECK: 'off' },
+      env: { LIBREPOOL_UPDATE_CHECK: 'off' },
       fetch: fetchMock,
       autoCheckEnabled: () => true,
     });

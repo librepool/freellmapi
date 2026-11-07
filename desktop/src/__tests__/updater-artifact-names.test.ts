@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 // GitHub rewrites spaces in an uploaded asset's name to dots while
 // electron-builder writes them into the manifest as dashes, so any installer
 // name with a space is one the updater can never fetch (v0.13.4's
-// "FreeLLMAPI.Setup.0.13.4.exe" vs latest.yml's "FreeLLMAPI-Setup-0.13.4.exe").
+// "LibrePool.Setup.0.13.4.exe" vs latest.yml's "LibrePool-Setup-0.13.4.exe").
 
 const yaml = createRequire(import.meta.url)('js-yaml');
 const desktopRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -33,6 +33,6 @@ describe('updater artifact names', () => {
   });
 
   it('names the Windows installer the way latest.yml will', () => {
-    expect(expand(config.nsis.artifactName)).toBe('FreeLLMAPI-Setup-1.2.3.exe');
+    expect(expand(config.nsis.artifactName)).toBe('LibrePool-Setup-1.2.3.exe');
   });
 });

@@ -60,7 +60,7 @@
     "emailChanged": "Sähköposti vaihdettu.",
     "passwordReset": "Salasana palautettu. Kirjaudu sisään.",
     "resetCodeDockerHint": "Onko käytössä Docker? Koodi on kontin lokissa: docker logs <container>.",
-    "desktopSessionFailed": "Hallintapaneeli ei voinut kirjautua paikalliselle palvelimelle. Sulje FreeLLMAPI ja avaa se uudelleen."
+    "desktopSessionFailed": "Hallintapaneeli ei voinut kirjautua paikalliselle palvelimelle. Sulje LibrePool ja avaa se uudelleen."
   },
   "common": {
     "save": "Tallenna",
@@ -160,16 +160,16 @@
     "notGitInstall": "Tämä asennus ei sisällä commit-tietoja.",
     "checkFailed": "Päivitysten tarkistaminen epäonnistui.",
     "autoUpdateCheck": "Automaattinen päivitystarkistus",
-    "restartAfterUpdate": "Käynnistä FreeLLMAPI uudelleen koonnin valmistuttua.",
+    "restartAfterUpdate": "Käynnistä LibrePool uudelleen koonnin valmistuttua.",
     "downloadUpdate": "Lataa päivitys",
     "downloadingUpdate": "Ladataan… {percent} %",
     "restartToUpdate": "Käynnistä uudelleen päivittääksesi",
-    "updateReadyHint": "Ladattu. FreeLLMAPI varmuuskopioi tietosi, käynnistyy uudelleen ja avaa uuden version.",
+    "updateReadyHint": "Ladattu. LibrePool varmuuskopioi tietosi, käynnistyy uudelleen ja avaa uuden version.",
     "updateInstallFailed": "Päivitystä ei voitu asentaa.",
     "updateNow": "Päivitä nyt",
-    "updatingContainer": "Ladataan uutta imagea ja käynnistetään uudelleen. Sivu latautuu uudelleen, kun FreeLLMAPI palaa.",
+    "updatingContainer": "Ladataan uutta imagea ja käynnistetään uudelleen. Sivu latautuu uudelleen, kun LibrePool palaa.",
     "updateNowFailed": "Päivittäjä ei hyväksynyt pyyntöä. Tarkista, että watchtower-kontti on käynnissä.",
-    "updateNowTimeout": "FreeLLMAPI ei ole käynnistynyt uudelleen 5 minuutissa. Tarkista watchtower-kontin lokit."
+    "updateNowTimeout": "LibrePool ei ole käynnistynyt uudelleen 5 minuutissa. Tarkista watchtower-kontin lokit."
   },
   "models": {
     "title": "Mallit",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Kuukausittainen token-budjetti",
     "remaining": "jäljelle jääminen",
     "used": "käytetty",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Viimeinen synkronointiongelma: {error}",
     "license": "Lisenssi",
     "planAnnual": "Premium Annual",
-    "planLifetime": "Premium Lifetime",
     "expired": "Vanhentunut",
     "inactive": "Passiivinen",
-    "lifetimeNote": "Elinikäinen ajokortti: ei koskaan vanhene.",
     "renewsOn": "Jatka {date}.",
     "willNotRenew": "Ei uusiudu. Premium {date} asti, sitten tämä asennus palautuu ilmaiseen kuukausikatalogiin.",
     "keyInactive": "Tämä avain ei ole enää aktiivinen. Sovellus jatkaa työskentelyä ilmaisen kuukausikatalogin parissa.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Avaimesi löytyy ostosähköpostistasi ja jälkikassasivulta. Kadotitko sen?",
     "recoverKey": "Palauta se verkkosivuilta",
     "upsellTitle": "Mene elämään 19 dollarilla vuodessa",
-    "upsellDescription": "Uusia ilmaisia malleja heti kun ne ovat olemassa, eivätkä 30 päivän päästä. Yksi avain, jokainen laite. Peruuta milloin tahansa; Reititin pysyy vapaana ikuisesti.",
+    "upsellDescription": "Uusia ilmaisia malleja heti kun ne ovat olemassa, eivätkä 15 päivän päästä. Yksi avain, jokainen laite. Peruuta milloin tahansa; Reititin pysyy vapaana ikuisesti.",
     "goPremium": "Go Premium",
     "bundled": "niputettu",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "FreeLLMAPI:n uudempi versio on asennettu.",
+    "newBuild": "LibrePool:n uudempi versio on asennettu.",
     "reload": "Lataa uudelleen"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

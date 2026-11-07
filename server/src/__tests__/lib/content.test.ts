@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { contentToString, estimateInputTokens, flattenMessageContent, messageHasImage, normalizeOutboundContent, sanitizeResponse, stripImagesFromMessages } from '../../lib/content.js';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 
 describe('contentToString', () => {
   it('passes strings through', () => {

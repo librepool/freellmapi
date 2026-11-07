@@ -4,7 +4,7 @@
 
 Both providers use bearer-authenticated Chat Completions at their `/v1` base
 URLs. Model availability is managed in the signed Oracle catalog, not seeded
-in application migrations. The existing Premium-immediate / Free-after-30-days
+in application migrations. The existing Premium-immediate / Free-after-15-days
 catalog policy is unchanged.
 
 | Provider ID | Base URL | Key-validation endpoint | Free-plan funding |
@@ -64,7 +64,7 @@ back to a paid model automatically. Provider-side spending controls still apply.
 
 Inferbase Free managed inference allows 8,192 input and 1,024 output tokens.
 The adapter respects that upstream output ceiling; it does not impose a new
-FreeLLMAPI request quota. SimpleLLM normalizes scalar stop strings to arrays.
+LibrePool request quota. SimpleLLM normalizes scalar stop strings to arrays.
 
 ElectronHub embeddings use `/v1/embeddings` with float encoding and share the
 same weekly wallet as chat. Returned model ID, dimensions, finite vector values

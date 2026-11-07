@@ -47,9 +47,9 @@ describe('node:sqlite Android fallback', () => {
   });
 
   itWithSqlite('opens a file-backed database with WAL and file metadata', () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'freellmapi-node-sqlite-'));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'librepool-node-sqlite-'));
     tempDirs.push(dir);
-    const dbPath = path.join(dir, 'freeapi.db');
+    const dbPath = path.join(dir, 'librepool.db');
 
     db = connectDb(dbPath, { factory: nodeSqliteFactory });
     db.exec('CREATE TABLE sample (id INTEGER PRIMARY KEY, value TEXT NOT NULL)');

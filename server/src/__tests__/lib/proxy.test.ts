@@ -42,7 +42,7 @@ vi.mock('node:child_process', async (importOriginal) => ({
 // Every env var the proxy config reads, in both the upper- and lower-case
 // spellings the convention allows. Cleared around each test so a developer
 // machine that genuinely sits behind a corporate proxy doesn't fail the suite.
-// FREEAPI_BLOCK_PRIVATE_PROVIDER_URLS is not a proxy knob, but the local/LAN
+// LIBREPOOL_BLOCK_PRIVATE_PROVIDER_URLS is not a proxy knob, but the local/LAN
 // cases below call proxyFetch with platform 'custom', which re-runs the SSRF
 // guard — an operator machine that exports it would fail them for the wrong
 // reason.
@@ -54,8 +54,8 @@ const PROXY_ENV_VARS = [
   'HTTP_PROXY',
   'NO_PROXY',
   'PROXY_REQUIRED_PLATFORMS',
-  'FREEAPI_PROXY_LOCAL_DESTINATIONS',
-  'FREEAPI_BLOCK_PRIVATE_PROVIDER_URLS',
+  'LIBREPOOL_PROXY_LOCAL_DESTINATIONS',
+  'LIBREPOOL_BLOCK_PRIVATE_PROVIDER_URLS',
 ];
 
 function clearProxyEnv(): void {
@@ -637,7 +637,7 @@ describe('opt-in required proxy transport (fail closed)', () => {
 // `socks5h` suffix, it is exactly what makes Tor log "giving Tor only an IP
 // address" and may get the connection refused. Loopback and private/LAN
 // addresses therefore always bypass the proxy, unless the operator opts out
-// with FREEAPI_PROXY_LOCAL_DESTINATIONS.
+// with LIBREPOOL_PROXY_LOCAL_DESTINATIONS.
 describe('local and LAN destinations bypass the proxy (#951)', () => {
   /** Run one request through the SOCKS-configured proxy and report the route. */
   const routeOf = async (url: string): Promise<'direct' | 'proxied'> => {
@@ -708,27 +708,27 @@ describe('local and LAN destinations bypass the proxy (#951)', () => {
 
   // The `ssh -D` case: the tunnel's far end is where 127.0.0.1:11434 is meant
   // to resolve, so the operator can force local destinations back through it.
-  describe('FREEAPI_PROXY_LOCAL_DESTINATIONS opt-out', () => {
+  describe('LIBREPOOL_PROXY_LOCAL_DESTINATIONS opt-out', () => {
     it('routes loopback through the proxy when set', async () => {
-      process.env.FREEAPI_PROXY_LOCAL_DESTINATIONS = 'true';
+      process.env.LIBREPOOL_PROXY_LOCAL_DESTINATIONS = 'true';
       applyProxyUrl('socks5h://127.0.0.1:9050');
       expect(await routeOf('http://127.0.0.1:11434/api/chat')).toBe('proxied');
     });
 
     it('routes a LAN address through the proxy when set', async () => {
-      process.env.FREEAPI_PROXY_LOCAL_DESTINATIONS = '1';
+      process.env.LIBREPOOL_PROXY_LOCAL_DESTINATIONS = '1';
       applyProxyUrl('socks5h://127.0.0.1:9050');
       expect(await routeOf('http://192.168.1.20:11434/api/chat')).toBe('proxied');
     });
 
     it('is ignored when set to a non-truthy value', async () => {
-      process.env.FREEAPI_PROXY_LOCAL_DESTINATIONS = 'false';
+      process.env.LIBREPOOL_PROXY_LOCAL_DESTINATIONS = 'false';
       applyProxyUrl('socks5h://127.0.0.1:9050');
       expect(await routeOf('http://127.0.0.1:11434/api/chat')).toBe('direct');
     });
 
     it('still honours the global off switch', async () => {
-      process.env.FREEAPI_PROXY_LOCAL_DESTINATIONS = 'true';
+      process.env.LIBREPOOL_PROXY_LOCAL_DESTINATIONS = 'true';
       applyProxyUrl('socks5h://127.0.0.1:9050');
       applyProxyEnabled(false);
       expect(await routeOf('http://127.0.0.1:11434/api/chat')).toBe('direct');

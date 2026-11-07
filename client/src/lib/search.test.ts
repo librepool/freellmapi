@@ -76,10 +76,10 @@ describe('freeFromDate', () => {
   })
 
   it('returns the day the row reaches the free catalog', () => {
-    expect(freeFromDate('2026-10-13T00:00:00Z', now)?.toISOString()).toBe('2026-11-12T00:00:00.000Z')
+    expect(freeFromDate('2026-10-13T00:00:00Z', now)?.toISOString()).toBe('2026-10-28T00:00:00.000Z')
   })
 
-  it('is null once the 30-day lag has passed', () => {
+  it('is null once the 15-day lag has passed', () => {
     expect(freeFromDate('2026-09-01T00:00:00Z', now)).toBeNull()
   })
 })

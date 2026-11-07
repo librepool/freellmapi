@@ -48,7 +48,7 @@ with one command; it reads your live `/v1/models` catalog, backs up the
 existing config and merges into it, so your other providers stay put:
 
 ```bash
-npx freellmapi setup-<agent> --url http://localhost:3001 --api-key <unified-key>
+npx librepool setup-<agent> --url http://localhost:3001 --api-key <unified-key>
 ```
 
 Add `--dry-run` to see the diff first, `--profile <name>` to add a second entry

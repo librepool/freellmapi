@@ -2075,7 +2075,7 @@ function migrateEmbeddingsV1(db: Db) {
  * misroute to an image model) and never pollute the chat token budget. This is
  * schema only: per the no-model-data-in-migrations rule (see migrateDbSchema),
  * the rows are maintained in the published catalog and arrive via catalog-sync
- * (premium on the live tier within ~12h, free once each model is 30 days old). `modality`
+ * (premium on the live tier within ~12h, free once each model is 15 days old). `modality`
  * is 'image' | 'audio'; `quota_label` mirrors the catalog's display note. The
  * request_type column (added by migrateEmbeddingsV1) tags media traffic 'image'
  * / 'audio' so it stays out of the chat budget math.
@@ -2289,7 +2289,7 @@ function backfillFallback(db: Db) {
 function ensureUnifiedKey(db: Db) {
   const existing = db.prepare("SELECT value FROM settings WHERE key = 'unified_api_key'").get() as { value: string } | undefined;
   if (!existing) {
-    const key = `freellmapi-${crypto.randomBytes(24).toString('hex')}`;
+    const key = `librepool-${crypto.randomBytes(24).toString('hex')}`;
     db.prepare("INSERT INTO settings (key, value) VALUES ('unified_api_key', ?)").run(key);
     // A direct stdout write bypasses the process-wide console redaction, so it
     // is only safe for a deliberate local-development session with an attached

@@ -92,7 +92,7 @@ export function trustSystemCertificates(tlsModule: Pick<typeof tls, 'getCACertif
 //
 // Deliberately NOT mirrored, because they are env-driven and the packaged app
 // inherits no shell environment:
-//   restoreDbBackupIfNeeded / startDbBackupPump   (FREEAPI_DB_BACKUP_* only)
+//   restoreDbBackupIfNeeded / startDbBackupPump   (LIBREPOOL_DB_BACKUP_* only)
 //   applyDeclarativeConfigFromEnv, warnOnEnvDrift, warnOnRoutingOverrideDrift
 //   generateSetupCode                             (desktop mints its own user)
 export async function startServer(opts: StartOptions): Promise<ServerHandle> {
@@ -113,12 +113,12 @@ export async function startServer(opts: StartOptions): Promise<ServerHandle> {
   // mirror the inlined literals into the real process.env — without this the
   // packaged app's update check resolves {sha: null, installation: 'unknown'}
   // and reports 'unsupported'.
-  const buildSha = process.env.FREELLMAPI_COMMIT_SHA;
-  const buildInstall = process.env.FREELLMAPI_INSTALL_METHOD;
+  const buildSha = process.env.LIBREPOOL_COMMIT_SHA;
+  const buildInstall = process.env.LIBREPOOL_INSTALL_METHOD;
   if (buildSha && buildInstall) {
     Object.assign(process.env, {
-      FREELLMAPI_COMMIT_SHA: buildSha,
-      FREELLMAPI_INSTALL_METHOD: buildInstall,
+      LIBREPOOL_COMMIT_SHA: buildSha,
+      LIBREPOOL_INSTALL_METHOD: buildInstall,
     });
   }
   process.env.CLIENT_DIST = opts.clientDist;
@@ -128,7 +128,7 @@ export async function startServer(opts: StartOptions): Promise<ServerHandle> {
   // desktop embedder; the server then skips re-auth for those two endpoints,
   // and only for requests arriving over loopback — with LAN access on we bind
   // 0.0.0.0, and a remote viewer must still enter the password.
-  process.env.FREEAPI_DESKTOP = '1';
+  process.env.LIBREPOOL_DESKTOP = '1';
   initDb(opts.dbPath);
   // One sweep at boot, while the DB is quiet — expired cooldown rows are only
   // collected lazily per route and would otherwise accumulate forever.

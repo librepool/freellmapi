@@ -19,7 +19,7 @@ const { events, autoUpdater } = vi.hoisted(() => {
 });
 
 vi.mock('electron', () => ({
-  app: { getVersion: () => '0.0.0', getName: () => 'FreeLLMAPI', isReady: () => true, on: vi.fn(), whenReady: vi.fn(() => Promise.resolve()) },
+  app: { getVersion: () => '0.0.0', getName: () => 'LibrePool', isReady: () => true, on: vi.fn(), whenReady: vi.fn(() => Promise.resolve()) },
   BrowserWindow: { fromWebContents: vi.fn(() => null), getAllWindows: vi.fn(() => []) },
   dialog: { showMessageBox: vi.fn(async () => ({ response: 0 })) },
   Notification: class { show() {} },
@@ -36,7 +36,7 @@ describe('updater check timeout (#1666)', () => {
     _setCheckTimeoutMsForTests(50);
     // A dev build only gets an updater when a test feed is configured; point
     // it at a dummy feed so updateSupport() reports the build as supported.
-    process.env.FREEAPI_UPDATE_FEED = 'http://127.0.0.1:8099/';
+    process.env.LIBREPOOL_UPDATE_FEED = 'http://127.0.0.1:8099/';
     initUpdater({
       autoCheckEnabled: () => false,
       backupBeforeUpdate: () => null,
@@ -45,7 +45,7 @@ describe('updater check timeout (#1666)', () => {
     });
   });
   afterEach(() => {
-    delete process.env.FREEAPI_UPDATE_FEED;
+    delete process.env.LIBREPOOL_UPDATE_FEED;
     _setCheckTimeoutMsForTests(30_000);
     vi.useRealTimers();
     vi.clearAllMocks();

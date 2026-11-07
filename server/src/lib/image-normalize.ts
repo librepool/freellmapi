@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import type { ChatMessage } from '@freellmapi/shared/types.js';
+import type { ChatMessage } from '@librepool/shared/types.js';
 
 // Inbound image normalization. Vision payloads ride inline as base64 data
 // URLs, and agents replay their ENTIRE history every turn — one real Codex

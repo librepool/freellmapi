@@ -60,7 +60,7 @@
     "emailChanged": "E-pošta je promijenjena.",
     "passwordReset": "Lozinka je poništena. Prijavite se.",
     "resetCodeDockerHint": "Koristite Docker? Kod se nalazi u zapisu kontejnera: docker logs <container>.",
-    "desktopSessionFailed": "Nadzorna ploča nije se uspjela prijaviti na lokalni poslužitelj. Zatvorite FreeLLMAPI i ponovno ga otvorite."
+    "desktopSessionFailed": "Nadzorna ploča nije se uspjela prijaviti na lokalni poslužitelj. Zatvorite LibrePool i ponovno ga otvorite."
   },
   "common": {
     "save": "Spasi",
@@ -160,16 +160,16 @@
     "notGitInstall": "Ova instalacija ne sadrži informacije o commitovima.",
     "checkFailed": "Nije moguće provjeriti ažuriranja.",
     "autoUpdateCheck": "Automatska provjera ažuriranja",
-    "restartAfterUpdate": "Ponovno pokrenite FreeLLMAPI nakon dovršetka izgradnje.",
+    "restartAfterUpdate": "Ponovno pokrenite LibrePool nakon dovršetka izgradnje.",
     "downloadUpdate": "Preuzmi ažuriranje",
     "downloadingUpdate": "Preuzimanje… {percent} %",
     "restartToUpdate": "Ponovno pokreni za ažuriranje",
-    "updateReadyHint": "Preuzeto. FreeLLMAPI sigurnosno kopira vaše podatke, ponovno se pokreće i otvara novu verziju.",
+    "updateReadyHint": "Preuzeto. LibrePool sigurnosno kopira vaše podatke, ponovno se pokreće i otvara novu verziju.",
     "updateInstallFailed": "Ažuriranje se nije moglo instalirati.",
     "updateNow": "Ažuriraj sada",
-    "updatingContainer": "Preuzimanje nove slike i ponovno pokretanje. Stranica će se ponovno učitati kad se FreeLLMAPI vrati.",
+    "updatingContainer": "Preuzimanje nove slike i ponovno pokretanje. Stranica će se ponovno učitati kad se LibrePool vrati.",
     "updateNowFailed": "Ažurirač nije prihvatio zahtjev. Provjerite radi li kontejner watchtower.",
-    "updateNowTimeout": "FreeLLMAPI se nije ponovno pokrenuo nakon 5 minuta. Provjerite zapise kontejnera watchtower."
+    "updateNowTimeout": "LibrePool se nije ponovno pokrenuo nakon 5 minuta. Provjerite zapise kontejnera watchtower."
   },
   "models": {
     "title": "Modeli",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Mjesečni budžet tokena",
     "remaining": "Preostali",
     "used": "Korišteno",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1038,10 +1038,8 @@
     "lastSyncProblem": "Problem s posljednjom sinkronizacijom: {error}",
     "license": "Licenca",
     "planAnnual": "Godišnja premija",
-    "planLifetime": "Premium životni vijek",
     "expired": "Istekao",
     "inactive": "Neaktivan",
-    "lifetimeNote": "Doživotna licenca: nikad ne istječe.",
     "renewsOn": "Obnavlja se {date}.",
     "willNotRenew": "Neću obnoviti. Premium do {date}, a zatim se ova instalacija vraća na besplatni mjesečni katalog.",
     "keyInactive": "Ovaj ključ više nije aktivan. Aplikacija i dalje radi na besplatnom mjesečnom katalogu.",
@@ -1056,7 +1054,7 @@
     "keyHint": "Vaš ključ nalazi se u e-mailu za kupnju i na stranici nakon plaćanja. Izgubio kontrolu?",
     "recoverKey": "Pronađite ga na web stranici",
     "upsellTitle": "Idite uživo za 19 dolara godišnje",
-    "upsellDescription": "Novi besplatni modeli čim se pojave, umjesto 30 dana kasnije. Jedan ključ, svaki uređaj. Otkažite u bilo koje vrijeme; Ruter ostaje slobodan zauvijek.",
+    "upsellDescription": "Novi besplatni modeli čim se pojave, umjesto 15 dana kasnije. Jedan ključ, svaki uređaj. Otkažite u bilo koje vrijeme; Ruter ostaje slobodan zauvijek.",
     "goPremium": "Go Premium",
     "bundled": "Bundled",
     "planGeneric": "Premija"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "Instalirana je novija verzija FreeLLMAPI-ja.",
+    "newBuild": "Instalirana je novija verzija LibrePool-ja.",
     "reload": "Ponovno učitaj"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

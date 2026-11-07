@@ -21,5 +21,5 @@ See [speech API](https://docs.electronhub.ai/api-reference/audio/speech) and
 [credit policy](https://docs.electronhub.ai/billing/credits).
 
 All model rows arrive through the signed catalog, with no database seeds or
-automatic discovery. Premium/live and Free/30-day eligibility logic is unchanged.
+automatic discovery. Premium/live and Free/15-day eligibility logic is unchanged.
 Older installations must update the application to use these adapters.

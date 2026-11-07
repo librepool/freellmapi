@@ -12,7 +12,7 @@ settings rather than assuming all requests beyond the grant remain free.
 
 Model rows are published through the signed hosted catalog only. Adding the
 adapter or importing a key does not seed models or bypass the existing
-Premium-now / Free-after-30-days release gate. Older app versions must update
+Premium-now / Free-after-15-days release gate. Older app versions must update
 to recognize the provider. Image generation is not enabled by this adapter.
 
 Key validation uses a nonexistent model against the authenticated chat

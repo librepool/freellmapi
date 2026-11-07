@@ -4,7 +4,7 @@ All five are first-class OpenAI-compatible chat providers. Select them on the
 Keys page or import `LUCIDITY_API_KEY` / `AIRFORCE_API_KEY` /
 `DREAMPROMPTING_API_KEY` / `WATERFALL_API_KEY` / `LOGFARE_API_KEY`. This
 integration does not seed model rows: the signed Oracle catalog controls
-availability and the existing Premium-immediate / Free-after-30-days release
+availability and the existing Premium-immediate / Free-after-15-days release
 gate.
 
 ## Free access (checked 2026-09-15)

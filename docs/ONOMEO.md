@@ -31,7 +31,7 @@ clients and agents never see it.
 
 Model rows are published only through the signed Oracle catalog. No seeds,
 model-discovery enrollment, or database migration bypasses the existing
-Premium-now / Free-after-30-days release gate.
+Premium-now / Free-after-15-days release gate.
 
 Sources:
 

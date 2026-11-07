@@ -60,7 +60,7 @@
     "emailChanged": "Email changed successfully.",
     "passwordReset": "Password reset successfully. Please sign in.",
     "resetCodeDockerHint": "Running in Docker? The code is in the container log: docker logs <container>.",
-    "desktopSessionFailed": "The dashboard could not sign in to the local server. Quit FreeLLMAPI and open it again."
+    "desktopSessionFailed": "The dashboard could not sign in to the local server. Quit LibrePool and open it again."
   },
   "common": {
     "save": "Save",
@@ -160,16 +160,16 @@
     "notGitInstall": "This installation does not include commit information.",
     "checkFailed": "Could not check for updates.",
     "autoUpdateCheck": "Automatic update check",
-    "restartAfterUpdate": "Restart FreeLLMAPI after the build completes.",
+    "restartAfterUpdate": "Restart LibrePool after the build completes.",
     "downloadUpdate": "Download update",
     "downloadingUpdate": "Downloading… {percent}%",
     "restartToUpdate": "Restart to update",
-    "updateReadyHint": "Downloaded. FreeLLMAPI backs up your data, restarts and opens the new version.",
+    "updateReadyHint": "Downloaded. LibrePool backs up your data, restarts and opens the new version.",
     "updateInstallFailed": "The update could not be installed.",
     "updateNow": "Update now",
-    "updatingContainer": "Pulling the new image and restarting. This page reloads when FreeLLMAPI is back.",
+    "updatingContainer": "Pulling the new image and restarting. This page reloads when LibrePool is back.",
     "updateNowFailed": "The updater did not accept the request. Check that the watchtower container is running.",
-    "updateNowTimeout": "FreeLLMAPI has not restarted after 5 minutes. Check the watchtower container's logs."
+    "updateNowTimeout": "LibrePool has not restarted after 5 minutes. Check the watchtower container's logs."
   },
   "models": {
     "title": "Models",
@@ -192,7 +192,7 @@
     "monthlyTokenBudget": "Monthly token budget",
     "remaining": "remaining",
     "used": "used",
-    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside FreeLLMAPI is not counted.",
+    "usedScopeHint": "Chat requests only, since the start of this calendar month, summed over every model in the active chain — custom endpoints included. Traffic you send to a provider outside LibrePool is not counted.",
     "legendRemainingTitle": "Remaining / monthly budget for {name} ({platform})",
     "noPublishedQuota": "+{count} with no published quota",
     "noPublishedQuotaTitle": "These models have no documented monthly token budget, so there is no remaining figure to show.",
@@ -1077,10 +1077,8 @@
     "lastSyncProblem": "Last sync problem: {error}",
     "license": "License",
     "planAnnual": "Premium Annual",
-    "planLifetime": "Premium Lifetime",
     "expired": "Expired",
     "inactive": "Inactive",
-    "lifetimeNote": "Lifetime license: never expires.",
     "renewsOn": "Renews on {date}.",
     "willNotRenew": "Will not renew. Premium until {date}, then this install falls back to the free monthly catalog.",
     "keyInactive": "This key is no longer active. The app keeps working on the free monthly catalog.",
@@ -1095,7 +1093,7 @@
     "keyHint": "Your key is in your purchase email and on the post-checkout page. Lost it?",
     "recoverKey": "Recover it on the website",
     "upsellTitle": "Go live for $19 a year",
-    "upsellDescription": "New free models the moment they exist, instead of 30 days later. One key, every device. Cancel anytime; the router stays free forever.",
+    "upsellDescription": "New free models the moment they exist, instead of 15 days later. One key, every device. Cancel anytime; the router stays free forever.",
     "goPremium": "Go Premium",
     "bundled": "bundled",
     "planGeneric": "Premium"
@@ -1207,7 +1205,7 @@
   "update": {
     "available": "New version available",
     "dismiss": "Dismiss",
-    "newBuild": "A newer version of FreeLLMAPI is installed.",
+    "newBuild": "A newer version of LibrePool is installed.",
     "reload": "Reload"
   },
   "freeTier": {
@@ -1273,7 +1271,7 @@
     "tab": "Search",
     "pageDesc": "Web search engines your apps and agents can call. Engines are tried in priority order; when one runs out of free credits the next one takes over.",
     "endpointHint": "Search via",
-    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 30 days later.",
+    "agentsHint": "— also answers web searches from Claude Code and Codex. New engines reach Premium first and Free 15 days later.",
     "empty": "No search engines yet. They sync from the catalog.",
     "creditsPerSearchOne": "1 credit / search",
     "creditsPerSearchOther": "{count} credits / search",

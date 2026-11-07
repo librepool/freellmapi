@@ -17,7 +17,7 @@ quota, so only non-streaming inference was live-verified in this publication.
 
 Model rows are supplied only by the hosted signed catalog. There are no bundled
 seeds or automatic discovery of LLMTR's paid models. Existing Premium-immediate
-and Free-after-30-days release logic is unchanged.
+and Free-after-15-days release logic is unchanged.
 Older app versions need an update to recognize the new provider.
 
 Five routes returned matching model IDs and valid text completions on 2026-09-29:

@@ -137,7 +137,7 @@ describe('budget alert webhook', () => {
       { threshold: 0.8, kind: 'requests', used: 80, cap: 100 },
       { threshold: 1.0, kind: 'tokens', used: 1000, cap: 1000 },
     ]);
-    expect(payload.type).toBe('freellmapi.key_budget_threshold');
+    expect(payload.type).toBe('librepool.key_budget_threshold');
     expect(payload.thresholds).toEqual([
       { kind: 'requests', threshold: 0.8, used: 80, cap: 100, blocked: false },
       { kind: 'tokens', threshold: 1, used: 1000, cap: 1000, blocked: true },
