@@ -4,6 +4,7 @@
 // Models tabs all treat them as their own group.
 
 import type { SearchPlatform as SharedSearchPlatform } from '@librepool/shared/types'
+import type { QueryClient } from '@tanstack/react-query'
 
 // Mirrors SEARCH_PLATFORMS in shared/types.ts. The client only imports types
 // from shared, so the list is repeated here; the two assertions below fail the

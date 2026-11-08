@@ -328,7 +328,7 @@ export function cooldownForError(route: RouteResult, err: any): number {
 export const APINEX_CHECKIN_URL = 'https://apinex.bond/';
 export const APINEX_CHECKIN_MESSAGE =
   `APINex Free requires a daily website visit. Open ${APINEX_CHECKIN_URL} and sign in to claim the daily check-in. ` +
-  'FreeLLMAPI will retry after a short cooldown, or you can resume the APINex key in the Keys dashboard after visiting.';
+  'LibrePool will retry after a short cooldown, or you can resume the APINex key in the Keys dashboard after visiting.';
 
 /** HTTP 402 on APINex Free can mean a missing website check-in, not empty credits. */
 export function isApinexCheckinRequired(platform: string, err: any): boolean {
