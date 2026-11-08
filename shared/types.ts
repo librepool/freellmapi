@@ -284,6 +284,23 @@ export type Platform =
   // aihorde.net key raises queue priority. Has a dedicated AIHordeProvider that
   // normalizes the proxy's OpenAI divergences. See issue #345.
   | 'aihorde'
+  // Gonka Broker — OpenAI-compatible proxy. Free tier is >=1M tokens/month,
+  // resetting on the 1st (no card, phone verification on signup); reasoning
+  // arrives in a dedicated `reasoning` field. Catalog rows live in the hosted
+  // catalog (premium now, free after the 15-day model-age gate).
+  | 'gonka'
+  // AIHubMix — OpenAI-compatible gateway. Free pool is 1M tokens/day shared
+  // across the `-free` / `:free`-suffixed routes after a one-time >=$1 top-up
+  // that stays as balance; the free roster churns, so the adapter guards on
+  // the suffix, not a frozen list. Catalog rows live in the hosted catalog
+  // (premium now, free after the 15-day model-age gate).
+  | 'aihubmix'
+  // IBM watsonx.ai Lite — custom adapter (IAM token exchange + project_id,
+  // native /ml/v1/text/chat). Free tier is 300K foundation-model tokens/month
+  // and 20 CUH/month at 2 req/sec; a card is held for identity verification
+  // but Lite never bills. Catalog rows live in the hosted catalog (premium
+  // now, free after the 15-day model-age gate).
+  | 'watsonx'
   // User-configured OpenAI-compatible endpoint (llama.cpp, LM Studio, vLLM,
   // Ollama, any base_url). The endpoint URL lives on the api_keys row; see #117.
   | 'custom';

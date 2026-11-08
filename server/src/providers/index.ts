@@ -29,6 +29,9 @@ import { GizmoProvider } from './gizmo.js';
 import { BlockRunProvider } from './blockrun.js';
 import { MoondreamProvider } from './moondream.js';
 import { JamaiProvider } from './jamai.js';
+import { GonkaProvider } from './gonka.js';
+import { AIHubMixProvider } from './aihubmix.js';
+import { WatsonxProvider } from './watsonx.js';
 import { NabhProvider } from './nabh.js';
 import { NovaiProvider } from './novai.js';
 import { FreeInferenceProvider } from './freeinference.js';
@@ -101,6 +104,32 @@ register(new GizmoProvider());
 register(new BlockRunProvider());
 register(new MoondreamProvider());
 register(new JamaiProvider());
+// Gonka Broker — OpenAI-compatible proxy (proxy.gonkabroker.com/v1). Free tier
+// is >=1M tokens/month, resetting on the 1st; no card, phone verification on
+// signup. Reasoning arrives in a dedicated `reasoning` field (mapped to
+// reasoning_content by the adapter); GET /test-auth validates keys. Live
+// /v1/models probe 2026-11-08: exactly 4 models (MiniMax M2.7, DeepSeek V4
+// Flash, GLM-5.3-Flash, BAAI/bge-m3 embeddings). Model rows live only in the
+// signed catalog, never in bundled seeds.
+register(new GonkaProvider());
+// AIHubMix — OpenAI-compatible gateway (aihubmix.com/v1). Free pool is 1M
+// tokens/day shared across the `-free` / `:free`-suffixed routes after a
+// one-time >=$1 top-up that stays as balance; 100 req/day, 5-10 req/min. The
+// free roster churns, so the adapter guards on the suffix, not a frozen list.
+// /v1/models is public, so there is no key-validation endpoint (KiosAPI
+// pattern: supportsKeyValidation=false). Live /v1/models probe 2026-11-08:
+// 662 models, 42 free. Model rows live only in the signed catalog.
+register(new AIHubMixProvider());
+// IBM watsonx.ai Lite — custom adapter: IAM token exchange plus project_id on
+// the native /ml/v1/text/chat and /ml/v1/text/chat_stream endpoints (IBM Cloud
+// API docs, read 2026-11-08). Free tier is 300K foundation-model tokens/month
+// and 20 CUH/month at 2 req/sec; a card is held for identity verification but
+// Lite never bills. Credential is project_id:api_key (JamAI composite form);
+// region comes from WATSONX_URL, default us-south. NOT live-probed: no IBM
+// Cloud account was available, so the adapter is built from the official docs
+// and the seeded model ids' Lite availability is unverified. Model rows live
+// only in the signed catalog.
+register(new WatsonxProvider());
 register(new NabhProvider());
 register(new NovaiProvider());
 register(new FreeInferenceProvider());

@@ -166,6 +166,10 @@ export const PREFIX_MAP: Record<string, string> = {
   XFYUN_: 'xfyun',
   SPARK_: 'xfyun',
   IFLYTEK_: 'xfyun',
+  GONKA_: 'gonka',
+  GONKABROKER_: 'gonka',
+  AIHUBMIX_: 'aihubmix',
+  WATSONX_: 'watsonx',
 };
 
 export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
@@ -281,6 +285,10 @@ export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
   linkup: 'linkup',
   parallel: 'parallel',
   keenable: 'keenable',
+  gonka: 'gonka',
+  gonkabroker: 'gonka',
+  aihubmix: 'aihubmix',
+  watsonx: 'watsonx',
 };
 
 export function detectPlatform(prefix: string): string | null {
@@ -789,12 +797,21 @@ function toParsedKeys(pairs: KeyPair[]): ParseResult {
   const skipped: string[] = [];
 
   const project = pairs.find(pair => pair.key.toUpperCase() === 'JAMAI_PROJECT_ID')?.value.trim();
+  const watsonxProject = pairs.find(pair => pair.key.toUpperCase() === 'WATSONX_PROJECT_ID')?.value.trim();
   for (const { key, value: rawValue, platform: statedPlatform, baseUrl, label, models } of pairs) {
     // Project metadata is not itself a credential. Support the SDK's paired
     // environment fields as well as our encrypted/exported composite value.
     if (key.toUpperCase() === 'JAMAI_PROJECT_ID') continue;
+    // watsonx.ai takes the same composite form (project_id:api_key); its
+    // region URL and token/space metadata are not credentials and must never
+    // be imported as keys — WATSONX_URL would otherwise match the WATSONX_
+    // prefix and be stored as a watsonx key.
+    if (key.toUpperCase() === 'WATSONX_PROJECT_ID') continue;
+    if (/^WATSONX_(URL|TOKEN|DEPLOYMENT_SPACE_ID|ZENAPIKEY)$/i.test(key)) continue;
     const value = project && /^JAMAI_(API_KEY|PAT|KEY)$/i.test(key) && !rawValue.includes(':')
-      ? `${project}:${rawValue.trim()}` : rawValue;
+      ? `${project}:${rawValue.trim()}`
+      : watsonxProject && /^WATSONX_(APIKEY|API_KEY|KEY)$/i.test(key) && !rawValue.includes(':')
+        ? `${watsonxProject}:${rawValue.trim()}` : rawValue;
     const prefix = extractPrefix(key);
     const platform = statedPlatform ?? detectPlatform(prefix);
     // The name before `=` becomes the stored label (splitRawKey in the import

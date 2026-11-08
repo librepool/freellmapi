@@ -26,6 +26,7 @@ import { INFERBASE_BASE_URL } from '../providers/inferbase.js';
 import { LLMTR_BASE_URL } from '../providers/llmtr.js';
 import { JAMAI_BASE_URL, jamaiHeaders } from '../providers/jamai.js';
 import { FREEINFERENCE_BASE_URL } from '../providers/freeinference.js';
+import { GONKA_BASE_URL } from '../providers/gonka.js';
 
 export interface EmbeddingModelRow {
   id: number;
@@ -127,6 +128,7 @@ export const EMBEDDING_PLATFORMS = new Set([
   'electronhub',
   'inferbase',
   'llmtr',
+  'gonka',
 ]);
 
 interface ProviderCallResult {
@@ -174,7 +176,7 @@ async function openAiStyleEmbed(
     usage?: { prompt_tokens?: number; total_tokens?: number };
   };
   const data = [...(j.data ?? [])].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
-  if (['electronhub', 'inferbase', 'llmtr', 'jamai'].includes(platform) && (
+  if (['electronhub', 'inferbase', 'llmtr', 'jamai', 'gonka'].includes(platform) && (
     j.model !== modelId || data.length !== inputs.length ||
     data.some((d, i) => d.index !== i || !Array.isArray(d.embedding) ||
       d.embedding.length !== (dimensions ?? expectedDimensions) ||
@@ -182,7 +184,7 @@ async function openAiStyleEmbed(
   )) {
     // A successful HTTP response is not enough: wrong model/dimension or
     // malformed vectors would corrupt the caller's embedding family.
-    const provider = platform === 'jamai' ? 'JamAI' : platform === 'electronhub' ? 'ElectronHub' : platform === 'llmtr' ? 'LLMTR' : 'Inferbase';
+    const provider = platform === 'jamai' ? 'JamAI' : platform === 'electronhub' ? 'ElectronHub' : platform === 'llmtr' ? 'LLMTR' : platform === 'gonka' ? 'Gonka' : 'Inferbase';
     throw new EmbeddingsError(`${provider} returned mismatched or malformed embeddings`, 502);
   }
   return {
@@ -345,6 +347,13 @@ async function callProvider(row: EmbeddingModelRow, credential: ProviderCredenti
         throw new EmbeddingsError('LLMTR does not support an embedding dimension override', 400);
       }
       return openAiStyleEmbed(`${LLMTR_BASE_URL}/embeddings`, row.platform, key, row.model_id, inputs, {}, undefined, row.dimensions);
+    case 'gonka':
+      // Gonka rejects a `dimensions` parameter with 400 (docs, "Embeddings"):
+      // bge-m3 is fixed at 1024 dimensions, so never send an override.
+      if (dimensions !== undefined && dimensions !== row.dimensions) {
+        throw new EmbeddingsError('Gonka does not support an embedding dimension override', 400);
+      }
+      return openAiStyleEmbed(`${GONKA_BASE_URL}/embeddings`, row.platform, key, row.model_id, inputs, {}, undefined, row.dimensions);
     case 'cloudflare': {
       // Key is stored as "account_id:token".
       const sep = key.indexOf(':');
