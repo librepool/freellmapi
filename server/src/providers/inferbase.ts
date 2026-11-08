@@ -6,6 +6,10 @@ import { OpenAICompatProvider } from './openai-compat.js';
 export const INFERBASE_BASE_URL = 'https://api.inferbase.ai/v1';
 
 function checkModel(requested: string, returned: string): void {
+  // `auto` is the vendor's router, not a model: the upstream answers with
+  // whichever model it picked per request, so a different returned id is the
+  // product working, not a substitution (same pattern as llmkiwi.ts).
+  if (requested === 'auto') return;
   // Pin explicit catalog IDs, including :fp8/:turbo variants. Never silently
   // accept an auto-routed substitute as the requested model.
   if (returned !== requested) {

@@ -36,6 +36,11 @@ import { NousProvider } from './nous.js';
 import { ArliProvider } from './arli.js';
 import { LlmkiwiProvider } from './llmkiwi.js';
 import { MeganovaProvider } from './meganova.js';
+import { MixlayerProvider } from './mixlayer.js';
+import { MoarkProvider } from './moark.js';
+import { SenseNovaProvider } from './sensenova.js';
+import { TokenHarborProvider } from './tokenharbor.js';
+import { ZroProvider } from './zro.js';
 import { NabhProvider } from './nabh.js';
 import { NovaiProvider } from './novai.js';
 import { FreeInferenceProvider } from './freeinference.js';
@@ -180,6 +185,68 @@ register(new LlmkiwiProvider());
 // suspension; flag before routing production traffic here. Model rows live
 // only in the signed catalog.
 register(new MeganovaProvider());
+// Mixlayer — OpenAI-compatible inference API (mixlayer.ai/v1; models.mixlayer.ai/v1
+// answers identically). Free tier is $0, no card: the `-free` models need no
+// prepaid credit (paid models return 402 on an empty balance); no numeric
+// RPM/TPM is published — limits are per organization and per model,
+// unpublished. The guard is a `-free` suffix rule, not a frozen list. GET
+// /v1/models requires a Bearer key (401 without one, verified live
+// 2026-11-08 on both hosts), so the base class's default validation applies.
+// No key prefix is published. Live evidence: docs quickstart + pricing page
+// (docs.mixlayer.com, read 2026-11-08); /v1/models probe 2026-11-08 returned
+// 401 without a key on both hosts. Model rows live only in the signed catalog.
+register(new MixlayerProvider());
+// Moark (Gitee AI) — OpenAI-compatible API (api.moark.com/v1). Free tier is
+// the "free experience access token": 100 calls/day per user across the
+// featured models, nothing bought (FAQ Q6, read 2026-11-08); at the cap the
+// API returns 400 已达到最大当日免费 API 使用次数… (FAQ Q17). Models marked
+// "free" in the square need a purchased resource package of any amount (FAQ
+// Q1) — not seeded. Only deepseek-v4-flash-0731 is confirmed callable on the
+// free token (vendor Claude Code guide + independent probe, verified
+// 2026-11-05); the featured roster is published only on the client-rendered
+// square, so the adapter guards on that one confirmed id. GET /v1/models is
+// public (live probe 2026-11-08: 200, 214 models), so there is no
+// key-validation endpoint (KiosAPI pattern: supportsKeyValidation=false).
+// Sign-in is via a Gitee account; non-mainland phone acceptance is
+// unverified. No key prefix is published. Model rows live only in the signed
+// catalog.
+register(new MoarkProvider());
+// SenseNova — OpenAI-compatible Token Plan API (token.sensenova.ai/v1).
+// Free tier is $0 during the public beta, no card: 1,500 requests per
+// model every rolling 5 hours, up to 20 keys. No permanent free tier is
+// published — paid Lite/Pro tiers are coming soon, so this lane is
+// beta-scoped. The China endpoint (token.sensenova.cn/v1) is a separate
+// platform with non-interchangeable keys. GET /v1/models requires a key
+// (401 without one, verified live 2026-11-08). No free-route guard: every
+// model on the global endpoint is $0 during the beta, and the roster
+// churns, so the signed catalog gates routable ids. Model rows live only
+// in the signed catalog.
+register(new SenseNovaProvider());
+// Token Harbor — OpenAI-compatible gateway (tokenharbor.ai/v1). Free plan
+// is $0, no card: a rolling 7-day list-price value allowance (amount
+// unpublished) shared across the :free routes, 60 req/min and 1,800
+// req/hour per account. The :free routes must be enabled in the dashboard
+// first; while enabled their prompts may be retained for diagnostics. The
+// free roster rotates, so the adapter guards on the :free suffix, not a
+// frozen list. GET /v1/models requires a key (401 invalid_api_key without
+// one, verified live 2026-11-08). Live Models page 2026-11-08: 2 free
+// (deepseek-v4.1-flash:free, mimo-v2.6-flash:free); TH-Rudder is
+// Webchat-only, not an API model. Model rows live only in the signed
+// catalog.
+register(new TokenHarborProvider());
+// Zro — OpenAI-compatible inference API (zro.moonmath.ai/v1). Free plan is
+// $0: daily usage on deepseek-v4.1-flash and glm-5.3-flash only, resetting
+// every calendar day; the allowance amount is unpublished, so seed rows carry
+// null limits. An account and API key are required (keys start `sk-`, so no
+// key-prefix detection; `ZRO_` matches the documented `ZRO_API_KEY` env var).
+// The quickstart asks new accounts to subscribe or add a usage pack, so a
+// card-free Free-only signup is unverified. The two free models are served in
+// different regions (DeepSeek US, GLM Europe) per the model pages. GET
+// /v1/models is key-gated (401 without a key, verified live 2026-11-08), so
+// the base class's default validation applies. The free set is frozen (the
+// Free plan names exactly two models); `auto` and the paid models are
+// rejected before any fetch. Model rows live only in the signed catalog.
+register(new ZroProvider());
 register(new NabhProvider());
 register(new NovaiProvider());
 register(new FreeInferenceProvider());

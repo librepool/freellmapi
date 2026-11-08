@@ -176,6 +176,11 @@ export const PREFIX_MAP: Record<string, string> = {
   ARLI_AI_: 'arli',
   LLM_KIWI_: 'llmkiwi',
   MEGANOVA_: 'meganova',
+  SENSENOVA_: 'sensenova',
+  TOKEN_HARBOR_: 'tokenharbor',
+  THK_LIVE_: 'tokenharbor',
+  THK_: 'tokenharbor',
+  ZRO_: 'zro',
 };
 
 export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
@@ -302,6 +307,13 @@ export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
   'llm.kiwi': 'llmkiwi',
   meganova: 'meganova',
   'meganova-ai': 'meganova',
+  mixlayer: 'mixlayer',
+  moark: 'moark',
+  sensenova: 'sensenova',
+  tokenharbor: 'tokenharbor',
+  'token-harbor': 'tokenharbor',
+  zro: 'zro',
+  moonmath: 'zro',
 };
 
 export function detectPlatform(prefix: string): string | null {

@@ -323,6 +323,37 @@ export type Platform =
   // live in the hosted catalog (premium now, free after the 15-day
   // model-age gate).
   | 'meganova'
+  // Mixlayer — OpenAI-compatible. One $0 model (qwen/qwen3.5-4b-free, 131K
+  // context), callable without prepaid credit, no card; per-org/per-model
+  // rate limits are unpublished, so no token figure. Catalog rows live in
+  // the hosted catalog (premium now, free after the 15-day model-age gate).
+  | 'mixlayer'
+  // Moark (Gitee AI) — OpenAI-compatible. Free experience token: 100
+  // calls/day per user across the featured models, nothing bought; models
+  // marked "free" in the square need a purchased resource package. Only
+  // deepseek-v4-flash-0731 is confirmed callable on the free token.
+  // Catalog rows live in the hosted catalog (premium now, free after the
+  // 15-day model-age gate).
+  | 'moark'
+  // SenseNova — OpenAI-compatible Token Plan API. Free tier is $0 during the
+  // public beta, no card: 1,500 requests per model every rolling 5 hours.
+  // Beta-scoped: no permanent free tier published; paid tiers coming soon.
+  // Catalog rows live in the hosted catalog (premium now, free after the
+  // 15-day model-age gate).
+  | 'sensenova'
+  // Token Harbor — OpenAI-compatible gateway. Free plan is $0, no card: a
+  // rolling 7-day value allowance (amount unpublished) across the :free
+  // routes, 60 RPM / 1,800 req/hour per account. The free roster rotates,
+  // so the adapter guards on the :free suffix, not a frozen list. Catalog
+  // rows live in the hosted catalog (premium now, free after the 15-day
+  // model-age gate).
+  | 'tokenharbor'
+  // Zro — OpenAI-compatible inference API. Free plan is $0: daily usage on
+  // deepseek-v4.1-flash and glm-5.3-flash only (allowance amount unpublished);
+  // the guard is a frozen set of those two ids plus their `zro/` aliases.
+  // Catalog rows live in the hosted catalog (premium now, free after the
+  // 15-day model-age gate).
+  | 'zro'
   // User-configured OpenAI-compatible endpoint (llama.cpp, LM Studio, vLLM,
   // Ollama, any base_url). The endpoint URL lives on the api_keys row; see #117.
   | 'custom';
