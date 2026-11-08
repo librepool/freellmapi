@@ -170,6 +170,12 @@ export const PREFIX_MAP: Record<string, string> = {
   GONKABROKER_: 'gonka',
   AIHUBMIX_: 'aihubmix',
   WATSONX_: 'watsonx',
+  NOUS_PORTAL_: 'nous',
+  NOUS_: 'nous',
+  ARLIAI_: 'arli',
+  ARLI_AI_: 'arli',
+  LLM_KIWI_: 'llmkiwi',
+  MEGANOVA_: 'meganova',
 };
 
 export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
@@ -289,6 +295,13 @@ export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
   gonkabroker: 'gonka',
   aihubmix: 'aihubmix',
   watsonx: 'watsonx',
+  nous: 'nous',
+  nousportal: 'nous',
+  arli: 'arli',
+  llmkiwi: 'llmkiwi',
+  'llm.kiwi': 'llmkiwi',
+  meganova: 'meganova',
+  'meganova-ai': 'meganova',
 };
 
 export function detectPlatform(prefix: string): string | null {

@@ -32,6 +32,10 @@ import { JamaiProvider } from './jamai.js';
 import { GonkaProvider } from './gonka.js';
 import { AIHubMixProvider } from './aihubmix.js';
 import { WatsonxProvider } from './watsonx.js';
+import { NousProvider } from './nous.js';
+import { ArliProvider } from './arli.js';
+import { LlmkiwiProvider } from './llmkiwi.js';
+import { MeganovaProvider } from './meganova.js';
 import { NabhProvider } from './nabh.js';
 import { NovaiProvider } from './novai.js';
 import { FreeInferenceProvider } from './freeinference.js';
@@ -130,6 +134,52 @@ register(new AIHubMixProvider());
 // and the seeded model ids' Lite availability is unverified. Model rows live
 // only in the signed catalog.
 register(new WatsonxProvider());
+// Nous Portal — OpenAI-compatible inference API (inference-api.nousresearch.com/v1).
+// Free plan is $0 for :free models only: 50 RPM / 500,000 TPM, no published
+// monthly token cap; a portal key is required (a keyless chat call returns 402
+// even though the public catalog is readable). The free roster churns, so the
+// adapter guards on the :free suffix, not a frozen list. /v1/models is public,
+// so there is no key-validation endpoint (KiosAPI pattern:
+// supportsKeyValidation=false). Live /v1/models probe 2026-11-08: 396 models,
+// 4 free (solar-mini4, step-3.7-flash, longcat-2.5, beam-1.0). Model rows live
+// only in the signed catalog.
+register(new NousProvider());
+// Arli AI — OpenAI-compatible API (api.arliai.com/v1, vLLM backend). Free plan
+// is $0, no card: exactly one permanently free model,
+// Qwen3.5-27B-Derestricted, max 12K context (the model natively advertises
+// 262K), 1 request at a time, delayed responses. Every other model is a
+// 5-request / 2-day trial on free accounts — not a routing lane, not seeded,
+// and refused by the adapter. GET /v1/models requires a Bearer key (401
+// without one, verified live 2026-11-08), so the base class's default
+// validation applies. No key prefix is published. The catalog is dominated by
+// "derestricted" (uncensored) fine-tunes. Model rows live only in the signed
+// catalog.
+register(new ArliProvider());
+// LLM.kiwi — OpenAI-compatible chat API (api.llm.kiwi/v1). Free plan is €0,
+// no card (Google/GitHub OAuth sign-in, 3 active keys); no numeric quota is
+// published anywhere in the official docs, so there is no token figure to add
+// to the floor — a rate-limited uncapped lane, never summed. Live GET
+// /v1/models 2026-11-08 (pulled 3x, identical): 5 models, all free; `hrllm`
+// is described in the docs but absent from the live list, so it is not
+// seeded. Keys begin `sk_kiwi_` (official quickstart). GET /v1/models is
+// public, so it cannot validate a key: validateKey sends a minimal chat call
+// (model `auto`, max_tokens 1). `auto` is a router, so the identity check is
+// skipped for it. Tool calling is not documented. Model rows live only in
+// the signed catalog.
+register(new LlmkiwiProvider());
+// MegaNova AI — OpenAI-compatible inference API (api.meganova.ai/v1). Free
+// Tier 1 (Explorer) is $0, no card: 50 requests/day per free model, 60 RPM /
+// 200,000 TPM, reset 00:00 UTC. Inference keys begin `sk-` (live-verified:
+// the endpoint rejects `ak_` keys outright — those belong to the Platform /
+// billing API, not inference). Manta Pro 1.0 and GLM-4.7-Flash are tagged
+// "free" in the live list but get 0 RPD at Tier 1 — they need the $1 Tier 2
+// deposit, so they are not seeded. GET /v1/models is public, so it cannot
+// validate a key: validateKey sends a minimal chat call (Manta Mini,
+// max_tokens 1). ToS Annex A: free modules are "for evaluation and
+// interactive use only" — high-throughput/production use may lead to
+// suspension; flag before routing production traffic here. Model rows live
+// only in the signed catalog.
+register(new MeganovaProvider());
 register(new NabhProvider());
 register(new NovaiProvider());
 register(new FreeInferenceProvider());

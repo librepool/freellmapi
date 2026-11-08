@@ -301,6 +301,28 @@ export type Platform =
   // but Lite never bills. Catalog rows live in the hosted catalog (premium
   // now, free after the 15-day model-age gate).
   | 'watsonx'
+  // Nous Portal — OpenAI-compatible inference API. Free plan is $0 for :free
+  // models only: 50 RPM / 500,000 TPM, no published monthly token cap; a
+  // portal key is required. The free roster churns, so the adapter guards on
+  // the :free suffix, not a frozen list. Catalog rows live in the hosted
+  // catalog (premium now, free after the 15-day model-age gate).
+  | 'nous'
+  // Arli AI — OpenAI-compatible API. Free plan is $0, no card: exactly one
+  // permanently free model (Qwen3.5-27B-Derestricted), max 12K context, 1
+  // request at a time; every other model is a 5-request / 2-day trial, not
+  // seeded. Catalog rows live in the hosted catalog (premium now, free after
+  // the 15-day model-age gate).
+  | 'arli'
+  // LLM.kiwi — OpenAI-compatible chat API. Free plan is €0, no card; no
+  // numeric quota is published, so it is a rate-limited uncapped lane, never
+  // summed. Catalog rows live in the hosted catalog (premium now, free after
+  // the 15-day model-age gate).
+  | 'llmkiwi'
+  // MegaNova AI — OpenAI-compatible inference API. Free Tier 1 is $0, no
+  // card: 50 requests/day per free model, 60 RPM / 200,000 TPM. Catalog rows
+  // live in the hosted catalog (premium now, free after the 15-day
+  // model-age gate).
+  | 'meganova'
   // User-configured OpenAI-compatible endpoint (llama.cpp, LM Studio, vLLM,
   // Ollama, any base_url). The endpoint URL lives on the api_keys row; see #117.
   | 'custom';
