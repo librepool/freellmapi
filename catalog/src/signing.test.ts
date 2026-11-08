@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import test from 'node:test';
-import { generateKeypair, signBytes, verifyBytes } from './signing.ts';
+import { generateKeypair, keyFingerprint, signBytes, verifyBytes } from './signing.ts';
 
 function privateKeyOf(pem: string): crypto.KeyObject {
   return crypto.createPrivateKey({ key: pem, format: 'pem' });
@@ -28,4 +28,20 @@ test('signature from a different key fails verification', () => {
   const sig = signBytes(privateKeyOf(a.privatePem), bytes);
   assert.equal(verifyBytes(b.publicPem, bytes, sig), false);
   assert.notEqual(a.publicPem, b.publicPem);
+});
+
+test('keyFingerprint is 16 lowercase hex chars, stable per key, distinct per key', () => {
+  const a = generateKeypair();
+  const b = generateKeypair();
+  const fpA = keyFingerprint(a.publicPem);
+  assert.match(fpA, /^[0-9a-f]{16}$/);
+  assert.equal(keyFingerprint(a.publicPem), fpA);
+  assert.notEqual(keyFingerprint(b.publicPem), fpA);
+});
+
+test('keyFingerprint is the first 16 hex chars of SHA-256 over the SPKI DER', () => {
+  const { publicPem } = generateKeypair();
+  const der = crypto.createPublicKey({ key: publicPem, format: 'pem' }).export({ type: 'spki', format: 'der' });
+  const expected = crypto.createHash('sha256').update(der).digest('hex').slice(0, 16);
+  assert.equal(keyFingerprint(publicPem), expected);
 });

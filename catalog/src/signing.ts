@@ -42,3 +42,17 @@ export function generateKeypair(): { publicPem: string; privatePem: string } {
     privatePem: privateKey.export({ type: 'pkcs8', format: 'pem' }).toString(),
   };
 }
+
+/**
+ * Fingerprint of a public key: first 16 hex chars of the SHA-256 of the
+ * SPKI DER encoding. Printed by scripts/generate-keypair.ts so the
+ * operator can confirm the router pins the intended key without pasting
+ * the whole PEM into chat or logs. A fingerprint is not a secret, but it
+ * is not a substitute for comparing the full PEM either — always compare
+ * the PEM itself when rotating a production key.
+ */
+export function keyFingerprint(publicPem: string): string {
+  const key = crypto.createPublicKey({ key: publicPem, format: 'pem' });
+  const der = key.export({ type: 'spki', format: 'der' });
+  return crypto.createHash('sha256').update(der).digest('hex').slice(0, 16);
+}

@@ -1,0 +1,90 @@
+{
+  "version": "2026.11.08",
+  "notes": [
+    "Source-model-id -> catalog-model-id (platform:modelId) for ranking ingestion.",
+    "Keys are the source's own identifier for a model: an AA slug or display name, a BenchLM canonical model name, or a LiveBench published model name. The matcher tries the keys exactly as written (slug first, then display name for AA) — no case folding, no substring or fuzzy matching. A key that does not exactly match a live source row simply never matches; that model stays Unranked, never 0.",
+    "A value may be a single catalog key or an array: several catalog rows serve the same base model (e.g. Llama 3.3 70B Instruct on Groq, OpenRouter and Cloudflare) and all of them legitimately share the source score.",
+    "HOW TO EXTEND: run the fetch job (dry-run) and read its unmatched-source report — every source row the job saw but could not map is listed. Add a mapping only when you are sure the catalog row is the SAME model (same weights, same variant). Variant matters: e.g. LiveBench 'Gemma 4 31B' is deliberately NOT mapped to aihubmix gemma-4-31b-it-free (base vs instruct-tuned variant), and 'MiMo V2.6 Pro' is NOT mapped to mimo-v2.6-flash rows.",
+    "PROVENANCE of the seeded entries: AA/BenchLM keys below are the models' published display names (verify slug vs display name against the first live API response — the parser accepts either as a key). LiveBench keys are the published LiveBench 2.0 model names from the 25 Oct 2026 results (DeepSeek V4.1 Flash 79.2, GLM-5.3 Flash 70.6, MiMo V2.6 Pro 74.9). Every target below exists in catalog/data/seed-catalog.json (checked by src/ranking-fetch.test.ts).",
+    "This file is committed source (a curated map), NOT usage state: do not put scores, keys, or fetch dates in here."
+  ],
+  "aa": {
+    "DeepSeek V4.1 Flash": [
+      "zro:deepseek-v4.1-flash",
+      "tokenharbor:deepseek-v4.1-flash:free"
+    ],
+    "GLM-5.3 Flash": [
+      "zro:glm-5.3-flash",
+      "gonka:zai-org/GLM-5.3-Flash"
+    ],
+    "Llama 3.1 8B Instruct": [
+      "groq:llama-3.1-8b-instant",
+      "aihubmix:meta-llama/llama-3.1-8b-instruct:free",
+      "kiosapi:meta/llama-3.1-8b",
+      "simplellm:free-Llama-3.1-8B-Instruct"
+    ],
+    "Llama 3.3 70B Instruct": [
+      "groq:llama-3.3-70b-versatile",
+      "openrouter:meta-llama/llama-3.3-70b-instruct:free",
+      "cloudflare:@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+    ],
+    "Mistral Small 3.1 24B Instruct": [
+      "mistral:mistral-small-3.1-24b-instruct-2503"
+    ],
+    "Qwen3 30B": [
+      "kiosapi:qwen/qwen3-30b"
+    ]
+  },
+  "benchlm": {
+    "DeepSeek V4.1 Flash": [
+      "zro:deepseek-v4.1-flash",
+      "tokenharbor:deepseek-v4.1-flash:free"
+    ],
+    "GLM-5.3 Flash": [
+      "zro:glm-5.3-flash",
+      "gonka:zai-org/GLM-5.3-Flash"
+    ],
+    "Llama 3.1 8B Instruct": [
+      "groq:llama-3.1-8b-instant",
+      "aihubmix:meta-llama/llama-3.1-8b-instruct:free",
+      "kiosapi:meta/llama-3.1-8b",
+      "simplellm:free-Llama-3.1-8B-Instruct"
+    ],
+    "Llama 3.3 70B Instruct": [
+      "groq:llama-3.3-70b-versatile",
+      "openrouter:meta-llama/llama-3.3-70b-instruct:free",
+      "cloudflare:@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+    ],
+    "MiMo V2.6 Pro": [
+      "aihubmix:xiaomi-mimo-v2.6-pro-free"
+    ],
+    "MiniMax M2.7": [
+      "gonka:MiniMaxAI/MiniMax-M2.7",
+      "aihubmix:coding-minimax-m2.7-free"
+    ],
+    "Mistral Small 3.1 24B Instruct": [
+      "mistral:mistral-small-3.1-24b-instruct-2503"
+    ],
+    "Nemotron 3 Ultra": [
+      "llmkiwi:nemotron-3-ultra",
+      "llmtr:nvidia/nemotron-3-ultra-550b-a55b",
+      "aihubmix:nemotron-3-ultra-550b-a55b-free"
+    ],
+    "Qwen3 30B": [
+      "kiosapi:qwen/qwen3-30b"
+    ]
+  },
+  "livebench": {
+    "DeepSeek V4.1 Flash": [
+      "zro:deepseek-v4.1-flash",
+      "tokenharbor:deepseek-v4.1-flash:free"
+    ],
+    "GLM-5.3 Flash": [
+      "zro:glm-5.3-flash",
+      "gonka:zai-org/GLM-5.3-Flash"
+    ],
+    "MiMo V2.6 Pro": [
+      "aihubmix:xiaomi-mimo-v2.6-pro-free"
+    ]
+  }
+}

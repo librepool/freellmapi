@@ -34,3 +34,6 @@ monetization/
 catalog/dev-keys/
 catalog/data/licenses.json
 catalog/data/catalog.*.json
+catalog/data/scraper-state.json
+catalog/data/scraper-changes.json
+catalog/data/livebench.json

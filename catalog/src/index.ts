@@ -39,7 +39,7 @@ function resolvePath(value: string | undefined, fallback: string): string {
 function main(): void {
   loadDotEnv();
   const seedPath = resolvePath(process.env.CATALOG_SEED_PATH, './data/seed-catalog.json');
-  const licensePath = resolvePath(process.env.CATALOG_LICENSE_DB_PATH, './data/licenses.json');
+  const licensePath = resolvePath(process.env.CATALOG_LICENSE_DB_PATH, './data/licenses.db');
   const catalogStore = new CatalogStore(loadSeed(seedPath));
   const licenseStore = new LicenseStore(licensePath);
   const privateKey = loadPrivateKey();

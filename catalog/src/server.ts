@@ -9,25 +9,51 @@
  *        response bytes).
  *   POST /v1/license/activate {key}    — {valid, plan, status, expiresAt, reason?}
  *   POST /v1/license/check (Bearer)    — LicenseStatus JSON.
+ *   POST /v1/checkout [ {email?} ]     — {url, sessionId} Stripe Checkout
+ *        Session for the $19/yr annual price (see stripe.ts).
  *   POST /v1/portal {key}              — {url} Stripe Billing Portal session
- *        (stub until Stripe is wired; see stripe.ts).
- *   POST /v1/stripe/webhook            — Stripe webhook receiver (stub).
+ *        for the key's stored customer (see stripe.ts).
+ *   POST /v1/stripe/webhook            — Stripe webhook receiver (signature-
+ *        verified; issues licenses, flips statuses — see stripe.ts).
  *   GET  /healthz                      — liveness only, no catalog data.
  *
- * Zero runtime dependencies: node:http + node:crypto only.
+ * Runtime dependencies: node:http + node:crypto, the Stripe SDK
+ * (checkout/portal/webhook), and global fetch for the purchase email
+ * (email.ts). Tests inject a fake Stripe client and a fake email sender
+ * via FeedServiceDeps, so no test calls the live Stripe API.
  */
 import crypto from 'node:crypto';
 import http from 'node:http';
 import type { CatalogStore } from './catalog-store.ts';
+import type { PurchaseEmailInput } from './email.ts';
 import type { LicenseStore } from './license-store.ts';
 import { signBytes } from './signing.ts';
-import { handleStripeWebhook, loadStripeConfig, STRIPE_NOT_CONFIGURED, type StripeConfig } from './stripe.ts';
+import {
+  createCheckoutSession,
+  createPortalSession,
+  createStripeClient,
+  handleStripeWebhook,
+  loadStripeConfig,
+  PORTAL_NO_CUSTOMER,
+  stripeIsConfigured,
+  STRIPE_NOT_CONFIGURED,
+  type StripeClient,
+  type StripeConfig,
+} from './stripe.ts';
+import type { EmailConfig } from './email.ts';
 
 export interface FeedServiceDeps {
   catalogStore: CatalogStore;
   licenseStore: LicenseStore;
   privateKey: crypto.KeyObject;
   stripeConfig?: StripeConfig;
+  /** Injected Stripe client (tests). When omitted or null, a real client
+   *  is built from STRIPE_SECRET_KEY; with no secret key there is no
+   *  client and Stripe routes report not-configured. */
+  stripeClient?: StripeClient | null;
+  emailConfig?: EmailConfig;
+  /** Injected purchase-email sender (tests); defaults to sendPurchaseEmail(). */
+  emailSender?: (input: PurchaseEmailInput) => Promise<unknown>;
 }
 
 function readBody(req: http.IncomingMessage): Promise<Buffer> {
@@ -59,6 +85,8 @@ function bearerKey(req: http.IncomingMessage): string | null {
 export function createFeedHandler(deps: FeedServiceDeps): (req: http.IncomingMessage, res: http.ServerResponse) => void {
   const { catalogStore, licenseStore, privateKey } = deps;
   const stripeConfig = deps.stripeConfig ?? loadStripeConfig();
+  const stripeClient: StripeClient | null = deps.stripeClient
+    ?? (stripeConfig.secretKey ? createStripeClient(stripeConfig.secretKey) : null);
 
   return async (req, res) => {
     const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
@@ -114,11 +142,34 @@ export function createFeedHandler(deps: FeedServiceDeps): (req: http.IncomingMes
         return;
       }
 
+      if (req.method === 'POST' && url.pathname === '/v1/checkout') {
+        const body = jsonBody(await readBody(req));
+        const email = typeof body.email === 'string' && body.email.length > 0 ? body.email : undefined;
+        const result = await createCheckoutSession(stripeClient, stripeConfig, email ? { email } : undefined);
+        sendJson(result.status, result.body);
+        return;
+      }
+
       if (req.method === 'POST' && url.pathname === '/v1/portal') {
         const body = jsonBody(await readBody(req));
         const key = typeof body.key === 'string' ? body.key : '';
         if (!key || !licenseStore.activate(key).valid) {
           sendJson(400, { error: 'That key is not active.' });
+          return;
+        }
+        if (stripeIsConfigured(stripeConfig)) {
+          const result = await createPortalSession(stripeClient, licenseStore, key, stripeConfig);
+          if (
+            result.status === 501
+            && (result.body as { error?: unknown }).error === PORTAL_NO_CUSTOMER
+            && stripeConfig.portalUrl
+          ) {
+            // Dev-only fallback: the key was not issued through checkout,
+            // so it has no Stripe customer id to open a portal for.
+            sendJson(200, { url: stripeConfig.portalUrl });
+            return;
+          }
+          sendJson(result.status, result.body);
           return;
         }
         if (stripeConfig.portalUrl) {
@@ -135,7 +186,11 @@ export function createFeedHandler(deps: FeedServiceDeps): (req: http.IncomingMes
       if (req.method === 'POST' && url.pathname === '/v1/stripe/webhook') {
         const raw = await readBody(req);
         const sig = typeof req.headers['stripe-signature'] === 'string' ? req.headers['stripe-signature'] : null;
-        const result = handleStripeWebhook(raw, sig, licenseStore, stripeConfig);
+        const result = await handleStripeWebhook(raw, sig, licenseStore, stripeConfig, {
+          client: stripeClient,
+          emailConfig: deps.emailConfig,
+          sendEmail: deps.emailSender,
+        });
         sendJson(result.status, result.body);
         return;
       }

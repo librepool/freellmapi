@@ -6,19 +6,24 @@ validates license keys, and (once wired) sells the $19/yr live feed through
 Stripe. It is a **new build**, not a rebrand: no catalog server exists in the
 upstream repo.
 
-Zero runtime dependencies: Node's built-in `http` + `crypto` only. TypeScript
-with erasable syntax, run directly with Node ≥ 22.6 type stripping
-(`node src/index.ts`) or via `npm start`. Tests use the Node test runner.
+Zero runtime dependencies except the Stripe SDK (`stripe`, for checkout /
+webhook / portal): otherwise Node's built-in `http` + `crypto` only, plus
+`node:sqlite` for the license store. TypeScript with erasable syntax, run
+directly with Node ≥ 22.13 type stripping (`node src/index.ts`) or via
+`npm start`. Tests use the Node test runner. Docs for the productionized
+parts live in `catalog/docs/` (license store, key rotation, scrapers,
+hosting options).
 
 ## Endpoints
 
 | Method | Path | Description |
 |---|---|---|
 | `GET` | `/v1/latest[?since=<version>]` | Signed catalog JSON. `Authorization: Bearer <premium_license_key>` → tier `live`; no/invalid key → tier `monthly` (the 15-day-old snapshot). `?since=<applied version>` → `304` when unchanged. Response carries `x-catalog-signature` (base64 Ed25519 over the exact response bytes). `version` is `YYYY.MM.DD`, ≥ `2026.06.07` (`MIN_CATALOG_VERSION` — the router ignores older catalogs). |
+| `POST` | `/v1/checkout` | Creates a Stripe Checkout Session for the $19/yr annual price (`STRIPE_PRICE_ID`); the price is verified as $19 USD recurring yearly before the session is created. Returns `{url, sessionId}`. |
 | `POST` | `/v1/license/activate` | Body `{key}` → `{valid, plan, status, expiresAt, reason?}`. Plan is annual-only. |
 | `POST` | `/v1/license/check` | `Authorization: Bearer <key>` → `LicenseStatus` JSON (`{valid, plan, status, expiresAt, cancelAtPeriodEnd?, checkedAtMs}`). No/invalid key → `401`. |
-| `POST` | `/v1/portal` | Body `{key}` → `{url}` Stripe Billing Portal session. **Stub**: returns `501 billing_portal_not_configured` until Stripe is wired (or `STRIPE_PORTAL_URL` is set, in which case that URL is returned). |
-| `POST` | `/v1/stripe/webhook` | Stripe webhook receiver. **Stub**: always `501` — signature verification + the Stripe SDK are still TODO (see `src/stripe.ts`). |
+| `POST` | `/v1/portal` | Body `{key}` → `{url}` real Stripe Billing Portal session for the key's stored customer. `STRIPE_PORTAL_URL` survives only as a dev fallback when the key has no customer id stored. `501` when Stripe is not configured. |
+| `POST` | `/v1/stripe/webhook` | Stripe webhook receiver. Signature verified with the Stripe SDK (`STRIPE_WEBHOOK_SECRET`); `checkout.session.completed` issues the license + sends the purchase email (idempotent per subscription), subscription events flip license status. `400` on a bad signature, `501` when Stripe is not configured. |
 | `GET` | `/healthz` | Liveness only (`{ok, version}`). |
 
 ## Signing
@@ -31,7 +36,13 @@ with erasable syntax, run directly with Node ≥ 22.6 type stripping
   via `CATALOG_SIGNING_PRIVATE_KEY_PEM` (inline PEM, `\n` escapes) or
   `CATALOG_SIGNING_KEY_PATH`.
 - Generate a new pair: `node scripts/generate-keypair.ts` (writes to
-  `dev-keys/`; prints the public PEM to paste into the router).
+  `dev-keys/`; prints the public PEM to paste into the router). It refuses
+  to overwrite existing key files without `--force` and prints the key
+  fingerprint plus the exact `PINNED_CATALOG_PUBKEY` replacement snippet.
+- Full rotation flow (generate on the host → set env → update the router
+  pin → deploy feed → deploy router → live round-trip verify → retire the
+  old key): `catalog/docs/key-rotation.md`. The dev keypair in `dev-keys/`
+  must NEVER be used in production; no production keypair exists yet.
 - Sign a document offline: `node scripts/sign-catalog.ts --in catalog.json [--out signed.json]`.
 - The live service signs the exact bytes it serves, at request time.
 
@@ -87,43 +98,73 @@ before serving; the tests assert the served JSON contains no per-source
 scores. The router's `CatalogModel` has no per-source fields at all.
 
 Ranking keys are env placeholders only (`LIBREPOOL_RANKING_AA_KEY`,
-`LIBREPOOL_RANKING_BENCHLM_KEY`, `LIBREPOOL_RANKING_LIVEBENCH_KEY` — free
-tier, fetched by the feed service at export time). No real key values exist
-in this repo, and none may ever be committed.
+`LIBREPOOL_RANKING_BENCHLM_KEY` — free tier). The fetch job
+(`node scripts/fetch-rankings.ts`, dry-run by default, `--apply` to merge)
+fetches AA + BenchLM with budget enforcement (AA ≤100 req/day, BenchLM
+≤250 reads/month; counters in git-ignored `catalog/data/catalog.ranking-budget.json`),
+matches source models to catalog models via the exact-match map
+(`catalog/data/ranking-model-map.json`), and merges scores into the seed's
+per-model `benchmarks` + `sourceDate`. LiveBench has no API: drop its
+Overall scores in git-ignored `catalog/data/livebench.json` and re-run the
+job. No real key values exist in this repo, and none may ever be committed.
+First live run should be a dry-run — the AA score sub-field and the BenchLM
+`surface=overall` row shape are parsed defensively from the docs and are
+unconfirmed against a live response (see `src/ranking-fetch.ts` header).
 
-## License store (dev-only)
+## License store (SQLite)
 
-`src/license-store.ts`: JSON file at `CATALOG_LICENSE_DB_PATH` (default
-`catalog/data/licenses.json`, git-ignored). Keys are stored ONLY as SHA-256
-hashes, never in plaintext. Key format: `lp_` + 32 random bytes (base64url).
-Annual only — 1-year expiry, no lifetime plan. **Production needs a real
-store** (Postgres/SQLite with a proper schema, keyed lookups, audit trail);
-this file store is for local dev and tests.
+`src/license-store.ts`: `node:sqlite` database at `CATALOG_LICENSE_DB_PATH`
+(default `catalog/data/licenses.db`). Schema: `licenses` (key hash PK,
+plan, status, expiry, Stripe customer/subscription ids) + append-only
+`license_events` audit table. Keys are stored ONLY as SHA-256 hashes, never
+in plaintext. Key format: `lp_` + 32 random bytes (base64url). Annual only
+— 1-year expiry, no lifetime plan. Full design + migration path:
+`catalog/docs/license-store.md`. Legacy JSON stores migrate with
+`node scripts/migrate-licenses.ts` (idempotent, never modifies the JSON
+file — it stays as a backup).
 
-## Stripe (stubs only — not wired)
+## Stripe (real — checkout, webhook, portal, purchase email)
 
-No real Stripe keys exist for LibrePool. Env placeholders:
-`STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID` ($19/yr annual-only price),
-`STRIPE_WEBHOOK_SECRET`. Until they are set, checkout/portal/webhook return
-a clear `stripe_not_configured` error instead of pretending to work.
+Stripe is wired via the `stripe` SDK (`src/stripe.ts`, `src/email.ts`,
+`src/server.ts`). Env: `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID` ($19/yr
+annual-only price — create it in the Stripe dashboard first; the service
+verifies the price is $19 USD recurring yearly before creating a Checkout
+Session), `STRIPE_WEBHOOK_SECRET`, `STRIPE_SUCCESS_URL` /
+`STRIPE_CANCEL_URL` / `STRIPE_PORTAL_RETURN_URL`. Until they are set,
+checkout/portal/webhook return a clear `stripe_not_configured` error
+instead of pretending to work.
 
-Documented checkout flow ($19/yr, annual only, no lifetime SKU):
+Checkout flow ($19/yr, annual only, no lifetime SKU):
 
-1. Buyer completes Stripe Checkout for `STRIPE_PRICE_ID`.
+1. Buyer completes Stripe Checkout for `STRIPE_PRICE_ID`
+   (`POST /v1/checkout` → `{url, sessionId}`).
 2. Stripe sends `checkout.session.completed` to `POST /v1/stripe/webhook`.
-3. The webhook handler (TODO: signature verification with
-   `STRIPE_WEBHOOK_SECRET` + the Stripe SDK) calls
-   `LicenseStore.issue()` and records the Stripe customer/subscription ids.
-4. The issued license key is delivered to the buyer by purchase email
-   (email sending is out of scope for this service).
-5. The buyer pastes the key into the router (`POST /api/premium/key`); the
+   The signature is verified with the SDK; the handler calls
+   `LicenseStore.issue()` (idempotent per subscription id — a redelivery
+   never issues a second key) and records the Stripe customer/subscription
+   ids.
+3. The issued license key is delivered to the buyer by purchase email
+   (`src/email.ts`): transport `log` by default (dev only, prints to
+   stdout) or `resend` (`EMAIL_TRANSPORT=resend`, `RESEND_API_KEY`,
+   `EMAIL_FROM` — must be a verified sender). The key is shown exactly
+   once. Known limitation: if the email send fails, the key cannot be
+   re-sent (only its hash is stored) — the webhook returns 500
+   `purchase_email_failed` so the failure is visible in Stripe, and the
+   undelivered key must be replaced manually.
+4. The buyer pastes the key into the router (`POST /api/premium/key`); the
    router validates it via `POST /v1/license/activate`, then gets the live
    tier from `GET /v1/latest` with `Authorization: Bearer <key>`.
-6. Cancellations / card updates / invoices go through the Stripe Billing
-   Portal: `POST /v1/portal {key}` creates a portal session.
-7. `customer.subscription.deleted` / `updated` webhooks flip the stored
+5. Cancellations / card updates / invoices go through the Stripe Billing
+   Portal: `POST /v1/portal {key}` creates a real portal session.
+6. `customer.subscription.deleted` / `updated` webhooks flip the stored
    license status (canceled / expired); the router's next
-   `POST /v1/license/check` reflects it.
+   `POST /v1/license/check` reflects it. `invoice.payment_failed` is
+   logged only — Stripe dunning owns recovery.
+
+No live Stripe or Resend calls have been made (no keys, no account): the
+flow is verified against fakes plus the real SDK's local signature
+verification. A live test-mode end-to-end still needs Alex's keys and
+dashboard setup.
 
 ## Catalog assembly & source of truth
 
@@ -147,15 +188,28 @@ that bridge, documented there:
   (the router's media path never reads them) and `limits` all-null, which
   the router's shape check requires on every `models[]` entry.
 
-## Scrapers (interface only)
+## Scrapers (per-provider, live)
 
-`src/scraper.ts` defines the contract for the later per-provider phase
-(`CatalogScraper`: poll → hash/diff change detection → verify before
-catalog entry → stamp `catalog_version` + `effective_date`). Per-provider
-scrapers are NOT built here; `StubScraper` always reports "no change".
-Rules for future scrapers: prefer official model-list APIs, respect
-robots.txt and provider ToS, verify a detected model (live probe) before it
-enters the catalog.
+`src/scraper.ts` + `src/scrapers/` implement the per-provider scraper
+pipeline (`catalog/docs/scrapers.md`): poll the provider's model list
+(preferring an official model-list API), hash/diff change detection with
+persisted per-platform state, verification before catalog entry, and
+`catalog_version` + `effective_date` (`premiumSince`) stamping — a verified
+addition enters the live tier immediately and the free tier 15 days later
+via the snapshot rule. Verification levels are honest: `list-verified`
+(the id is in the provider's live list) vs `serving-verified` (a real chat
+call — needs a provider key, an operator step). All 26 seed platforms are
+registered (4 concrete: AIHubMix, Nous, LLMTR, Airforce; 15 generic
+OpenAI-compatible; 7 stubs with reasons).
+
+Runner: `node scripts/run-scrapers.ts` (read-only by default; `--apply`
+updates the seed with verified additions, `.bak` backup first).
+Two real findings from the first live run (2026-11-08): robots.txt
+disallows `/v1/` on AIHubMix, LLMTR, and Airforce, so those scrapers report
+`skipped` by default — re-enabling needs a recorded operator decision;
+and Mixlayer, Token Harbor, Zro, SenseNova, SimpleLLM (plus Arli) return
+401 on keyless `/v1/models`, so their lists need a list key before they
+can be polled.
 
 ## Environment variables
 
@@ -166,14 +220,22 @@ enters the catalog.
 | `CATALOG_SIGNING_KEY_PATH` | `./dev-keys/signing-private.pem` | Ed25519 private key (dev) |
 | `CATALOG_SIGNING_PRIVATE_KEY_PEM` | — | Inline private key PEM (production) |
 | `CATALOG_SEED_PATH` | `./data/seed-catalog.json` | Seed catalog (source of truth) |
-| `CATALOG_LICENSE_DB_PATH` | `./data/licenses.json` | License store file (dev-only) |
-| `STRIPE_SECRET_KEY` | — | Stripe secret (placeholder until wired) |
-| `STRIPE_PRICE_ID` | — | $19/yr annual price id (placeholder) |
-| `STRIPE_WEBHOOK_SECRET` | — | Webhook signing secret (placeholder) |
-| `STRIPE_PORTAL_URL` | — | Optional fixed portal URL for the `/v1/portal` stub |
-| `LIBREPOOL_RANKING_AA_KEY` | — | Artificial Analysis free key (placeholder) |
-| `LIBREPOOL_RANKING_BENCHLM_KEY` | — | BenchLM free key (placeholder) |
-| `LIBREPOOL_RANKING_LIVEBENCH_KEY` | — | LiveBench free key (placeholder) |
+| `CATALOG_LICENSE_DB_PATH` | `./data/licenses.db` | License store (SQLite) |
+| `STRIPE_SECRET_KEY` | — | Stripe secret key |
+| `STRIPE_PRICE_ID` | — | $19/yr annual price id (create in dashboard first) |
+| `STRIPE_WEBHOOK_SECRET` | — | Webhook signing secret for `POST /v1/stripe/webhook` |
+| `STRIPE_SUCCESS_URL` | `https://librepool.com/premium/success` | Checkout success page |
+| `STRIPE_CANCEL_URL` | `https://librepool.com/premium/cancel` | Checkout cancel page |
+| `STRIPE_PORTAL_RETURN_URL` | — | Return URL after the Billing Portal |
+| `STRIPE_PORTAL_URL` | — | Optional dev-only portal fallback |
+| `EMAIL_TRANSPORT` | `log` | Purchase email: `log` (dev, prints only) or `resend` |
+| `RESEND_API_KEY` | — | Resend API key (when `EMAIL_TRANSPORT=resend`) |
+| `EMAIL_FROM` | — | Verified sender for purchase emails |
+| `RESEND_API_URL` | `https://api.resend.com/emails` | Email API endpoint override |
+| `EMAIL_REPLY_TO` | — | Optional reply-to for purchase emails |
+| `LIBREPOOL_RANKING_AA_KEY` | — | Artificial Analysis free key |
+| `LIBREPOOL_RANKING_BENCHLM_KEY` | — | BenchLM free key |
+| `LIBREPOOL_RANKING_LIVEBENCH_KEY` | — | Accepted name only — LiveBench has no API; use `catalog/data/livebench.json` |
 
 Router-side env (for the dev router pointing at this service):
 `CATALOG_BASE_URL` (e.g. `http://127.0.0.1:8080`), `CATALOG_PUBKEY`
@@ -201,7 +263,7 @@ purchase email would, then never store it again):
 
 ```bash
 node -e "import('./src/license-store.ts').then(async ({LicenseStore}) => {
-  const s = new LicenseStore('./data/licenses.json');
+  const s = new LicenseStore('./data/licenses.db');
   console.log(s.issue().key);
 })"
 ```
@@ -212,18 +274,24 @@ dashboard Premium page) and watch the next sync apply the live tier.
 ## Tests & typecheck
 
 ```bash
-node --test src/*.test.ts        # 33 tests: signing, snapshot, ranking, licenses, HTTP
+node --test src/*.test.ts        # 137 tests: signing, snapshot, ranking, licenses, HTTP, Stripe, email, scrapers, ranking-fetch
 ../node_modules/.bin/tsc --noEmit -p tsconfig.json   # uses the workspace TypeScript
 ```
 
 ## What remains (not done here)
 
-- Deploy the feed service (host, TLS, real Ed25519 keys on the host — the
-  dev keypair in `dev-keys/` must never be used in production).
-- Finish Stripe: Checkout + webhook signature verification + portal
-  sessions + purchase-email key delivery; replace the JSON license store
-  with a real store.
-- Real ranking ingestion: fetch AA / BenchLM / LiveBench with the free keys
-  (placeholders today) and populate per-model `benchmarks` in the seed.
+- Deploy the feed service: hosting choice (options + trade-offs in
+  `catalog/docs/hosting-options.md` — no pick made), domain purchase
+  (librepool.com / librepool.ai checked available, nothing bought), TLS,
+  real Ed25519 keys on the host (flow in `catalog/docs/key-rotation.md` —
+  the dev keypair in `dev-keys/` must never be used in production).
+- Live Stripe end-to-end: Stripe account + $19/yr price + webhook secret +
+  Resend key + verified sender; run a test-mode Checkout → webhook →
+  email delivery. The AA score sub-field and BenchLM `surface=overall`
+  row shape are parsed defensively from the docs and unconfirmed against a
+  live response — first ranking fetch should be a dry-run with the real
+  keys. LiveBench scores still need the manual snapshot-file procedure.
 - Production seed catalog data (the seed here is a small dev sample).
-- Per-provider scrapers (interface only today).
+- Scraper operator decisions: robots.txt-disallowed hosts (AIHubMix,
+  LLMTR, Airforce), list keys for the 401 providers, serving verification
+  keys, and curation of `--apply` rows (see `catalog/docs/scrapers.md`).
