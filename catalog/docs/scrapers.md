@@ -262,7 +262,7 @@ Notes from the probes:
 | nara | generic | `/v1/models`, frozen `{laguna-s-2.1}` (from public `/api/plans`) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | xkiro | generic | `/v1/models`, `access_tier: "free"` (26 of 69 live, all $0) |
 | experiential | generic | `/v1/models`, frozen `{gpt-6-luna, deepseek-v4.1-flash}` — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| llm7 | generic | `/v1/models`, `tier: "turbo"` + `model_type: "chat"`, not `usage_based_only` (4 live) |
+| llm7 | generic | `/v1/models`, `tier: "turbo"` + `model_type: "chat"`, not `usage_based_only` (3 live) |
 | navy | generic | `/v1/models`, `premium: false` + chat-completions endpoint (70 live) |
 | aion | generic | `/v1/models`, all ids (whole 6-model roster is free-tier) |
 | anyapi | generic | `/v1/models`, frozen `:free` set (4 ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
@@ -274,7 +274,7 @@ Notes from the probes:
 | ovh | generic | `/v1/models`, frozen chat set (9 of 21 live; anonymous tier, price is NOT the signal) |
 | agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
 | routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
-| bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 9 of 128 live) |
+| bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 7 of 127 live) |
 | requesty | generic | `/v1/models`, zero price + `api == "chat"` (13 zero-price chat of 821 live; content-safety classifier excluded) |
 | sealion | generic | `/v1/models`, frozen docs-sourced set (2 chat ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | orcarouter | generic | `/v1/models`, `-free` suffix + the `orcarouter/free` auto route (7 of 215 live) |

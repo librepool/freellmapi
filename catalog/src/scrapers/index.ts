@@ -434,7 +434,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
      'temporary $1 card-verification charge (refunded) unlocks free models',
      'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
   llm7: generic('llm7', 'https://api.llm7.io/v1', (e) => e.tier === 'turbo' && e.model_type === 'chat' && e.usage_based_only !== true, SIX_HOURS,
-    ['tier == "turbo" and model_type == "chat", not usage_based_only (live /v1/models 2026-11-09: 4 turbo chat models; the other 64 are Pro)',
+    ['tier == "turbo" and model_type == "chat", not usage_based_only (live /v1/models 2026-11-09: 3 turbo chat models; the other 64 are Pro)',
      'free token: 100K tokens/day rolling 24h (TERMS.md 2026-10-15); anonymous access reaches the same turbo models at lower rates',
      'ToS §3A: no resale/proxy/downstream access without prior written approval — routing here needs approval',
      'robots.txt carries content-signal lines only, no Disallow (checked 2026-11-09) — polls run']),
@@ -504,8 +504,8 @@ export const REGISTRY: Record<string, RegistryEntry> = {
       const p = e.pricing as { prompt?: unknown; completion?: unknown } | undefined;
       return p?.prompt === '0' && p?.completion === '0';
     }, SIX_HOURS,
-    ['zero pricing (prompt "0" + completion "0") is the free signal (live /v1/models 2026-11-09: 128 models, 9 at $0)',
-     'the June-2026 adapter comment ("only auto:free is cataloged") is stale: the live list now also prices beam-free, nemotron-3.5-lightning-free and glyph-cluster at $0, plus namespaced :free variants of the same three models and qwen/qwen3.7-flash:free — bare + :free ids of one model are both seeded, as listed',
+    ['zero pricing (prompt "0" + completion "0") is the free signal (live /v1/models 2026-11-09: 127 models, 7 at $0)',
+     'the June-2026 adapter comment ("only auto:free is cataloged") is stale: the live list now also prices nemotron-3.5-lightning-free and glyph-cluster at $0, plus namespaced :free variants of the same two models and qwen/qwen3.7-flash:free — bare + :free ids of one model are both seeded, as listed',
      'free pool is 10 RPM + 60 weighted units/day (units are not tokens); the auto:free route picks a currently-available zero-cost model — 6h churn check',
      'robots.txt allows / (checked 2026-11-09) — polls run']),
   requesty: generic('requesty', 'https://router.requesty.ai/v1',
