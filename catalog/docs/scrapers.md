@@ -144,7 +144,7 @@ Persistent=true
 WantedBy=timers.target
 ```
 
-## Robots.txt, per host (live, 2026-11-08)
+## Robots.txt, per host (live, 2026-11-08; Batch E hosts 2026-11-09)
 
 | Host | robots.txt | Effect on the scraper |
 |---|---|---|
@@ -152,6 +152,12 @@ WantedBy=timers.target
 | `inference-api.nousresearch.com` | None (404) | Polls **run** — the only concrete scraper live by default |
 | `llmtr.com` | `User-agent: *` / `Disallow: /v1/` (also `/api/`, `/dashboard`); file advertises `/llms.txt` and `/llms-full.txt` as machine-readable surfaces | Polls **skip** by default; `/llms-full.txt` is a future alternative source, not implemented here |
 | `api.airforce` | `User-agent: *` / `Disallow: /v1/` (comment: the block targets indexing waste — "backend API endpoints, not content pages") | Polls **skip** by default |
+| `api.orcarouter.ai` | `User-agent: *` / `Allow: /` (content-signal lines only; `Disallow: /` applies to named training crawlers, not `*`) | Polls **run** |
+| `api.unorouter.com` | `User-agent: *` / `Disallow: /` | Polls **skip** by default |
+| `api-inference.modelscope.cn` | None (404) | Polls **run** |
+| `qianfan.baidubce.com` | None (404 — JSON `ResourceNotFound`) | Polls **run** (the list itself 429s keyless — see below) |
+| `spark-api-open.xf-yun.com` | Fetch 401s (non-2xx = no restriction) | Polls **run** (the list itself 401s keyless — see below) |
+| `oai.aihorde.net` | None (404) | Polls **run** |
 
 Three of the four concrete scrapers therefore report `skipped` on the
 default schedule. That is the faithful outcome of the two requirements
@@ -230,7 +236,7 @@ Notes from the probes:
   both rosters churn (AIHubMix had 42 free on 2026-11-08; Nous 4, down
   from 7 on 2026-10-15).
 
-## Registry coverage (44 seed platforms)
+## Registry coverage (50 seed platforms)
 
 | Platform | Kind | List / filter |
 |---|---|---|
@@ -271,6 +277,12 @@ Notes from the probes:
 | bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 9 of 128 live) |
 | requesty | generic | `/v1/models`, zero price + `api == "chat"` (13 zero-price chat of 821 live; content-safety classifier excluded) |
 | sealion | generic | `/v1/models`, frozen docs-sourced set (2 chat ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| orcarouter | generic | `/v1/models`, `-free` suffix + the `orcarouter/free` auto route (7 of 215 live) |
+| unorouter | generic | `/v1/models`, `:free` suffix + `openai` endpoint type, excluding embeddings / image-generation / whisper (110 chat of 180 `:free`, 341 live) — but `api.unorouter.com/robots.txt` disallows `/`, so polls skip by default |
+| modelscope | generic | `/v1/models`, frozen chat set (36 of 38 live; the 2 Qwen-Image-Edit ids are image editing, not chat) |
+| qianfan | generic | `/v2/models`, frozen free set (5 ERNIE Speed/Lite/Tiny ids, official 2024-05-21 announcement) — but the list endpoint 429s keyless, so this entry reports errors until a list key exists; a conflicting retirement claim (single secondary source, no official notice found) is flagged in the registry entry |
+| xfyun | generic | `/v1/models`, frozen `{lite}` (official docs: Lite "can be used for free") — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (11 of 13 live; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
@@ -316,6 +328,16 @@ platform without a registry entry fails the build.
 - **LLMTR:** automated key-validation probes are refused outright; a
   validation probe can get an account flagged. Never probe keys here.
 - **Airforce:** 1 request/minute/account; a 429 carries Retry-After.
+- **iFlytek Spark:** OmniRoute's ToS table flags a proxy/relay
+  restriction on Spark (not re-verified against the official ToS here).
+  Spark Lite is free, but routing through LibrePool may violate the
+  provider's terms — needs a direct ToS check before paid traffic is
+  routed here.
+- **UnoRouter / OrcaRouter:** pure aggregators re-serving upstream free
+  lanes (like LLMTR/Kilo). They count as distinct access points with
+  their own free rows, but an upstream lane's ToS may prohibit proxying
+  — the same caveat as LLMTR. Frontier ids on UnoRouter's `:free` roster
+  (GPT-4o, Claude Haiku 4.5) have unverified upstream provenance.
 
 ## What still needs an operator
 
@@ -324,14 +346,17 @@ platform without a registry entry fails the build.
   provider (AIHubMix, Nous, LLMTR, Airforce, and any generic entry whose
   additions get applied). No key values exist in this repo and none may
   ever be committed.
-- **Robots-disallowed hosts (AIHubMix, LLMTR, Airforce).** Scheduled
-  polling for these three needs a documented operator decision recorded
+- **Robots-disallowed hosts (AIHubMix, LLMTR, Airforce, UnoRouter).** Scheduled
+  polling for these four needs a documented operator decision recorded
   in the registry — until then they report `skipped` and their lists are
   refreshed by manual probe only.
 - **Arli's list endpoint** 401s without a key, so its generic entry
   reports errors; a list key or a docs change is needed before it can poll.
   The same applies to Mixlayer, Token Harbor, Zro, SenseNova, and
-  SimpleLLM (all 401 on keyless `/v1/models`, verified live 2026-11-08).
+  SimpleLLM (all 401 on keyless `/v1/models`, verified live 2026-11-08),
+  and to iFlytek Spark (401, verified 2026-11-09). Baidu Qianfan's
+  `/v2/models` 429s keyless ("Over rate limit", verified 2026-11-09) —
+  its entry likewise reports errors until a list key exists.
 - **Removal decisions.** Removals are reported, never applied. When a
   report lists a removal, the operator decides: outage, rename, or real
   retirement — then edits the seed by hand.

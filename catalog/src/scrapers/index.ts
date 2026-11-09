@@ -27,8 +27,9 @@
  * plus xkiro, llm7, navy, whose public lists carry a rotating aggregator
  * roster — plus nvidia and kilo, whose free rosters rotate/vanish without
  * notice — plus routeway, bazaarlink and requesty, whose free rosters
- * rotate (suffix-rule / zero-price aggregator pools); 24h for the rest;
- * 0 ("not scheduled") for stubs.
+ * rotate (suffix-rule / zero-price aggregator pools) — plus orcarouter and
+ * unorouter, whose free rosters rotate (suffix-rule aggregator pools);
+ * 24h for the rest; 0 ("not scheduled") for stubs.
  */
 import { AihubmixScraper } from './aihubmix.ts';
 import { AirforceScraper } from './airforce.ts';
@@ -273,6 +274,82 @@ const SEALION_CHAT_FREE: ReadonlySet<string> = new Set([
   'aisingapore/Qwen-SEA-LION-v4.5-27B-IT',
   'aisingapore/Llama-SEA-LION-v3.5-70B-R',
 ]);
+/** ModelScope chat models (live keyless /v1/models 2026-11-09: 38 ids; 36
+ *  chat. Excluded: MusePublic/Qwen-Image-Edit + Qwen/Qwen-Image-Edit
+ *  (image editing, not chat). The list carries no free marker — the whole
+ *  inference catalog is on the free magic-grain tier (~2,000 req/day
+ *  aggregate, ≤500/model/day), so the frozen set IS the filter; additions
+ *  need operator review. Retired models answer 429 "insufficient balance"
+ *  — keep them out of the seed (see the adapter comment). */
+const MODELSCOPE_CHAT_FREE: ReadonlySet<string> = new Set([
+  'deepseek-ai/DeepSeek-V4-Flash-0731',
+  'deepseek-ai/DeepSeek-V4-Pro',
+  'deepseek-ai/DeepSeek-V4-Pro-0813',
+  'deepseek-ai/DeepSeek-V4.1-Flash',
+  'deepseek-ai/DeepSeek-V4.1-Flash-1017',
+  'early-access/EA-29B-A4B',
+  'MedAIBase/AntAngelMed',
+  'meituan-longcat/LongCat-Flash-Lite',
+  'MiniMax/MiniMax-M1-80k',
+  'MiniMax/MiniMax-M3',
+  'mistralai/Mistral-Large-Instruct-2407',
+  'moonshotai/Kimi-K3.1-Pro',
+  'nex-agi/Nex-N2.5-mini',
+  'nex-agi/Nex-N2.5-Pro',
+  'opencompass/CompassJudger-1-32B-Instruct',
+  'OpenGVLab/InternVL3_5-241B-A28B',
+  'PaddlePaddle/ERNIE-4.5-0.3B-PT',
+  'PaddlePaddle/ERNIE-4.5-21B-A3B-PT',
+  'PaddlePaddle/ERNIE-4.5-300B-A47B-PT',
+  'PaddlePaddle/ERNIE-4.5-VL-28B-A3B-PT',
+  'Qwen/Qwen3.5-122B-A10B',
+  'Qwen/Qwen3.5-27B',
+  'Qwen/Qwen3.5-35B-A3B',
+  'Qwen/Qwen3.5-397B-A17B',
+  'Qwen/Qwen3.8-27B',
+  'Qwen/Qwen3.8-Flash-Next',
+  'Shanghai_AI_Laboratory/Intern-S1',
+  'Shanghai_AI_Laboratory/Intern-S1-mini',
+  'Shanghai_AI_Laboratory/Intern-S2-Preview',
+  'stepfun-ai/Step-3.5-Flash',
+  'stepfun-ai/Step-3.7-Flash',
+  'stepfun-ai/Step-5-Preview',
+  'XGenerationLab/XiYanSQL-QwenCoder-32B-2412',
+  'XGenerationLab/XiYanSQL-QwenCoder-32B-2504',
+  'ZhipuAI/GLM-4.7-Flash',
+  'ZhipuAI/GLM-5.2',
+]);
+/** Baidu Qianfan free ERNIE models (official free-opening announcement
+ *  2024-05-21, doc updated 2025-04-11: 7 preset services free, "planned
+ *  to stay open long-term"). Seeded 5: the AppBuilder-only Speed variant
+ *  and the dated ERNIE-Lite-8K-0922 snapshot are excluded. The 17-model
+ *  new-user grant (1M tokens each, 3-month validity) is one-time credit,
+ *  not a permanent tier — never seeded. */
+const QIANFAN_FREE: ReadonlySet<string> = new Set([
+  'ernie-speed-8k',
+  'ernie-speed-128k',
+  'ernie-lite-8k',
+  'ernie-lite-128k',
+  'ernie-tiny-8k',
+]);
+/** AI Horde models with at least one worker online (live keyless
+ *  /v1/models 2026-11-09: 13 ids; 11 seeded). The list IS the
+ *  currently-online volunteer roster — it rotates by the hour, so the
+ *  frozen set is the filter; additions need operator review. The two
+ *  `debug-` ids are test deployments, not catalog entries. */
+const AIHORDE_FREE: ReadonlySet<string> = new Set([
+  'koboldcpp/G4-MeroMero-26B-A4B-it-uncensored-heretic',
+  'koboldcpp/Gemma-4-E4B-it-Ultra-Uncensored-Heretic',
+  'koboldcpp/L3-8B-Stheno-v3.2',
+  'koboldcpp/Llama-3.2-1B-Instruct',
+  'koboldcpp/mini-magnum-12b-v1.1',
+  'koboldcpp/Orion-26B-A4B-v1.1',
+  'koboldcpp/Qwen3-0.6B',
+  'koboldcpp/Qwen3-1.7B',
+  'koboldcpp/Qwen3-4B',
+  'koboldcpp/Underdog-Saluki-27B-1.0-IQ2-mix-MTP-abliterated',
+  'koboldcpp/zerofata/G4-MeroMero-26B-A4B',
+]);
 
 export const REGISTRY: Record<string, RegistryEntry> = {
   // ---- Concrete scrapers (churn-prone, dedicated class + ToS notes) ----
@@ -441,6 +518,46 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     ['frozen docs-sourced set (current API docs examples: Qwen-SEA-LION-v4.5-27B-IT instruct + tool use, Llama-SEA-LION-v3.5-70B-R reasoning; SEA-Guard classifier excluded; embedding row SEA-LION-ModernBERT-Embedding-600M seeded from the docs example)',
      'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
      'trial key only: Google sign-in via the Playground, 1 key per user, 10 RPM, prototyping only — the "trial key" wording is a friction flag, not a billing incident',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  orcarouter: generic('orcarouter', 'https://api.orcarouter.ai/v1',
+    (e) => e.id === 'orcarouter/free' || e.id.endsWith('-free'), SIX_HOURS,
+    ['-free suffix + the orcarouter/free auto route (adapter; live /v1/models 2026-11-09: 215 models, 7 free; two carry explicit $0 pricing, the rest no pricing field — the suffix is the marker)',
+     'rotating $0 lineup, 10 RPM / 50 req/day; free routes never fall back to paid models, so a 429 is a clean quota signal, not a wallet risk — 6h churn check',
+     'robots.txt has no Disallow on / (User-agent: * Allow: /, checked 2026-11-09) — polls run']),
+  unorouter: generic('unorouter', 'https://api.unorouter.com/v1',
+    (e) => {
+      if (!e.id.endsWith(':free')) return false;
+      const types = e.supported_endpoint_types as string[] | undefined;
+      if (!Array.isArray(types) || !types.includes('openai')) return false;
+      if (types.includes('embedding') || types.includes('image-generation')) return false;
+      if (e.id.startsWith('whisper')) return false;
+      return true;
+    }, SIX_HOURS,
+    [':free suffix + openai endpoint type, excluding embeddings / image-generation / whisper (live /v1/models 2026-11-09: 341 models, 180 :free, 110 chat; 34 embeddings, 24 image, 4 whisper excluded)',
+     'pure aggregator of ~50 upstream free lanes; 1 req/min per free model; a burst of parallel requests trips an account-wide 429 on every :free model for several minutes — 6h churn check',
+     'the :free roster includes frontier ids (gpt-4o, claude-haiku-4-5) whose upstream free provenance is unverified — a listed id is not a serving guarantee; the health check catches dead lanes',
+     'api.unorouter.com/robots.txt disallows / (checked 2026-11-09) — polls skip by default; needs a documented operator decision to re-enable']),
+  modelscope: generic('modelscope', 'https://api-inference.modelscope.cn/v1', (e) => MODELSCOPE_CHAT_FREE.has(e.id), DAY,
+    ['frozen chat set (live keyless /v1/models 2026-11-09: 38 ids, 36 chat; the 2 Qwen-Image-Edit ids are image editing, not chat)',
+     'the whole inference catalog is the free magic-grain tier (~2,000 req/day aggregate, ≤500/model/day) — the frozen set is the filter, additions need operator review',
+     'calls only work after binding to an Alibaba Cloud CHINA-site account with real-name verification — unbound tokens 401',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  qianfan: generic('qianfan', 'https://qianfan.baidubce.com/v2', (e) => QIANFAN_FREE.has(e.id), DAY,
+    ['frozen free set (official 2024-05-21 announcement, doc updated 2025-04-11: 7 preset services free, "planned to stay open long-term"; seeded 5 — AppBuilder variant + dated Lite-8K-0922 snapshot excluded)',
+     'GET /v2/models 429s keyless ("Over rate limit", checked 2026-11-09) — this entry reports errors until a list key exists',
+     'CONFLICTING SIGNAL: one secondary source claims a 2026-07-28 retirement notice lists Speed/Lite — no official notice found; AIMap notes the models are "no longer shown in the current model list (unverified)". The seed rows rest on the still-live official announcement; re-check before relying on them',
+     'the 17-model new-user grant (1M tokens each, 3 months) is one-time credit, not a permanent tier — never seeded',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  xfyun: generic('xfyun', 'https://spark-api-open.xf-yun.com/v1', (e) => e.id === 'lite', DAY,
+    ['frozen set (official Spark HTTP docs: Lite "can be used for free"; model id `lite`, max input 8K / output 4K)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'Lite does NOT support tool calling (Max/Ultra only) — the seed row carries supportsTools false; real-name verification required on the account',
+     'robots.txt fetch 401s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  aihorde: generic('aihorde', 'https://oai.aihorde.net/v1', (e) => AIHORDE_FREE.has(e.id), DAY,
+    ['frozen set of models with ≥1 worker online (live keyless /v1/models 2026-11-09: 13 ids, 11 seeded; the 2 debug- ids are test deployments, not catalog entries)',
+     'volunteer kudos queue: anonymous key 0000000000 works at lowest priority, a registered key raises priority; no monthly cap, no key in the usual sense — the adapter is keyless',
+     'the worker roster rotates by the hour — the frozen set is the filter so the scraper watches for seeded models losing all workers without flooding on every ephemeral worker; NOT a 6h churn candidate',
+     'queue-based: calls can take tens of seconds, no upstream streaming, max_tokens >= 16, usage reported as kudos (synthesized into token counts)',
      'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
 
   // ---- Explicit stubs (no usable list endpoint) ----
