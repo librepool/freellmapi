@@ -26,7 +26,9 @@
  * tokenharbor, mixlayer, openrouter — all suffix-rule rosters that rotate —
  * plus xkiro, llm7, navy, whose public lists carry a rotating aggregator
  * roster — plus nvidia and kilo, whose free rosters rotate/vanish without
- * notice); 24h for the rest; 0 ("not scheduled") for stubs.
+ * notice — plus routeway, bazaarlink and requesty, whose free rosters
+ * rotate (suffix-rule / zero-price aggregator pools); 24h for the rest;
+ * 0 ("not scheduled") for stubs.
  */
 import { AihubmixScraper } from './aihubmix.ts';
 import { AirforceScraper } from './airforce.ts';
@@ -235,6 +237,42 @@ const ZHIPU_FREE: ReadonlySet<string> = new Set([
   'glm-4.5-flash',
   'glm-4.6v-flash',
 ]);
+/** OVHcloud AI Endpoints chat models (live keyless /v1/models 2026-11-09:
+ *  21 ids; 9 chat. Excluded: whisper-large-v3/turbo (transcription),
+ *  Qwen3Guard-Gen-0.6B/8B (guard classifiers), stable-diffusion-xl-base-v10
+ *  (image), nvr-tts-* (TTS), bge-multilingual-gemma2 / bge-m3 /
+ *  Qwen3-Embedding-8B (embeddings). The list carries authenticated pricing
+ *  (nonzero for chat models) — anonymous access is free, so price is NOT
+ *  the signal; the frozen set is the filter. */
+const OVH_CHAT_FREE: ReadonlySet<string> = new Set([
+  'Qwen2.5-VL-72B-Instruct',
+  'gpt-oss-120b',
+  'Qwen3.6-27B',
+  'Qwen3.5-397B-A17B',
+  'Qwen3.8-27B',
+  'Qwen3.5-9B',
+  'gpt-oss-20b',
+  'Mistral-Small-3.2-24B-Instruct-2506',
+  'Meta-Llama-3_3-70B-Instruct',
+]);
+/** Agnes AI $0 Flash models (official pricing page wiki.agnes-ai.com,
+ *  corroborated by one successful keyless /v1/models 200 on 2026-11-09:
+ *  exactly the two Flash models are $0; Pro is metered; video/image
+ *  models are media, not chat). */
+const AGNES_FLASH_FREE: ReadonlySet<string> = new Set([
+  'agnes-2.5-flash',
+  'agnes-3.0-flash',
+]);
+/** SEA-LION chat models, docs-sourced (current API docs examples at
+ *  docs.sea-lion.ai/guides/inferencing/api: Qwen-SEA-LION-v4.5-27B-IT
+ *  instruct + tool use, Llama-SEA-LION-v3.5-70B-R reasoning).
+ *  /v1/models 401s keyless, so the live list cannot be enumerated without
+ *  a trial key; SEA-Guard (classifier) and the embedding model are not
+ *  chat rows. */
+const SEALION_CHAT_FREE: ReadonlySet<string> = new Set([
+  'aisingapore/Qwen-SEA-LION-v4.5-27B-IT',
+  'aisingapore/Llama-SEA-LION-v3.5-70B-R',
+]);
 
 export const REGISTRY: Record<string, RegistryEntry> = {
   // ---- Concrete scrapers (churn-prone, dedicated class + ToS notes) ----
@@ -370,6 +408,40 @@ export const REGISTRY: Record<string, RegistryEntry> = {
       'free prompts/outputs are logged for training (adapter); free routes transition to paid without notice — 6h churn check',
       'robots.txt has no Disallow on /api/ (checked 2026-11-09) — polls run'],
   },
+  ovh: generic('ovh', 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', (e) => OVH_CHAT_FREE.has(e.id), DAY,
+    ['frozen chat set (live keyless /v1/models 2026-11-09: 21 ids, 9 chat; whisper, guard, image, TTS and embeddings excluded)',
+     'anonymous tier is 2 RPM/IP/model (no key, no signup); list pricing is authenticated pricing, NOT the free signal — chat models list nonzero prices but are free anonymously',
+     'mnfst lists an EOL of 2026-11-04 for Mistral-Small-3.2-24B-Instruct-2506, yet it is still in the live list — watch for removal',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  agnes: generic('agnes', 'https://apihub.agnes-ai.com/v1', (e) => AGNES_FLASH_FREE.has(e.id), DAY,
+    ['frozen $0 Flash set (official pricing page: agnes-2.5-flash + agnes-3.0-flash currently $0; Pro metered; video/image excluded)',
+     'GET /v1/models 401s keyless as of 2026-11-09 — after one successful keyless 200 the same morning (9 ids) — this entry reports errors until a list key exists or keyless access stabilizes',
+     '$0 is promotional ("previously $X" / "during this period") — watch for reversion to paid',
+     'robots.txt fetch 403s (Cloudflare, checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  routeway: generic('routeway', 'https://api.routeway.ai/v1', (e) => e.id.endsWith(':free'), SIX_HOURS,
+    [':free suffix rule (live /v1/models 2026-11-09: 287 models, 9 :free, all $0, all available; no other $0 models)',
+     'free pool is 200 req/day, 20 RPM, shared low-priority queue; the :free roster is an aggregator pool — 6h churn check',
+     'robots.txt fetch 403s (Cloudflare, checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  bazaarlink: generic('bazaarlink', 'https://bazaarlink.ai/api/v1',
+    (e) => {
+      const p = e.pricing as { prompt?: unknown; completion?: unknown } | undefined;
+      return p?.prompt === '0' && p?.completion === '0';
+    }, SIX_HOURS,
+    ['zero pricing (prompt "0" + completion "0") is the free signal (live /v1/models 2026-11-09: 128 models, 9 at $0)',
+     'the June-2026 adapter comment ("only auto:free is cataloged") is stale: the live list now also prices beam-free, nemotron-3.5-lightning-free and glyph-cluster at $0, plus namespaced :free variants of the same three models and qwen/qwen3.7-flash:free — bare + :free ids of one model are both seeded, as listed',
+     'free pool is 10 RPM + 60 weighted units/day (units are not tokens); the auto:free route picks a currently-available zero-cost model — 6h churn check',
+     'robots.txt allows / (checked 2026-11-09) — polls run']),
+  requesty: generic('requesty', 'https://router.requesty.ai/v1',
+    (e) => e.api === 'chat' && e.input_price === 0 && e.output_price === 0 && e.id !== 'nvidia/nemotron-3.5-content-safety', SIX_HOURS,
+    ['zero price (input_price 0 + output_price 0) + api == "chat" (live /v1/models 2026-11-09: 821 models, 13 zero-price chat; Requesty\'s own free page confirms 13 zero-cost models)',
+     'nvidia/nemotron-3.5-content-safety is zero-price but a guard classifier — excluded, no seed precedent for guards',
+     'free tier is 200 req/day on free models; Requesty says the free catalogue changes as providers add/remove models — 6h churn check',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  sealion: generic('sealion', 'https://api.sea-lion.ai/v1', (e) => SEALION_CHAT_FREE.has(e.id), DAY,
+    ['frozen docs-sourced set (current API docs examples: Qwen-SEA-LION-v4.5-27B-IT instruct + tool use, Llama-SEA-LION-v3.5-70B-R reasoning; SEA-Guard classifier excluded; embedding row SEA-LION-ModernBERT-Embedding-600M seeded from the docs example)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'trial key only: Google sign-in via the Playground, 1 key per user, 10 RPM, prototyping only — the "trial key" wording is a friction flag, not a billing incident',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
 
   // ---- Explicit stubs (no usable list endpoint) ----
   groq: stub('groq',

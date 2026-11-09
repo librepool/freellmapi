@@ -230,7 +230,7 @@ Notes from the probes:
   both rosters churn (AIHubMix had 42 free on 2026-11-08; Nous 4, down
   from 7 on 2026-10-15).
 
-## Registry coverage (38 seed platforms)
+## Registry coverage (44 seed platforms)
 
 | Platform | Kind | List / filter |
 |---|---|---|
@@ -265,6 +265,12 @@ Notes from the probes:
 | cohere | generic | `/v1/models`, frozen chat set (9 Command/North ids, official rate-limits page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | zhipu | generic | `/v1/models`, frozen `$0` set (3 Flash ids, official pricing page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (11 of 379 live) |
+| ovh | generic | `/v1/models`, frozen chat set (9 of 21 live; anonymous tier, price is NOT the signal) |
+| agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
+| routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
+| bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 9 of 128 live) |
+| requesty | generic | `/v1/models`, zero price + `api == "chat"` (13 zero-price chat of 821 live; content-safety classifier excluded) |
+| sealion | generic | `/v1/models`, frozen docs-sourced set (2 chat ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
