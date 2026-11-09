@@ -25,7 +25,8 @@
  * Intervals: 6h for churn-prone rosters (the four concrete scrapers,
  * tokenharbor, mixlayer, openrouter — all suffix-rule rosters that rotate —
  * plus xkiro, llm7, navy, whose public lists carry a rotating aggregator
- * roster); 24h for the rest; 0 ("not scheduled") for stubs.
+ * roster — plus nvidia and kilo, whose free rosters rotate/vanish without
+ * notice); 24h for the rest; 0 ("not scheduled") for stubs.
  */
 import { AihubmixScraper } from './aihubmix.ts';
 import { AirforceScraper } from './airforce.ts';
@@ -126,6 +127,113 @@ const ANYAPI_FREE: ReadonlySet<string> = new Set([
   'inclusionai/ling-3.0-flash-fin:free',
   'inclusionai/ling-3.0-flash-sante:free',
   'google/gemma-4-26b-a4b-it:free',
+]);
+/** AMD Radeon Cloud TokenFactory chat models (official model catalog, 2026-11-09).
+ *  The 5 non-chat models (MinerU2.5-Pro OCR, OmniVoice TTS, Clef/d3/d3-flash
+ *  decision endpoints) are excluded; /v1/models 401s keyless. */
+const RADEON_CHAT_FREE: ReadonlySet<string> = new Set([
+  'DeepSeek-V4-Flash',
+  'DeepSeek-V4-Flash-Vision-Exp',
+  'DeepSeek-V4.1-Flash',
+  'Qwen3.8-Flash-Next',
+  'Qwen3.8-27B',
+  'GLM-5.3-Flash',
+  'MiMo-V2.6-Flash',
+  'MiniCPM5-2B',
+  'MiniCPM-V-4.7-1B',
+  'MiniCPM-V-4.7-35B-A3B',
+  'Gemma-4-31B-IT',
+]);
+/** NVIDIA NIM chat-capable ids (live /v1/models 2026-11-09: 84 ids; 61 kept).
+ *  Excluded as non-chat by name: 9 embeddings, 5 guard/safety classifiers,
+ *  1 reward model, 1 image-gen, 1 video detector, 2 parse/OCR, 2 translation,
+ *  1 CLIP, 1 calibration. The list carries no free marker — the whole hosted
+ *  catalog is the free trial tier (no card, ~40 RPM), so the frozen set IS the
+ *  filter; additions need operator review. */
+const NVIDIA_CHAT_FREE: ReadonlySet<string> = new Set([
+  '01-ai/yi-large',
+  'adept/fuyu-8b',
+  'ai21labs/jamba-1.5-large-instruct',
+  'aisingapore/sea-lion-7b-instruct',
+  'bigcode/starcoder2-15b',
+  'databricks/dbrx-instruct',
+  'deepseek-ai/deepseek-coder-6.7b-instruct',
+  'deepseek-ai/deepseek-v4.1-flash',
+  'google/codegemma-1.1-7b',
+  'google/codegemma-7b',
+  'google/deplot',
+  'google/gemma-2b',
+  'google/gemma-3-12b-it',
+  'google/gemma-3-4b-it',
+  'google/gemma-4-31b-it',
+  'google/recurrentgemma-2b',
+  'ibm/granite-3.0-3b-a800m-instruct',
+  'ibm/granite-3.0-8b-instruct',
+  'ibm/granite-34b-code-instruct',
+  'ibm/granite-8b-code-instruct',
+  'meta/codellama-70b',
+  'meta/llama-3.2-90b-vision-instruct',
+  'meta/llama2-70b',
+  'meta/muse-glimmer-30b',
+  'microsoft/kosmos-2',
+  'microsoft/phi-3-vision-128k-instruct',
+  'microsoft/phi-3.5-moe-instruct',
+  'minimaxai/minimax-m3.1-flash',
+  'mistralai/codestral-22b-instruct-v0.1',
+  'mistralai/mistral-7b-instruct-v0.3',
+  'mistralai/mistral-large',
+  'mistralai/mistral-large-2-instruct',
+  'mistralai/mistral-large-4-1t-a52b',
+  'mistralai/mixtral-8x22b-v0.1',
+  'moonshotai/kimi-k2.6',
+  'nv-mistralai/mistral-nemo-12b-instruct',
+  'nvidia/cosmos-reason2-8b',
+  'nvidia/llama-3.1-nemotron-51b-instruct',
+  'nvidia/llama-3.1-nemotron-70b-instruct',
+  'nvidia/llama-3.1-nemotron-ultra-253b-v1',
+  'nvidia/llama3-chatqa-1.5-70b',
+  'nvidia/mistral-nemo-minitron-8b-8k-instruct',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
+  'nvidia/nemotron-3-super-120b-a12b',
+  'nvidia/nemotron-3-ultra-550b-a55b',
+  'nvidia/nemotron-3.5-bolt-e4b',
+  'nvidia/nemotron-3.5-lightning-30b-a3b',
+  'nvidia/nemotron-3.5-super-vl-120b-a12b',
+  'nvidia/nemotron-4-340b-instruct',
+  'nvidia/nemotron-nano-3-30b-a3b',
+  'nvidia/neva-22b',
+  'nvidia/vila',
+  'openai/gpt-oss-20b',
+  'poolside/laguna-xs-2.1',
+  'stepfun-ai/step-5-preview',
+  'writer/palmyra-creative-122b',
+  'writer/palmyra-fin-70b-32k',
+  'writer/palmyra-med-70b',
+  'writer/palmyra-med-70b-32k',
+  'z-ai/glm-5.3-flash',
+  'zyphra/zamba2-7b-instruct',
+]);
+/** Cohere trial-key chat models (official rate-limits page, 2026-11-09):
+ *  all 9 Command/North chat models at 20 RPM on a trial key (1,000 calls/mo,
+ *  non-commercial only). /v1/models 401s keyless. */
+const COHERE_CHAT_FREE: ReadonlySet<string> = new Set([
+  'command-a-03-2025',
+  'command-a-plus-05-2026',
+  'command-a-reasoning-08-2025',
+  'command-a-translate-08-2025',
+  'command-a-vision-07-2025',
+  'command-r-08-2024',
+  'command-r-plus-08-2024',
+  'command-r7b-12-2024',
+  'north-mini-code-1.0',
+]);
+/** Z.ai $0 models (official pricing page docs.z.ai, updated 2026-10-21):
+ *  $0 on every line (input, cached input, storage, output). /v1/models 401s
+ *  keyless on both the domestic and global hosts. */
+const ZHIPU_FREE: ReadonlySet<string> = new Set([
+  'glm-4.7-flash',
+  'glm-4.5-flash',
+  'glm-4.6v-flash',
 ]);
 
 export const REGISTRY: Record<string, RegistryEntry> = {
@@ -229,6 +337,39 @@ export const REGISTRY: Record<string, RegistryEntry> = {
      'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
      'budgets are in proprietary ANY Tokens, not raw tokens — see the anyapi-any-tokens quirk in the seed',
      'robots.txt fetch 403s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  radeon: generic('radeon', 'https://developer.amd.com.cn/radeon/api/v1', (e) => RADEON_CHAT_FREE.has(e.id), DAY,
+    ['frozen chat set (official model catalog 2026-11-09: 11 chat ids; MinerU2.5-Pro OCR, OmniVoice TTS and Clef/d3/d3-flash decision endpoints excluded)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'Token Factory is free with a daily points cap (points are not money or credits); China site only; "free trial and development service, not for production" — no resale',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  nvidia: generic('nvidia', 'https://integrate.api.nvidia.com/v1', (e) => NVIDIA_CHAT_FREE.has(e.id), SIX_HOURS,
+    ['frozen chat set (live /v1/models 2026-11-09: 84 ids, 61 chat; 23 non-chat excluded by name — embeddings, guards, reward, image/video, parse, translation, CLIP, calibration)',
+     'the list carries no free marker — the whole hosted catalog is the free trial tier (no card, ~40 RPM); the frozen set is the filter, additions need operator review',
+     'trial ToS: internal testing/evaluation only, not production; prompts may be used to improve NVIDIA models; models vanish without notice — 6h churn check',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  cohere: generic('cohere', 'https://api.cohere.ai/compatibility/v1', (e) => COHERE_CHAT_FREE.has(e.id), DAY,
+    ['frozen chat set (official rate-limits page 2026-11-09: all 9 Command/North chat models at 20 RPM on a trial key)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09 on both the native and compatibility hosts) — this entry reports errors until a list key exists',
+     'trial key: 1,000 API calls/month shared across the key, non-commercial use only — the "trial key" wording is a friction flag, not a billing incident',
+     'robots.txt fetch 403s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  zhipu: generic('zhipu', 'https://open.bigmodel.cn/api/paas/v4', (e) => ZHIPU_FREE.has(e.id), DAY,
+    ['frozen $0 set (official pricing page docs.z.ai, updated 2026-10-21: glm-4.7-flash, glm-4.5-flash, glm-4.6v-flash $0 on every line; GLM-5.3-Flash is $0.15 — paid, excluded)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09 on both the domestic and global hosts) — this entry reports errors until a list key exists',
+     'robots.txt has no Disallow on /api/ (checked 2026-11-09) — polls run']),
+  // Kilo's list lives at /api/gateway/models, NOT {baseUrl}/models (the /v1/models
+  // path only accepts POST) — so this entry is built by hand: the registry
+  // baseUrl is the router base, but the scraper is pointed at the gateway root
+  // so its listUrl comes out as https://api.kilo.ai/api/gateway/models.
+  kilo: {
+    platform: 'kilo', kind: 'generic', baseUrl: 'https://api.kilo.ai/api/gateway/v1',
+    listUrl: 'https://api.kilo.ai/api/gateway/models', intervalMs: SIX_HOURS,
+    create: (deps: ScraperDeps = {}) =>
+      new OpenAICompatibleScraper({ platform: 'kilo', baseUrl: 'https://api.kilo.ai/api/gateway', freeFilter: (e) => e.isFree === true, intervalMs: SIX_HOURS, ...deps }),
+    notes: ['isFree === true (live /api/gateway/models 2026-11-09: 11 of 379, all $0 prompt/completion; the two $0-priced Lyria audio previews have isFree false and are excluded)',
+      'gateway re-serves upstream free lanes (NVIDIA, Cohere, OpenRouter); kilo-auto/free and openrouter/free are routers, not models — they rotate/select free models',
+      'free prompts/outputs are logged for training (adapter); free routes transition to paid without notice — 6h churn check',
+      'robots.txt has no Disallow on /api/ (checked 2026-11-09) — polls run'],
+  },
 
   // ---- Explicit stubs (no usable list endpoint) ----
   groq: stub('groq',
@@ -241,7 +382,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     ['free tier is the Workers AI daily allocation, not a model roster; seed also carries a decision-model row']),
   google: stub('google',
     'Bespoke Gemini API (generativelanguage.googleapis.com/v1beta) — no OpenAI-compatible /v1/models list endpoint exists.',
-    ['seed carries only an embeddings row (gemini-embedding-001) for this platform']),
+    ['seed carries 7 free Flash chat rows (official pricing page 2026-11-09: gemini-3.8/3.6-flash, 3.5/3.1-flash-lite, 3-flash-preview, 2.5-flash/lite) plus the gemini-embedding-001 embeddings row; Pro Preview / Omni video / image / TTS / Live models are paid or non-chat and are not seeded']),
   exa: stub('exa',
     'Search-only provider — no chat model list; the engine roster is fixed (exa-search).'),
   tavily: stub('tavily',

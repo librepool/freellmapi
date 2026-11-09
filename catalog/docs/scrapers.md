@@ -230,7 +230,7 @@ Notes from the probes:
   both rosters churn (AIHubMix had 42 free on 2026-11-08; Nous 4, down
   from 7 on 2026-10-15).
 
-## Registry coverage (33 seed platforms)
+## Registry coverage (38 seed platforms)
 
 | Platform | Kind | List / filter |
 |---|---|---|
@@ -260,10 +260,15 @@ Notes from the probes:
 | navy | generic | `/v1/models`, `premium: false` + chat-completions endpoint (70 live) |
 | aion | generic | `/v1/models`, all ids (whole 6-model roster is free-tier) |
 | anyapi | generic | `/v1/models`, frozen `:free` set (4 ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| radeon | generic | `/v1/models`, frozen chat set (11 ids, official model catalog) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| nvidia | generic | `/v1/models`, frozen chat set (61 of 84 live; 23 non-chat excluded by name) — the list carries no free marker, the whole hosted catalog is the free trial tier |
+| cohere | generic | `/v1/models`, frozen chat set (9 Command/North ids, official rate-limits page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| zhipu | generic | `/v1/models`, frozen `$0` set (3 Flash ids, official pricing page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (11 of 379 live) |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
-| google | stub | Bespoke Gemini API, no `/v1/models` (seed has only an embeddings row) |
+| google | stub | Bespoke Gemini API, no `/v1/models` (seed has 7 free Flash chat rows + the gemini-embedding-001 embeddings row) |
 | exa | stub | Search-only; engine roster is fixed (`exa-search`) |
 | tavily | stub | Search-only; engine roster is fixed (`tavily-search`) |
 | watsonx | stub | Bespoke IAM + `/ml/v1` API, no public list endpoint |
@@ -283,6 +288,19 @@ platform without a registry entry fails the build.
 - **LLM7:** Terms §3A — no resale, redistribution, proxying, gatewaying
   or downstream access without prior written approval. Routing here
   needs approval (verified against TERMS.md 2026-11-09, not yet sought).
+- **NVIDIA NIM:** API Trial Terms — internal testing/evaluation only,
+  not production; prompts may be used to improve NVIDIA models.
+  Models vanish without notice (three of five in one June 2026 post
+  were gone by October).
+- **Cohere:** trial (evaluation) keys are non-commercial only; 1,000
+  calls/month shared across the key. Production use needs a production
+  key — and the four newest Command variants stay at trial limits even
+  on one (contact sales).
+- **Kilo Code:** free prompts/outputs are logged for training; the
+  gateway re-serves upstream free lanes, and free routes transition
+  to paid without notice.
+- **AMD Radeon Cloud:** Token Factory is a "free trial and development
+  service, not for production"; reselling access is not allowed.
 - **Moark:** models marked "free" in the model square are NOT free — the
   FAQ says they need a purchased resource package. Only the
   vendor-documented featured id is seeded.
