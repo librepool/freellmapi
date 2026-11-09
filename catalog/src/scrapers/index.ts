@@ -486,7 +486,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     listUrl: 'https://api.kilo.ai/api/gateway/models', intervalMs: SIX_HOURS,
     create: (deps: ScraperDeps = {}) =>
       new OpenAICompatibleScraper({ platform: 'kilo', baseUrl: 'https://api.kilo.ai/api/gateway', freeFilter: (e) => e.isFree === true, intervalMs: SIX_HOURS, ...deps }),
-    notes: ['isFree === true (live /api/gateway/models 2026-11-09: 11 of 379, all $0 prompt/completion; the two $0-priced Lyria audio previews have isFree false and are excluded)',
+    notes: ['isFree === true (live /api/gateway/models 2026-11-09: 11 of 380, all $0 prompt/completion; the two $0-priced Lyria audio previews have isFree false and are excluded)',
       'gateway re-serves upstream free lanes (NVIDIA, Cohere, OpenRouter); kilo-auto/free and openrouter/free are routers, not models — they rotate/select free models',
       'free prompts/outputs are logged for training (adapter); free routes transition to paid without notice — 6h churn check',
       'robots.txt has no Disallow on /api/ (checked 2026-11-09) — polls run'],
