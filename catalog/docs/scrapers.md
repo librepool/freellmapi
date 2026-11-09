@@ -230,7 +230,7 @@ Notes from the probes:
   both rosters churn (AIHubMix had 42 free on 2026-11-08; Nous 4, down
   from 7 on 2026-10-15).
 
-## Registry coverage (26 seed platforms)
+## Registry coverage (33 seed platforms)
 
 | Platform | Kind | List / filter |
 |---|---|---|
@@ -253,6 +253,13 @@ Notes from the probes:
 | typhoon | generic | `/v1/models`, seeded-only (removal detection; no free-id rule for the wider roster) |
 | openrouter | generic | `/v1/models`, `:free` suffix |
 | pollinations | generic | `/v1/models`, all ids — free rule **unverified**; additions need operator review |
+| nara | generic | `/v1/models`, frozen `{laguna-s-2.1}` (from public `/api/plans`) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| xkiro | generic | `/v1/models`, `access_tier: "free"` (26 of 69 live, all $0) |
+| experiential | generic | `/v1/models`, frozen `{gpt-6-luna, deepseek-v4.1-flash}` — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
+| llm7 | generic | `/v1/models`, `tier: "turbo"` + `model_type: "chat"`, not `usage_based_only` (4 live) |
+| navy | generic | `/v1/models`, `premium: false` + chat-completions endpoint (70 live) |
+| aion | generic | `/v1/models`, all ids (whole 6-model roster is free-tier) |
+| anyapi | generic | `/v1/models`, frozen `:free` set (4 ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
@@ -273,6 +280,9 @@ platform without a registry entry fails the build.
 - **SenseNova:** beta-scoped, no permanent free tier published. If paid
   tiers launch, the catalog must be re-checked before routing paid
   traffic here.
+- **LLM7:** Terms §3A — no resale, redistribution, proxying, gatewaying
+  or downstream access without prior written approval. Routing here
+  needs approval (verified against TERMS.md 2026-11-09, not yet sought).
 - **Moark:** models marked "free" in the model square are NOT free — the
   FAQ says they need a purchased resource package. Only the
   vendor-documented featured id is seeded.

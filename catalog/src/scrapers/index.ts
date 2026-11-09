@@ -23,8 +23,9 @@
  * lane; a wrongly-included paid model is a billing incident.
  *
  * Intervals: 6h for churn-prone rosters (the four concrete scrapers,
- * tokenharbor, mixlayer, openrouter — all suffix-rule rosters that rotate);
- * 24h for the rest; 0 ("not scheduled") for stubs.
+ * tokenharbor, mixlayer, openrouter — all suffix-rule rosters that rotate —
+ * plus xkiro, llm7, navy, whose public lists carry a rotating aggregator
+ * roster); 24h for the rest; 0 ("not scheduled") for stubs.
  */
 import { AihubmixScraper } from './aihubmix.ts';
 import { AirforceScraper } from './airforce.ts';
@@ -115,6 +116,17 @@ const KIOSAPI_FREE_ROUTES: ReadonlySet<string> = new Set([
   'aisingapore/sea-lion-27b',
 ]);
 const ZRO_FREE: ReadonlySet<string> = new Set(['deepseek-v4.1-flash', 'glm-5.3-flash']);
+/** NaraRouter Free plan, from the public /api/plans endpoint (live 2026-11-09). */
+const NARA_FREE: ReadonlySet<string> = new Set(['laguna-s-2.1']);
+/** Experiential Labs Free core models (pricing page 2026-11-09). */
+const EXPERIENTIAL_FREE: ReadonlySet<string> = new Set(['gpt-6-luna', 'deepseek-v4.1-flash']);
+/** AnyAPI free models (model pages' "model ID" fields, all ₳0/₳0, 2026-11-09). */
+const ANYAPI_FREE: ReadonlySet<string> = new Set([
+  'qwen/qwen3.8-27b:free',
+  'inclusionai/ling-3.0-flash-fin:free',
+  'inclusionai/ling-3.0-flash-sante:free',
+  'google/gemma-4-26b-a4b-it:free',
+]);
 
 export const REGISTRY: Record<string, RegistryEntry> = {
   // ---- Concrete scrapers (churn-prone, dedicated class + ToS notes) ----
@@ -185,6 +197,38 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   pollinations: generic('pollinations', 'https://gen.pollinations.ai/v1', () => true, DAY,
     ['free rule UNVERIFIED in the adapter — additions from this entry need operator review before --apply; seed rows here are media (flux/seedance), not chat ids',
      'gen.pollinations.ai/robots.txt disallows /v1/ (found in the 2026-11-08 smoke run) — polls skip by default']),
+  nara: generic('nara', 'https://router.bynara.id/v1', (e) => NARA_FREE.has(e.id), DAY,
+    ['frozen Free-plan set from the public /api/plans endpoint (live 2026-11-09: Free = 7M tokens/day, no card, exactly [laguna-s-2.1])',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'aggregator: Laguna is another provider\'s lane re-served; Nara\'s 210M/month is counted once in the token floor — never add an upstream cap for it']),
+  xkiro: generic('xkiro', 'https://api.xkiro.com/v1', (e) => e.access_tier === 'free', SIX_HOURS,
+    ['access_tier == "free" (live /v1/models 2026-11-09: 26 free of 69, all $0, all chat); paid models 403 on free accounts',
+     'free ids re-serve Mistral/Cohere/SenseNova lanes; the 5M/day pool is shared — budget 150M is the pool, not per-model',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  experiential: generic('experiential', 'https://api.experientiallabs.ai/v1', (e) => EXPERIENTIAL_FREE.has(e.id), DAY,
+    ['frozen Free core-model set (pricing page 2026-11-09: GPT-6 Luna + DeepSeek V4.1 Flash share 1M/day); Clef is a decision endpoint, not chat; Jev is existing-accounts-only',
+     'GET /v1/models requires a Bearer key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'temporary $1 card-verification charge (refunded) unlocks free models',
+     'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
+  llm7: generic('llm7', 'https://api.llm7.io/v1', (e) => e.tier === 'turbo' && e.model_type === 'chat' && e.usage_based_only !== true, SIX_HOURS,
+    ['tier == "turbo" and model_type == "chat", not usage_based_only (live /v1/models 2026-11-09: 4 turbo chat models; the other 64 are Pro)',
+     'free token: 100K tokens/day rolling 24h (TERMS.md 2026-10-15); anonymous access reaches the same turbo models at lower rates',
+     'ToS §3A: no resale/proxy/downstream access without prior written approval — routing here needs approval',
+     'robots.txt carries content-signal lines only, no Disallow (checked 2026-11-09) — polls run']),
+  navy: generic('navy', 'https://api.navy/v1', (e) => e.premium === false && e.endpoint === '/v1/chat/completions', SIX_HOURS,
+    ['premium == false and endpoint == "/v1/chat/completions" (live /v1/models 2026-11-09: 70 chat of 88 non-premium; the other 18 are image/audio/embeddings/moderation)',
+     'free plan is 150K tokens/day; non-premium models draw from it at token_multiplier rates — budget 4.5M is the pool, not per-model',
+     'live smoke tests required an explicit User-Agent header (adapter); the scraper sends its own UA — watch for 403s',
+     'robots.txt fetch 403s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
+  aion: generic('aion', 'https://api.aionlabs.ai/v1', () => true, DAY,
+    ['whole 6-model roster is free-tier (live /v1/models 2026-11-09; the rate-limits doc gates tiers by request/token limits only — Free is default on signup, 20K/day)',
+     'first-party roleplay models; all priced per-token upstream, free within the daily cap',
+     'robots.txt carries content-signal lines only, no Disallow (checked 2026-11-09) — polls run']),
+  anyapi: generic('anyapi', 'https://api.anyapi.ai/v1', (e) => ANYAPI_FREE.has(e.id), DAY,
+    ['frozen :free set (model pages 2026-11-09: 4 ids, all ₳0/₳0; the Gemma page is titled "Gemma 3n 4B (free)" but its model-ID field reads google/gemma-4-26b-a4b-it:free)',
+     'GET /v1/models requires a key (401 without one, verified live 2026-11-09) — this entry reports errors until a list key exists',
+     'budgets are in proprietary ANY Tokens, not raw tokens — see the anyapi-any-tokens quirk in the seed',
+     'robots.txt fetch 403s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
 
   // ---- Explicit stubs (no usable list endpoint) ----
   groq: stub('groq',
