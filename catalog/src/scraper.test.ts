@@ -429,7 +429,7 @@ test('registry: every seed platform is registered; stubs carry a reason; no plat
   const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8')) as SeedCatalog;
   const platforms = seedPlatforms(seed);
   assert.deepEqual(unregisteredSeedPlatforms(seed), []);
-  assert.equal(platforms.length, 26);
+  assert.equal(platforms.length, 25);
   assert.deepEqual(registeredPlatforms(), platforms);
   for (const p of platforms) {
     const entry = REGISTRY[p];
@@ -445,7 +445,7 @@ test('registry: every seed platform is registered; stubs carry a reason; no plat
   }
   const kinds = Object.values(REGISTRY).map((e) => e.kind);
   assert.equal(kinds.filter((k) => k === 'concrete').length, 4);
-  assert.equal(kinds.filter((k) => k === 'generic').length, 15);
+  assert.equal(kinds.filter((k) => k === 'generic').length, 14);
   assert.equal(kinds.filter((k) => k === 'stub').length, 7);
 });
 

@@ -23,7 +23,7 @@
  * lane; a wrongly-included paid model is a billing incident.
  *
  * Intervals: 6h for churn-prone rosters (the four concrete scrapers,
- * tokenharbor, mixlayer, openrouter — all suffix-rule rosters that rotate);
+ * tokenharbor, mixlayer — all suffix-rule rosters that rotate);
  * 24h for the rest; 0 ("not scheduled") for stubs.
  */
 import { AihubmixScraper } from './aihubmix.ts';
@@ -180,8 +180,6 @@ export const REGISTRY: Record<string, RegistryEntry> = {
   typhoon: generic('typhoon', 'https://api.opentyphoon.ai/v1', (e) => e.id === 'typhoon-v2.5-30b-a3b-instruct', DAY,
     ['seeded-only filter: detects removals/renames, never adds — no free-id rule is established for the wider roster (research API, rate-limited)',
      'list shape is a bare array [{id, …}], not {data: […]} — the base class accepts both (found in the 2026-11-08 smoke run)']),
-  openrouter: generic('openrouter', 'https://openrouter.ai/api/v1', (e) => e.id.endsWith(':free'), SIX_HOURS,
-    [':free suffix is the free marker; /v1/models is public']),
   pollinations: generic('pollinations', 'https://gen.pollinations.ai/v1', () => true, DAY,
     ['free rule UNVERIFIED in the adapter — additions from this entry need operator review before --apply; seed rows here are media (flux/seedance), not chat ids',
      'gen.pollinations.ai/robots.txt disallows /v1/ (found in the 2026-11-08 smoke run) — polls skip by default']),

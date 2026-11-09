@@ -251,7 +251,6 @@ Notes from the probes:
 | arli | generic | `/v1/models`, frozen `{Qwen3.5-27B-Derestricted}` — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | inferbase | generic | `/v1/models`, frozen `{auto}` |
 | typhoon | generic | `/v1/models`, seeded-only (removal detection; no free-id rule for the wider roster) |
-| openrouter | generic | `/v1/models`, `:free` suffix |
 | pollinations | generic | `/v1/models`, all ids — free rule **unverified**; additions need operator review |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
