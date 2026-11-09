@@ -282,7 +282,7 @@ Notes from the probes:
 | modelscope | generic | `/v1/models`, frozen chat set (36 of 38 live; the 2 Qwen-Image-Edit ids are image editing, not chat) |
 | qianfan | generic | `/v2/models`, frozen free set (5 ERNIE Speed/Lite/Tiny ids, official 2024-05-21 announcement) — but the list endpoint 429s keyless, so this entry reports errors until a list key exists; a conflicting retirement claim (single secondary source, no official notice found) is flagged in the registry entry |
 | xfyun | generic | `/v1/models`, frozen `{lite}` (official docs: Lite "can be used for free") — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (11 of 13 live; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
+| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (9 of 11 live; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
