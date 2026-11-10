@@ -138,6 +138,36 @@ test('AA: accepts the index as a nested { value } object', () => {
   assert.equal(r.scores.get('groq:llama-3.3-70b-versatile')?.aa, 50);
 });
 
+test('AA: performance_v3 rows still parse (Dec 10 2026 migration) — performance fields are never read', () => {
+  const r = parseAaResponse(
+    {
+      intelligence_index_version: 5,
+      data: [
+        {
+          slug: 'llama-3-3-70b-instruct',
+          name: 'Llama 3.3 70B Instruct',
+          evaluations: { artificial_analysis_intelligence_index: 45 },
+          // Post-migration shape: performance_v3 present, legacy performance emptied.
+          performance_v3: { output_speed: 120, time_to_first_token: 0.4 },
+          performance: {},
+        },
+        {
+          slug: 'llama-3-1-8b-instruct',
+          name: 'Llama 3.1 8B Instruct',
+          evaluations: { artificial_analysis_intelligence_index: 30 },
+          performance: null,
+        },
+      ],
+    },
+    TEST_MAP,
+    FETCHED_AT,
+  );
+  assert.equal(r.scores.get('groq:llama-3.3-70b-versatile')?.aa, 45);
+  assert.equal(r.scores.get('groq:llama-3.1-8b-instant')?.aa, 30);
+  assert.equal(r.matchedCount, 3);
+  assert.deepEqual(r.unscored, []);
+});
+
 test('AA: version mismatch (v4) refuses to parse — never mix versions', () => {
   assert.throws(
     () => parseAaResponse({ intelligence_index_version: 4, data: [] }, TEST_MAP, FETCHED_AT),

@@ -28,6 +28,18 @@
  *    reports unscored rows); if AA renames it, fix the parser here.
  *    AA Free data is for internal use only — scores are folded into
  *    intelligenceRank and NEVER redistributed (see ranking.ts hard rule).
+ *    PERFORMANCE_V3 (2026-12-10): AA emailed 2026-11-10 that the
+ *    performance fields on language-model/provider endpoints stop
+ *    returning data on 2026-12-10, replaced by performance_v3 (new
+ *    methodology v3.0.0, 2026-11-03: multi-turn agentic workloads,
+ *    headline output speed averaged over 5 days). This parser never
+ *    reads performance fields — only the Intelligence Index above — so
+ *    the migration should not affect ranking ingestion. The regression
+ *    test "AA: performance_v3 rows still parse" pins that: a row
+ *    carrying performance_v3 (or an emptied performance object) still
+ *    yields its Intelligence Index score. If AA ever moves the
+ *    Intelligence Index itself, that is a separate change and the
+ *    version-mismatch guard above will refuse to merge.
  *
  *  - BenchLM, BenchAlign v5.8 Overall:
  *      GET https://data.benchlm.ai/v1/rankings/current?surface=overall
