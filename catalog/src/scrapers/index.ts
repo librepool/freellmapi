@@ -333,15 +333,18 @@ const QIANFAN_FREE: ReadonlySet<string> = new Set([
   'ernie-tiny-8k',
 ]);
 /** AI Horde models with at least one worker online (live keyless
- *  /v1/models 2026-11-09: 11 ids; 9 seeded). The list IS the
+ *  /v1/models 2026-11-10: 14 ids; 5 seeded). The list IS the
  *  currently-online volunteer roster — it rotates by the hour, so the
  *  frozen set is the filter; additions need operator review. The two
  *  `debug-` ids are test deployments, not catalog entries.
  *  Orion-26B-A4B-v1.1 and Underdog-Saluki-27B-1.0-IQ2-mix-MTP-abliterated
  *  lost all workers and were removed from the seed 2026-11-09 (live
  *  re-check confirms); they stay in this set so the scraper re-reports
- *  them as additions if workers return. A newcomer,
- *  koboldcpp/gemma-4-E4B-it, appeared the same morning and is not yet
+ *  them as additions if workers return. Gemma-4-E4B-it-Ultra-Uncensored-
+ *  Heretic, Qwen3-1.7B, Qwen3-4B and zerofata/G4-MeroMero-26B-A4B lost
+ *  all workers and were removed 2026-11-10 (live re-check confirms);
+ *  also kept in the set. A newcomer,
+ *  koboldcpp/gemma-4-E4B-it, appeared 2026-11-09 and is not yet
  *  in the set — operator review before adding. */
 const AIHORDE_FREE: ReadonlySet<string> = new Set([
   'koboldcpp/G4-MeroMero-26B-A4B-it-uncensored-heretic',
@@ -516,7 +519,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
      'robots.txt allows / (checked 2026-11-09) — polls run']),
   requesty: generic('requesty', 'https://router.requesty.ai/v1',
     (e) => e.api === 'chat' && e.input_price === 0 && e.output_price === 0 && e.id !== 'nvidia/nemotron-3.5-content-safety', SIX_HOURS,
-    ['zero price (input_price 0 + output_price 0) + api == "chat" (live /v1/models 2026-11-09: 821 models, 13 zero-price chat; Requesty\'s own free page confirms 13 zero-cost models)',
+    ['zero price (input_price 0 + output_price 0) + api == "chat" (live /v1/models 2026-11-10: 8 zero-price chat, all seeded; the content-safety classifier is also gone from the live list)',
      'nvidia/nemotron-3.5-content-safety is zero-price but a guard classifier — excluded, no seed precedent for guards',
      'free tier is 200 req/day on free models; Requesty says the free catalogue changes as providers add/remove models — 6h churn check',
      'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
@@ -560,7 +563,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
      'Lite does NOT support tool calling (Max/Ultra only) — the seed row carries supportsTools false; real-name verification required on the account',
      'robots.txt fetch 401s (checked 2026-11-09) — a non-2xx robots fetch means "no restriction", so polls run']),
   aihorde: generic('aihorde', 'https://oai.aihorde.net/v1', (e) => AIHORDE_FREE.has(e.id), DAY,
-    ['frozen set of models with ≥1 worker online (live keyless /v1/models 2026-11-09: 11 ids, 9 seeded; Orion-26B-A4B-v1.1 + Underdog-Saluki-27B-1.0-IQ2-mix-MTP-abliterated lost all workers and left the seed — kept in the frozen set so the scraper re-reports them if workers return)',
+    ['frozen set of models with ≥1 worker online (live keyless /v1/models 2026-11-10: 14 ids, 5 seeded; Gemma-4-E4B-it-Ultra-Uncensored-Heretic, Qwen3-1.7B, Qwen3-4B + zerofata/G4-MeroMero-26B-A4B lost all workers and left the seed 2026-11-10 — kept in the frozen set so the scraper re-reports them if workers return)',
      'volunteer kudos queue: anonymous key 0000000000 works at lowest priority, a registered key raises priority; no monthly cap, no key in the usual sense — the adapter is keyless',
      'the worker roster rotates by the hour — the frozen set is the filter so the scraper watches for seeded models losing all workers without flooding on every ephemeral worker; NOT a 6h churn candidate',
      'queue-based: calls can take tens of seconds, no upstream streaming, max_tokens >= 16, usage reported as kudos (synthesized into token counts)',

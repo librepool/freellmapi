@@ -275,14 +275,14 @@ Notes from the probes:
 | agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
 | routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
 | bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 7 of 127 live) |
-| requesty | generic | `/v1/models`, zero price + `api == "chat"` (13 zero-price chat of 821 live; content-safety classifier excluded) |
+| requesty | generic | `/v1/models`, zero price + `api == "chat"` (8 zero-price chat; content-safety classifier excluded) |
 | sealion | generic | `/v1/models`, frozen docs-sourced set (2 chat ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | orcarouter | generic | `/v1/models`, `-free` suffix + the `orcarouter/free` auto route (7 of 215 live) |
 | unorouter | generic | `/v1/models`, `:free` suffix + `openai` endpoint type, excluding embeddings / image-generation / whisper (110 chat of 180 `:free`, 341 live) — but `api.unorouter.com/robots.txt` disallows `/`, so polls skip by default |
 | modelscope | generic | `/v1/models`, frozen chat set (36 of 38 live; the 2 Qwen-Image-Edit ids are image editing, not chat) |
 | qianfan | generic | `/v2/models`, frozen free set (5 ERNIE Speed/Lite/Tiny ids, official 2024-05-21 announcement) — but the list endpoint 429s keyless, so this entry reports errors until a list key exists; a conflicting retirement claim (single secondary source, no official notice found) is flagged in the registry entry |
 | xfyun | generic | `/v1/models`, frozen `{lite}` (official docs: Lite "can be used for free") — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (9 of 11 live; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
+| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (5 of 14 live; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
