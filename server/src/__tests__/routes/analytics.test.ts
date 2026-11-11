@@ -399,6 +399,57 @@ describe('Analytics API', () => {
     });
   });
 
+  describe('extended by-model fields (Phase A)', () => {
+    it('adds TTFT p50/p95 and tokens/sec per model', async () => {
+      // 10 success rows: ttfb 10..100, 1000 output tokens in 100ms each.
+      // Nearest-rank: p50 = 50 (offset 4), p95 = 90 (offset 8); throughput
+      // 1000 / 0.1s = 10000 tok/s on every row.
+      for (let ms = 10; ms <= 100; ms += 10) {
+        insertRaw({ platform: 'groq', modelId: 'fast-model', status: 'success', outputTokens: 1000, latencyMs: 100, ttfbMs: ms, createdAt: '2026-05-29 11:00:00' });
+      }
+
+      const { status, body } = await request(app, '/api/analytics/by-model?range=24h');
+
+      expect(status).toBe(200);
+      const row = body.find((r: any) => r.modelId === 'fast-model');
+      expect(row.p50TtfbMs).toBe(50);
+      expect(row.p95TtfbMs).toBe(90);
+      expect(row.avgTokensPerSecond).toBe(10000);
+    });
+
+    it('reports null TTFT percentiles and tokens/sec when no rows qualify', async () => {
+      insertRaw({ platform: 'nokey', modelId: 'quiet-model', status: 'success', outputTokens: 0, latencyMs: 0, ttfbMs: null, createdAt: '2026-05-29 11:00:00' });
+
+      const { status, body } = await request(app, '/api/analytics/by-model?range=24h');
+
+      expect(status).toBe(200);
+      const row = body.find((r: any) => r.modelId === 'quiet-model');
+      expect(row.p50TtfbMs).toBeNull();
+      expect(row.p95TtfbMs).toBeNull();
+      expect(row.avgTokensPerSecond).toBeNull();
+    });
+
+    it('keeps TTFT percentiles per model and counts throughput on success rows only', async () => {
+      insertRaw({ platform: 'groq', modelId: 'model-a', status: 'success', outputTokens: 1000, latencyMs: 100, ttfbMs: 100, createdAt: '2026-05-29 11:00:00' });
+      // An error row with output tokens and a slow first byte must not move
+      // model-b's throughput (no qualifying success row) or leak into
+      // model-a's percentiles.
+      insertRaw({ platform: 'groq', modelId: 'model-b', status: 'error', outputTokens: 1000, latencyMs: 100, ttfbMs: 1000, error: 'boom', createdAt: '2026-05-29 11:01:00' });
+
+      const { status, body } = await request(app, '/api/analytics/by-model?range=24h');
+
+      expect(status).toBe(200);
+      const a = body.find((r: any) => r.modelId === 'model-a');
+      expect(a.p50TtfbMs).toBe(100);
+      expect(a.p95TtfbMs).toBe(100);
+      expect(a.avgTokensPerSecond).toBe(10000);
+      const b = body.find((r: any) => r.modelId === 'model-b');
+      expect(b.p50TtfbMs).toBe(1000);
+      expect(b.p95TtfbMs).toBe(1000);
+      expect(b.avgTokensPerSecond).toBeNull();
+    });
+  });
+
   describe('by-key endpoint', () => {
     it('groups usage per key, joins the label, and keeps deleted keys', async () => {
       getDb().prepare('DELETE FROM api_keys').run();

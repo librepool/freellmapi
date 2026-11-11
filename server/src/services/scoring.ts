@@ -433,6 +433,42 @@ export function headroomFactor(usedTokens: number, budgetTokens: number, opts?: 
   return headroomRamp(1 - usedTokens / budgetTokens, opts);
 }
 
+// ── Guardrail: burn-projected monthly headroom (Phase A) ───────────────────
+// The static factor above only reacts once the month's budget is nearly spent:
+// a model that burns its whole budget in the first week still scores 1 until
+// it is almost gone. Project month-end usage from the observed burn rate
+// instead — used-so-far scaled by the elapsed fraction of the month — and run
+// the projection through the same ramp. The projection can only demote
+// earlier than the static factor, never promote above it: projected usage is
+// always >= usage so far (the elapsed fraction is <= 1), so the projected
+// remaining fraction is always <= the static one and the ramp is monotonic.
+// Callers take min(static, burn-projected); the min is belt-and-braces for
+// that ordering, not a second opinion.
+//
+// The month is UTC, matching the datetime('now', 'start of month') window
+// refreshStatsCache sums monthlyUsedTokens over — a local-time month would
+// disagree with the usage figure by up to a day at the boundaries.
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function burnAdjustedHeadroomFactor(
+  usedTokens: number,
+  budgetTokens: number,
+  opts?: HeadroomThresholds,
+  now = new Date(),
+): number {
+  if (!budgetTokens || budgetTokens <= 0) return 1; // unknown budget → no opinion
+  const monthStartMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1);
+  const nextMonthStartMs = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
+  const monthMs = nextMonthStartMs - monthStartMs;
+  // Clamp elapsed to at least one day: on the 1st of the month a handful of
+  // tokens would otherwise project to a whole month at that burn rate. And
+  // at most the full month, so the projection never goes below the usage
+  // already observed.
+  const elapsedMs = Math.min(monthMs, Math.max(DAY_MS, now.getTime() - monthStartMs));
+  const projectedUsed = usedTokens / (elapsedMs / monthMs);
+  return headroomRamp(1 - projectedUsed / budgetTokens, opts);
+}
+
 /** The shared ramp both headroom guardrails ride: 1 while `remaining` (a 0..1
  *  fraction of the quota still available) is comfortable, then linear down to
  *  `floor` as it reaches zero. Factored out so the monthly-budget guardrail and

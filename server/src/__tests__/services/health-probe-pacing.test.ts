@@ -9,8 +9,10 @@ const {
   startHealthChecker,
   stopHealthChecker,
   HEALTH_CHECK_INTERVAL_MS,
+  HEALTH_CHECK_SCHEDULER_INTERVAL_MS,
   HEALTH_PASS_TIME_BUDGET_MS,
   RECENT_CHECK_SKIP_MS,
+  recentCheckSkipMsFor,
 } = await import('../../services/health.js');
 
 // #553: every enabled key was probed in raw DB order behind a concurrency-8
@@ -138,6 +140,27 @@ describe('recently-validated keys', () => {
     expect(RECENT_CHECK_SKIP_MS).toBeLessThan(HEALTH_CHECK_INTERVAL_MS);
   });
 
+  it('re-probes churn-platform keys sooner than non-churn keys (Phase A)', async () => {
+    // Both checked 2 minutes ago: past the churn skip (84s) but inside the
+    // default skip (3.5 min), so only the churn key is due this pass.
+    const churn = seedKey('openrouter');
+    getDb().prepare("UPDATE api_keys SET last_checked_at = datetime('now', '-2 minutes') WHERE id = ?").run(churn);
+    const steady = seedKey('groq');
+    getDb().prepare("UPDATE api_keys SET last_checked_at = datetime('now', '-2 minutes') WHERE id = ?").run(steady);
+
+    const clock = fakeClock();
+    const checked: number[] = [];
+    const result = await checkAllKeys({
+      now: clock.now,
+      sleep: clock.sleep,
+      concurrency: 1,
+      check: async (keyId: number) => { checked.push(keyId); },
+    });
+
+    expect(checked).toEqual([churn]);
+    expect(result.skippedKeyIds).toEqual([steady]);
+  });
+
   it('never skips a key sitting at status=error', async () => {
     const errored = seedKey('groq', { status: 'error' });
     getDb().prepare("UPDATE api_keys SET last_checked_at = datetime('now') WHERE id = ?").run(errored);
@@ -171,16 +194,22 @@ describe('recently-validated keys', () => {
 });
 
 describe('interval jitter', () => {
-  it('spreads the next pass around the base interval', () => {
-    expect(nextHealthCheckDelayMs(() => 0)).toBeLessThan(HEALTH_CHECK_INTERVAL_MS);
-    expect(nextHealthCheckDelayMs(() => 0.999)).toBeGreaterThan(HEALTH_CHECK_INTERVAL_MS);
+  it('spreads the next pass around the scheduler interval', () => {
+    // Phase A: the scheduler runs at min(default 5 min, churn 2 min), so the
+    // jitter band follows the scheduler interval, not the default alone.
+    expect(nextHealthCheckDelayMs(() => 0)).toBeLessThan(HEALTH_CHECK_SCHEDULER_INTERVAL_MS);
+    expect(nextHealthCheckDelayMs(() => 0.999)).toBeGreaterThan(HEALTH_CHECK_SCHEDULER_INTERVAL_MS);
     for (const r of [0, 0.25, 0.5, 0.75, 0.999]) {
       const delay = nextHealthCheckDelayMs(() => r);
-      expect(delay).toBeGreaterThanOrEqual(HEALTH_CHECK_INTERVAL_MS * 0.5);
-      expect(delay).toBeLessThanOrEqual(HEALTH_CHECK_INTERVAL_MS * 1.5);
-      // A jittered pass must never start before the recency window has closed,
-      // or the skip filter would swallow whole passes.
-      expect(delay).toBeGreaterThan(RECENT_CHECK_SKIP_MS);
+      expect(delay).toBeGreaterThanOrEqual(HEALTH_CHECK_SCHEDULER_INTERVAL_MS * 0.5);
+      expect(delay).toBeLessThanOrEqual(HEALTH_CHECK_SCHEDULER_INTERVAL_MS * 1.5);
+      // A jittered pass must never start before the churn recency window has
+      // closed, or the skip filter would swallow whole passes for the keys
+      // the faster cadence exists for. (Non-churn keys may legitimately be
+      // skipped on an extra pass — their window is the slower default — and
+      // are caught on the next one.) The 0.8 jitter floor vs the 0.7 skip
+      // factor keeps this true for any configured churn interval.
+      expect(delay).toBeGreaterThan(recentCheckSkipMsFor('openrouter'));
     }
   });
 

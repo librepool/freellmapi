@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import { initDb, getDb } from '../../db/index.js';
 import { encrypt } from '../../lib/crypto.js';
 import { getRoutingScores, refreshStatsCache } from '../../services/router.js';
@@ -29,6 +29,22 @@ describe('routing headroom scales the monthly budget by usable key count (#456)'
 
   beforeEach(() => {
     getDb().prepare('DELETE FROM api_keys').run();
+    // Phase A: the headroom guardrail now also projects the observed burn
+    // rate, so the factor depends on the day of the month — 950k burned early
+    // in the month projects near the pooled budget and demotes, while the same
+    // usage late in the month does not. Pin the clock to the 28th so the
+    // pooling assertion below is deterministic instead of passing only after
+    // ~mid-month. (The usage row itself is dated by SQLite's real clock, so
+    // it stays inside the current calendar month either way.)
+    const pinned = new Date();
+    pinned.setUTCDate(28);
+    pinned.setUTCHours(12, 0, 0, 0);
+    vi.useFakeTimers();
+    vi.setSystemTime(pinned);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   function headroomFor(): number {

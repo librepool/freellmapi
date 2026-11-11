@@ -300,6 +300,12 @@ analyticsRouter.get('/by-model', (req: Request, res: Response) => {
       -- Rate over success+error only: 'canceled' (#752) is neither.
       SUM(CASE WHEN r.status = 'success' THEN 1 ELSE 0 END) * 100.0 / NULLIF(SUM(CASE WHEN r.status <> 'canceled' THEN 1 ELSE 0 END), 0) as success_rate,
       AVG(r.latency_ms) as avg_latency_ms,
+      COUNT(r.ttfb_ms) as ttfb_count,
+      -- Throughput over success rows only, same per-row formula as
+      -- /by-platform: output tokens per latency second. Rows with no output
+      -- or no latency yield NULL and drop out of the average.
+      AVG(CASE WHEN r.status = 'success' AND r.output_tokens > 0 AND r.latency_ms > 0
+        THEN r.output_tokens / (r.latency_ms / 1000.0) ELSE NULL END) as avg_tokens_per_second,
       SUM(r.input_tokens) as total_input_tokens,
       SUM(r.output_tokens) as total_output_tokens,
       SUM(CASE WHEN r.requested_model = r.model_id THEN 1 ELSE 0 END) as pinned_requests,
@@ -317,6 +323,25 @@ analyticsRouter.get('/by-model', (req: Request, res: Response) => {
     ORDER BY requests DESC
   `).all(FALLBACK_INPUT_PER_M, FALLBACK_OUTPUT_PER_M, since) as any[];
 
+  // TTFT percentiles are per-group nearest-rank values over the non-null
+  // ttfb_ms rows, same pattern /by-platform uses for p95 latency: one small
+  // ORDER BY/OFFSET query per group (the group count is tiny). The WHERE must
+  // match the grouping exactly — platform AND endpoint AND model — or one
+  // model's percentiles would bleed in another model's first-byte times.
+  const ttfbStmt = db.prepare(`
+    SELECT r.ttfb_ms FROM requests r
+    LEFT JOIN api_keys k ON k.id = r.key_id
+    WHERE r.created_at >= ? AND r.platform = ? AND ${ENDPOINT_ID_SQL} = ? AND r.model_id = ? AND r.ttfb_ms IS NOT NULL
+    ORDER BY r.ttfb_ms ASC
+    LIMIT 1 OFFSET ?
+  `);
+  const ttfbAt = (r: any, fraction: number): number | null => {
+    const count = r.ttfb_count ?? 0;
+    if (count === 0) return null;
+    const row = ttfbStmt.get(since, r.platform, r.base_url, r.model_id, Math.floor((count - 1) * fraction)) as { ttfb_ms: number } | undefined;
+    return row ? Math.round(row.ttfb_ms) : null;
+  };
+
   res.json(rows.map(r => ({
     platform: r.platform,
     // Same row identity as /by-platform, so a model row and a provider row for
@@ -329,6 +354,16 @@ analyticsRouter.get('/by-model', (req: Request, res: Response) => {
     // success_rate is NULL when every row in the group was canceled.
     successRate: Math.round((r.success_rate ?? 0) * 10) / 10,
     avgLatencyMs: Math.round(r.avg_latency_ms),
+    // TTFT spread over rows that recorded a first-byte time; null when none
+    // did (non-streaming traffic), same nearest-rank convention as the
+    // summary percentiles.
+    p50TtfbMs: ttfbAt(r, 0.5),
+    p95TtfbMs: ttfbAt(r, 0.95),
+    // Mean output tokens per latency second over qualifying success rows;
+    // null when no row qualifies.
+    avgTokensPerSecond: r.avg_tokens_per_second != null
+      ? Math.round(r.avg_tokens_per_second * 10) / 10
+      : null,
     totalInputTokens: r.total_input_tokens ?? 0,
     totalOutputTokens: r.total_output_tokens ?? 0,
     // Requests this model served because the client pinned it by name.

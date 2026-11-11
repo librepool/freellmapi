@@ -20,7 +20,7 @@ import {
   BANDIT_PRESETS, DEFAULT_STRATEGY, type PresetStrategy, type RoutingStrategy, type RoutingWeights,
   type KeySelectionStrategy,
   reliabilityPosterior, expectedReliability, sampleBeta,
-  speedScore, intelligenceScore, intelligenceComposite, headroomFactor, rateWindowHeadroomFactor,
+  speedScore, intelligenceScore, intelligenceComposite, headroomFactor, burnAdjustedHeadroomFactor, rateWindowHeadroomFactor,
   rateLimitFactor, combineScore,
   peakAdjustedWeights, taskAdjustedWeights, TASK_WEIGHT_SHARE, isValidPeakHour, isValidTimezone,
   DEFAULT_PEAK_HOURS, type PeakHoursConfig,
@@ -1126,7 +1126,15 @@ function scoreChainEntry(
   // ONCE per chain by the caller, not per entry — getSetting is an uncached
   // SELECT, so reading it here cost two extra SQLite round-trips per model per
   // request, the same reason `weights` and `keyCounts` are hoisted.
-  const monthlyHeadroom = headroomFactor(stats?.monthlyUsedTokens ?? 0, budget, headroomCfg);
+  //
+  // Phase A: the WORSE of the static month-to-date factor and the
+  // burn-projected one. A model burning fast early in the month is demoted
+  // before its budget is nearly spent; an on-pace model is untouched, because
+  // the burn projection can never exceed the static factor (see scoring.ts).
+  const monthlyHeadroom = Math.min(
+    headroomFactor(stats?.monthlyUsedTokens ?? 0, budget, headroomCfg),
+    burnAdjustedHeadroomFactor(stats?.monthlyUsedTokens ?? 0, budget, headroomCfg),
+  );
 
   // The same guardrail, driven by live rpm/rpd/tpm/tpd utilization instead of
   // the monthly budget (#899). Most free tiers publish a daily request or token

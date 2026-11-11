@@ -36,6 +36,50 @@ const CHECK_INTERVAL_MS = getCheckIntervalMs();
  *  nextHealthCheckDelayMs). Exported for tests. */
 export const HEALTH_CHECK_INTERVAL_MS = CHECK_INTERVAL_MS;
 
+// Phase A live-signal routing (design note §4): the churn-prone platforms
+// below get a faster health cadence — their free rosters change fastest, so a
+// stale key verdict costs the most there. Non-churn platforms keep the
+// default interval exactly; only the pass itself runs more often (see
+// HEALTH_CHECK_SCHEDULER_INTERVAL_MS) and the per-key recency skip below
+// still paces them at the default cadence.
+export const CHURN_PLATFORMS: readonly string[] = [
+  'aihubmix', 'nous', 'llmtr', 'airforce', 'tokenharbor', 'mixlayer',
+  'openrouter', 'xkiro', 'llm7', 'navy', 'nvidia', 'kilo',
+  'routeway', 'bazaarlink', 'requesty', 'orcarouter',
+];
+const CHURN_PLATFORM_SET = new Set<string>(CHURN_PLATFORMS);
+
+/** True when this platform is one of the churn-prone set above. */
+export function isChurnPlatform(platform: string): boolean {
+  return CHURN_PLATFORM_SET.has(platform);
+}
+
+const DEFAULT_CHURN_CHECK_INTERVAL_MS = 2 * 60 * 1000; // 2 minutes
+
+/** Churn cadence, tunable via HEALTH_CHECK_INTERVAL_MS_CHURN. Same 60s floor
+ *  and invalid-value fallback as the default interval above. */
+function getChurnCheckIntervalMs(): number {
+  const n = positiveIntEnv(process.env.HEALTH_CHECK_INTERVAL_MS_CHURN, DEFAULT_CHURN_CHECK_INTERVAL_MS);
+  return n < MIN_CHECK_INTERVAL_MS ? DEFAULT_CHURN_CHECK_INTERVAL_MS : n;
+}
+const CHURN_CHECK_INTERVAL_MS = getChurnCheckIntervalMs();
+
+/** The churn interval in effect. Exported for tests. */
+export const HEALTH_CHECK_INTERVAL_MS_CHURN = CHURN_CHECK_INTERVAL_MS;
+
+/** Effective health cadence for one platform: the churn interval for
+ *  churn-prone platforms, the default interval for everything else. */
+export function healthCheckIntervalMsFor(platform: string): number {
+  return isChurnPlatform(platform) ? CHURN_CHECK_INTERVAL_MS : CHECK_INTERVAL_MS;
+}
+
+/** Base cadence of the scheduled pass: the faster of the default and churn
+ *  intervals, so churn-platform keys are re-probed on the churn cadence.
+ *  Non-churn keys are unaffected in effect — the per-key recency skip below
+ *  still paces them at the default interval, they are simply skipped on the
+ *  extra passes in between. */
+export const HEALTH_CHECK_SCHEDULER_INTERVAL_MS = Math.min(CHECK_INTERVAL_MS, CHURN_CHECK_INTERVAL_MS);
+
 // Jitter applied to every scheduled interval, ±20% (4–6 minutes). Two gateways
 // started by the same deploy — or one gateway restarted on a cron — otherwise
 // probe the same provider on the same phase forever; a per-run offset breaks
@@ -46,8 +90,18 @@ const CHECK_INTERVAL_JITTER = 0.2;
 // re-asking a provider about a credential it just answered for is exactly the
 // traffic #553 is about. Capped at 70% of the configured interval so a faster
 // HEALTH_CHECK_INTERVAL_MS can never skip a whole pass' worth of keys (the
-// invariant nextHealthCheckDelayMs asserts).
+// invariant nextHealthCheckDelayMs asserts). This is the DEFAULT (non-churn)
+// skip; see recentCheckSkipMsFor for the per-platform form.
 export const RECENT_CHECK_SKIP_MS = Math.min(3.5 * 60 * 1000, CHECK_INTERVAL_MS * 0.7);
+
+/** Per-platform recency skip: a key is re-due once 70% of its platform's
+ *  health interval has elapsed (same shape as RECENT_CHECK_SKIP_MS, with the
+ *  same 3.5-minute absolute cap). Churn-platform keys are therefore re-due
+ *  after churnInterval * 0.7 (84s by default); every other platform keeps
+ *  exactly the skip it had before. */
+export function recentCheckSkipMsFor(platform: string): number {
+  return Math.min(3.5 * 60 * 1000, healthCheckIntervalMsFor(platform) * 0.7);
+}
 
 // #1599: how often the scheduled pass re-asks about a key parked at 'error' on
 // a provider that must not be polled (supportsKeyPolling === false). Healthy
@@ -57,8 +111,10 @@ export const NO_POLL_ERROR_REPROBE_MS = 60 * 60 * 1000;
 // Wall-clock ceiling for one pass. Per-provider spacing is compressed rather
 // than allowed to push a pass past this, so a large fleet still finishes well
 // inside the interval it is scheduled on and the dashboard never shows
-// statuses from two passes ago.
-export const HEALTH_PASS_TIME_BUDGET_MS = CHECK_INTERVAL_MS / 2;
+// statuses from two passes ago. Sized off the scheduler interval (the faster
+// of the default and churn cadences), since that is the interval the pass is
+// actually scheduled on.
+export const HEALTH_PASS_TIME_BUDGET_MS = HEALTH_CHECK_SCHEDULER_INTERVAL_MS / 2;
 
 /** Parallel key probes per health pass. Tunable because the right number depends
  *  on how many keys share one provider; 0 or a bad value falls back to the default. */
@@ -609,7 +665,10 @@ async function runHealthPass(opts: HealthPassOptions): Promise<HealthPassResult>
     // (the router writes that status, and last_checked_at with it), so it is
     // never skipped — it is the one key whose verdict is worth re-asking for.
     if (row.status === 'error') return true;
-    if (row.age_ms !== null && row.age_ms < RECENT_CHECK_SKIP_MS) {
+    // Per-platform recency skip (Phase A): churn-platform keys are re-due
+    // after 70% of the churn interval, all others after 70% of the default
+    // interval — exactly the skip they had before this change.
+    if (row.age_ms !== null && row.age_ms < recentCheckSkipMsFor(row.platform)) {
       skippedKeyIds.push(row.id);
       return false;
     }
@@ -675,10 +734,12 @@ async function runHealthPass(opts: HealthPassOptions): Promise<HealthPassResult>
   return { checkedKeyIds, skippedKeyIds };
 }
 
-/** Delay until the next scheduled pass: the base interval ±20%, so restarts and
- *  co-deployed gateways don't stay phase-locked on the same providers. */
+/** Delay until the next scheduled pass: the scheduler interval ±20%, so restarts and
+ *  co-deployed gateways don't stay phase-locked on the same providers. The
+ *  scheduler interval is the faster of the default and churn cadences, so the
+ *  jitter band follows it — never the slower default alone. */
 export function nextHealthCheckDelayMs(jitter: () => number = Math.random): number {
-  return Math.round(CHECK_INTERVAL_MS * (1 + (jitter() * 2 - 1) * CHECK_INTERVAL_JITTER));
+  return Math.round(HEALTH_CHECK_SCHEDULER_INTERVAL_MS * (1 + (jitter() * 2 - 1) * CHECK_INTERVAL_JITTER));
 }
 
 let cancelHealthCheck: (() => void) | null = null;
@@ -688,7 +749,7 @@ export function startHealthChecker(scheduler: Scheduler): void {
   if (healthCheckerRunning) return;
   healthCheckerRunning = true;
   console.log(
-    `[Health] Starting health checker (every ~${CHECK_INTERVAL_MS / 1000}s ±${CHECK_INTERVAL_JITTER * 100}%)`,
+    `[Health] Starting health checker (every ~${HEALTH_CHECK_SCHEDULER_INTERVAL_MS / 1000}s ±${CHECK_INTERVAL_JITTER * 100}%)`,
   );
   // Self-rescheduling one-shot timers rather than a fixed interval: each pass
   // picks its own jittered delay (see nextHealthCheckDelayMs), and the next one

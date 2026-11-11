@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import { initDb } from '../../db/index.js';
-import { startHealthChecker, stopHealthChecker, HEALTH_CHECK_INTERVAL_MS } from '../../services/health.js';
+import { startHealthChecker, stopHealthChecker, HEALTH_CHECK_SCHEDULER_INTERVAL_MS } from '../../services/health.js';
 import type { Scheduler } from '../../lib/scheduler.js';
 
 function makeScheduler() {
@@ -31,14 +31,16 @@ describe('startHealthChecker / stopHealthChecker', () => {
   });
 
   // The pass re-arms itself after each run with a fresh jittered delay (#553)
-  // instead of sitting on a fixed 5-minute interval, so a fleet's probes don't
-  // stay phase-locked to the same instant on every provider.
-  it('arms one jittered timer around the 5-minute base interval', () => {
+  // instead of sitting on a fixed interval, so a fleet's probes don't stay
+  // phase-locked to the same instant on every provider. The base interval is
+  // the scheduler interval — min(default 5 min, churn 2 min) by default, so
+  // churn-platform keys are re-probed on the churn cadence (Phase A).
+  it('arms one jittered timer around the scheduler interval', () => {
     const { scheduler, after } = makeScheduler();
     startHealthChecker(scheduler);
     expect(after).toHaveLength(1);
-    expect(after[0].ms).toBeGreaterThanOrEqual(HEALTH_CHECK_INTERVAL_MS * 0.8);
-    expect(after[0].ms).toBeLessThanOrEqual(HEALTH_CHECK_INTERVAL_MS * 1.2);
+    expect(after[0].ms).toBeGreaterThanOrEqual(HEALTH_CHECK_SCHEDULER_INTERVAL_MS * 0.8);
+    expect(after[0].ms).toBeLessThanOrEqual(HEALTH_CHECK_SCHEDULER_INTERVAL_MS * 1.2);
   });
 
   it('is idempotent — double-start registers only one job', () => {

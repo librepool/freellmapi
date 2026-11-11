@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   BANDIT_PRESETS, combineScore, speedScore, intelligenceScore, intelligenceComposite,
-  headroomFactor, rateWindowHeadroomFactor, rateLimitFactor, sampleBeta, reliabilityPosterior,
+  headroomFactor, burnAdjustedHeadroomFactor, rateWindowHeadroomFactor, rateLimitFactor, sampleBeta, reliabilityPosterior,
   expectedReliability, SPEED_PRIOR, HEADROOM_FLOOR,
   isPeakHours, peakAdjustedWeights, hourInTimezone, isValidPeakHour, isValidTimezone,
   isPeakExemptStrategy, DEFAULT_PEAK_HOURS, PEAK_SPEED_TO_RELIABILITY,
@@ -184,6 +184,89 @@ describe('scoring: guardrails', () => {
     expect(rateLimitFactor(0)).toBe(1);
     expect(rateLimitFactor(10)).toBeCloseTo(0.4, 5);
     expect(rateLimitFactor(100)).toBeCloseTo(0.4, 5); // clamped
+  });
+});
+
+describe('scoring: burn-projected headroom (Phase A)', () => {
+  // June 2026 has 30 days, so the 16th at 00:00 UTC is exactly halfway
+  // through the month (elapsed fraction 0.5) — clean arithmetic, no rounding.
+  const MID_JUNE = new Date('2026-06-16T00:00:00Z');
+  const BUDGET = 1_000_000;
+
+  it('clamps the elapsed month to at least one day, so the 1st cannot explode the projection', () => {
+    // 30 minutes into June: unclamped, 10k used would project to ~14.4M
+    // (10k / (0.5h / 720h)) and hit the floor. Clamped to 1 day it projects
+    // to 300k — 70% remaining, no opinion.
+    expect(burnAdjustedHeadroomFactor(10_000, BUDGET, undefined, new Date('2026-06-01T00:30:00Z'))).toBe(1);
+    // ...while a genuinely heavy first day still demotes: 500k on day 1
+    // projects to 15M, past the budget.
+    expect(burnAdjustedHeadroomFactor(500_000, BUDGET, undefined, new Date('2026-06-01T00:30:00Z')))
+      .toBeCloseTo(HEADROOM_FLOOR, 5);
+  });
+
+  it('is 1 for a mid-month burn on pace to stay within budget', () => {
+    // Halfway through the month with 400k of 1M used → projects to 800k,
+    // 20% remaining — exactly the ramp start, so still no opinion. The
+    // projected remaining lands a float ulp under 0.2, same as the
+    // rateWindowHeadroomFactor(0.8) case in the guardrails tests above.
+    expect(burnAdjustedHeadroomFactor(400_000, BUDGET, undefined, MID_JUNE)).toBeCloseTo(1, 9);
+    // Well under pace projects further inside the budget.
+    expect(burnAdjustedHeadroomFactor(100_000, BUDGET, undefined, MID_JUNE)).toBe(1);
+  });
+
+  it('hits the floor when the burn projects past the budget', () => {
+    // Halfway through with 600k used → projects to 1.2M, past the budget.
+    expect(burnAdjustedHeadroomFactor(600_000, BUDGET, undefined, MID_JUNE))
+      .toBeCloseTo(HEADROOM_FLOOR, 5);
+    // Past the budget already is past it projected, too.
+    expect(burnAdjustedHeadroomFactor(1_200_000, BUDGET, undefined, MID_JUNE))
+      .toBeCloseTo(HEADROOM_FLOOR, 5);
+  });
+
+  it('unknown budget yields no opinion (factor 1)', () => {
+    expect(burnAdjustedHeadroomFactor(999_999, 0, undefined, MID_JUNE)).toBe(1);
+    expect(burnAdjustedHeadroomFactor(999_999, -5, undefined, MID_JUNE)).toBe(1);
+  });
+
+  it('converges to the static factor at month end', () => {
+    // On the last day the elapsed fraction is ~1, so the projection is the
+    // usage itself and the two guardrails agree.
+    const lastDay = new Date('2026-06-30T23:59:00Z');
+    expect(burnAdjustedHeadroomFactor(900_000, BUDGET, undefined, lastDay))
+      .toBeCloseTo(headroomFactor(900_000, BUDGET), 2);
+  });
+
+  it('honors tunable rampStart/floor thresholds like the static factor', () => {
+    const opts = { rampStart: 0.5, floor: 0.3 };
+    // Halfway, 300k used → projects to 600k, 40% remaining:
+    // 0.3 + 0.7·(0.4/0.5) = 0.86.
+    expect(burnAdjustedHeadroomFactor(300_000, BUDGET, opts, MID_JUNE)).toBeCloseTo(0.86, 5);
+    expect(burnAdjustedHeadroomFactor(BUDGET, BUDGET, opts, MID_JUNE)).toBeCloseTo(0.3, 5);
+  });
+
+  it('never exceeds the static factor — burn can only demote earlier', () => {
+    // The projection divides by an elapsed fraction <= 1, so projected usage
+    // is always >= usage so far and the ramp is monotonic: the burn factor
+    // is <= the static factor for every (date, usage) pair. The router takes
+    // min(static, burn), so the combined monthly headroom inherits this.
+    const dates = [
+      new Date('2026-06-01T00:00:00Z'),
+      new Date('2026-06-01T12:00:00Z'),
+      new Date('2026-06-05T00:00:00Z'),
+      new Date('2026-06-16T00:00:00Z'),
+      new Date('2026-06-28T00:00:00Z'),
+      new Date('2026-02-14T00:00:00Z'), // 28-day month
+      new Date('2026-02-28T23:00:00Z'),
+    ];
+    const usages = [0, 1, 10_000, 100_000, 400_000, 500_000, 800_000, 900_000, 1_000_000, 1_500_000];
+    for (const now of dates) {
+      for (const used of usages) {
+        for (const opts of [undefined, { rampStart: 0.5, floor: 0.3 } as const]) {
+          expect(burnAdjustedHeadroomFactor(used, BUDGET, opts, now))
+            .toBeLessThanOrEqual(headroomFactor(used, BUDGET, opts) + 1e-12);
+        }
+      }
+    }
   });
 });
 
