@@ -855,6 +855,8 @@
     "attemptTimingHint": "Przesunięcie początku od początku żądania · czas trwania próby",
     "requestedModel": "Żądany model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Żądania według agenta",
     "sortBy": "Sortuj według: {column}",
     "sortHint": "Sortowanie dotyczy {count} załadowanych wierszy",

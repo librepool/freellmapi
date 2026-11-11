@@ -103,8 +103,8 @@ const recentCallValue: SortValueFn<RecentCallRow, RecentCallCol> = (r, col) => {
   }
 }
 
-type ByModelCol = 'model' | 'provider' | 'requests' | 'pinned' | 'success' | 'latency' | 'inTokens' | 'outTokens' | 'saved'
-const BY_MODEL_COLS: readonly ByModelCol[] = ['model', 'provider', 'requests', 'pinned', 'success', 'latency', 'inTokens', 'outTokens', 'saved']
+type ByModelCol = 'model' | 'provider' | 'requests' | 'pinned' | 'success' | 'latency' | 'p50Ttft' | 'p95Ttft' | 'throughput' | 'inTokens' | 'outTokens' | 'saved'
+const BY_MODEL_COLS: readonly ByModelCol[] = ['model', 'provider', 'requests', 'pinned', 'success', 'latency', 'p50Ttft', 'p95Ttft', 'throughput', 'inTokens', 'outTokens', 'saved']
 const BY_MODEL_SORT_KEY = 'analytics.byModelSort'
 
 const byModelValue: SortValueFn<ByModelRow, ByModelCol> = (m, col) => {
@@ -115,6 +115,9 @@ const byModelValue: SortValueFn<ByModelRow, ByModelCol> = (m, col) => {
     case 'pinned': return m.pinnedRequests
     case 'success': return m.successRate
     case 'latency': return m.avgLatencyMs
+    case 'p50Ttft': return m.p50TtfbMs ?? null
+    case 'p95Ttft': return m.p95TtfbMs ?? null
+    case 'throughput': return m.avgTokensPerSecond ?? null
     case 'inTokens': return m.totalInputTokens
     case 'outTokens': return m.totalOutputTokens
     case 'saved': return m.estimatedCost ?? null
@@ -223,6 +226,11 @@ interface ByModelRow {
   requests: number
   successRate: number
   avgLatencyMs: number
+  // Phase A per-model TTFT percentiles + throughput; null when the raw
+  // window has no qualifying rows (mirrors the server response).
+  p50TtfbMs: number | null
+  p95TtfbMs: number | null
+  avgTokensPerSecond: number | null
   totalInputTokens: number
   totalOutputTokens: number
   pinnedRequests: number
@@ -1187,6 +1195,9 @@ export default function AnalyticsPage() {
                         <SortableHeader column="pinned" label={t('analytics.pinned')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
                         <SortableHeader column="success" label={t('common.success')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
                         <SortableHeader column="latency" label={t('analytics.latency')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
+                        <SortableHeader column="p50Ttft" label={t('analytics.p50Ttft')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
+                        <SortableHeader column="p95Ttft" label={t('analytics.p95Ttft')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
+                        <SortableHeader column="throughput" label={t('analytics.tokensPerSec')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
                         <SortableHeader column="inTokens" label={t('analytics.inTokens')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
                         <SortableHeader column="outTokens" label={t('analytics.outTokens')} align="right" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
                         <SortableHeader column="saved" label={t('analytics.saved')} align="right" className="pr-4" sort={byModelSort.sort} onToggle={byModelSort.toggle} />
@@ -1201,6 +1212,9 @@ export default function AnalyticsPage() {
                           <TableCell className="text-right tabular-nums">{m.pinnedRequests > 0 ? m.pinnedRequests : '—'}</TableCell>
                           <TableCell className="text-right tabular-nums">{m.successRate}%</TableCell>
                           <TableCell className="text-right tabular-nums">{m.avgLatencyMs} ms</TableCell>
+                          <TableCell className="text-right tabular-nums">{m.p50TtfbMs != null ? `${m.p50TtfbMs} ms` : '—'}</TableCell>
+                          <TableCell className="text-right tabular-nums">{m.p95TtfbMs != null ? `${m.p95TtfbMs} ms` : '—'}</TableCell>
+                          <TableCell className="text-right tabular-nums">{m.avgTokensPerSecond != null ? m.avgTokensPerSecond : '—'}</TableCell>
                           <TableCell className="text-right tabular-nums">{formatTokens(m.totalInputTokens)}</TableCell>
                           <TableCell className="text-right tabular-nums">{formatTokens(m.totalOutputTokens)}</TableCell>
                           <TableCell className="text-right tabular-nums pr-4">${(m.estimatedCost ?? 0).toFixed(2)}</TableCell>

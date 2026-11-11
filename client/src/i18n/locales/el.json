@@ -855,6 +855,8 @@
     "attemptTimingHint": "Μετατόπιση έναρξης από την έναρξη αιτήματος · Διάρκεια προσπάθειας",
     "requestedModel": "Ζητούμενο μοντέλο",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Αιτήματα ανά πράκτορα",
     "sortBy": "Ταξινόμηση κατά {column}",
     "sortHint": "Η ταξινόμηση ισχύει για τις {count} φορτωμένες γραμμές",

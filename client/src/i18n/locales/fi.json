@@ -855,6 +855,8 @@
     "attemptTimingHint": "Aloita siirtymä pyynnön alusta · Yrityksen kesto",
     "requestedModel": "Pyydetty malli",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Pyynnöt agenteittain",
     "sortBy": "Lajittele: {column}",
     "sortHint": "Lajittelu koskee vain ladattuja {count} riviä",

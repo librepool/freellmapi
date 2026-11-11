@@ -895,6 +895,8 @@
     "attemptTimingHint": "Start offset from request start · attempt duration",
     "requestedModel": "Requested model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "sortBy": "Sort by {column}",
     "sortHint": "Sorting applies to the {count} loaded rows",
     "cacheHitRate": "Cache hit rate",

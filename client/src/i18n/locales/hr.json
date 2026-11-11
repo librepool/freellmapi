@@ -855,6 +855,8 @@
     "attemptTimingHint": "Početak offseta od početka zahtjeva · Trajanje pokušaja",
     "requestedModel": "Traženi model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Zahtjevi po agentu",
     "sortBy": "Sortiraj po: {column}",
     "sortHint": "Sortiranje vrijedi za {count} učitanih redaka",

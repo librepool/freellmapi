@@ -855,6 +855,8 @@
     "attemptTimingHint": "Почетак одступања од почетка захтева · трајање покушаја",
     "requestedModel": "Тражени модел",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Захтеви по агенту",
     "sortBy": "Сортирај по: {column}",
     "sortHint": "Сортирање важи за {count} учитаних редова",

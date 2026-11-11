@@ -855,6 +855,8 @@
     "attemptTimingHint": "Offset mula dari permintaan mula · tempoh cubaan",
     "requestedModel": "Model yang diminta",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Permintaan mengikut ejen",
     "sortBy": "Isih mengikut {column}",
     "sortHint": "Pengisihan hanya digunakan pada {count} baris yang dimuatkan",

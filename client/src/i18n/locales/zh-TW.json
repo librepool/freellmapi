@@ -855,6 +855,8 @@
     "attemptTimingHint": "自請求開始的偏移 · 嘗試耗時",
     "requestedModel": "請求的模型",
     "ttft": "首字延遲",
+    "p50Ttft": "首字延遲 p50",
+    "p95Ttft": "首字延遲 p95",
     "requestsByAgent": "按代理程式統計的請求",
     "sortBy": "依{column}排序",
     "sortHint": "排序僅套用於已載入的 {count} 列",

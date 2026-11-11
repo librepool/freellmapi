@@ -855,6 +855,8 @@
     "attemptTimingHint": "İstek başlangıcına göre başlangıç farkı · deneme süresi",
     "requestedModel": "İstenen model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Ajan başına istekler",
     "sortBy": "{column} ölçütüne göre sırala",
     "sortHint": "Sıralama yalnızca yüklenen {count} satıra uygulanır",

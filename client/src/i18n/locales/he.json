@@ -855,6 +855,8 @@
     "attemptTimingHint": "התחל הזזה מהבקשה · משך הניסיון",
     "requestedModel": "מודל מבוקש",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "בקשות לפי סוכן",
     "sortBy": "מיון לפי {column}",
     "sortHint": "המיון חל על {count} השורות שנטענו בלבד",

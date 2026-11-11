@@ -855,6 +855,8 @@
     "attemptTimingHint": "Startforskyvning fra forespørselsstart · Forsøksvarighet",
     "requestedModel": "Etterspurt modell",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Forespørsler per agent",
     "sortBy": "Sorter etter {column}",
     "sortHint": "Sorteringen gjelder de {count} innlastede radene",

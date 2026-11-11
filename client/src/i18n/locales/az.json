@@ -855,6 +855,8 @@
     "attemptTimingHint": "Sorğu başlanğıcından ofset · Cəhd müddəti",
     "requestedModel": "Tələb olunan model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Agent üzrə sorğular",
     "sortBy": "{column} üzrə sırala",
     "sortHint": "Sıralama yalnız yüklənmiş {count} sətrə tətbiq olunur",

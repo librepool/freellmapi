@@ -855,6 +855,8 @@
     "attemptTimingHint": "Décalage depuis le début de la requête · durée de la tentative",
     "requestedModel": "Modèle demandé",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Requêtes par agent",
     "sortBy": "Trier par {column}",
     "sortHint": "Le tri s'applique aux {count} lignes chargées",

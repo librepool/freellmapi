@@ -855,6 +855,8 @@
     "attemptTimingHint": "অনুরোধ শুরু থেকে অফসেট শুরু করুন · প্রচেষ্টার সময়কাল",
     "requestedModel": "অনুরোধ করা মডেল",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "এজেন্ট অনুযায়ী অনুরোধ",
     "sortBy": "{column} অনুযায়ী সাজান",
     "sortHint": "সাজানো শুধুমাত্র লোড হওয়া {count}টি সারিতে প্রযোজ্য",

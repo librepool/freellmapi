@@ -855,6 +855,8 @@
     "attemptTimingHint": "ចាប់ផ្តើមពីចំណុចចាប់ផ្តើម · រយៈពេលព្យាយាម",
     "requestedModel": "ម៉ូដែលដែលបានស្នើសុំ",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "សំណើតាមភ្នាក់ងារ",
     "sortBy": "តម្រៀបតាម {column}",
     "sortHint": "ការតម្រៀបអនុវត្តតែលើជួរ {count} ដែលបានផ្ទុកប៉ុណ្ណោះ",

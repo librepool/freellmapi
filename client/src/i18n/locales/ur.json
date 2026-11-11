@@ -855,6 +855,8 @@
     "attemptTimingHint": "درخواست کے آغاز سے آفسیٹ شروع کریں · کوشش کی مدت",
     "requestedModel": "ماڈل کی درخواست کی۔",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "فی ایجنٹ درخواستیں",
     "sortBy": "{column} کے لحاظ سے ترتیب دیں",
     "sortHint": "ترتیب صرف لوڈ شدہ {count} قطاروں پر لاگو ہوتی ہے",

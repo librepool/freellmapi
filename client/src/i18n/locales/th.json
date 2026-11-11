@@ -855,6 +855,8 @@
     "attemptTimingHint": "เริ่มต้นออฟเซ็ตจากคำขอเริ่มต้น · ระยะเวลาความพยายาม",
     "requestedModel": "รุ่นที่ขอ",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "คำขอตามเอเจนต์",
     "sortBy": "เรียงตาม{column}",
     "sortHint": "การเรียงลำดับใช้กับ {count} แถวที่โหลดแล้วเท่านั้น",

@@ -855,6 +855,8 @@
     "attemptTimingHint": "Offset dall'inizio della richiesta · durata del tentativo",
     "requestedModel": "Modello richiesto",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Richieste per agente",
     "sortBy": "Ordina per {column}",
     "sortHint": "L'ordinamento si applica alle {count} righe caricate",

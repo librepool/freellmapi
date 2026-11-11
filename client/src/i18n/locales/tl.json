@@ -855,6 +855,8 @@
     "attemptTimingHint": "Start offset mula sa request start · tagal ng pagtatangka",
     "requestedModel": "Hinihiling na modelo",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Mga kahilingan ayon sa agent",
     "sortBy": "Ayusin ayon sa {column}",
     "sortHint": "Ang pag-aayos ay para lamang sa {count} na-load na row",

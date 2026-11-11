@@ -855,6 +855,8 @@
     "attemptTimingHint": "विनंती पासून ऑफसेट सुरू करा प्रारंभ · प्रयत्न कालावधी",
     "requestedModel": "मॉडेलची विनंती केली",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "एजंटनुसार विनंत्या",
     "sortBy": "{column} नुसार क्रमवारी लावा",
     "sortHint": "क्रमवारी फक्त लोड केलेल्या {count} ओळींना लागू होते",

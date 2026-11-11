@@ -855,6 +855,8 @@
     "attemptTimingHint": "Изместване на старта от заявката за старт · Продължителност на опита",
     "requestedModel": "Поискан модел",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Заявки по агент",
     "sortBy": "Сортиране по {column}",
     "sortHint": "Сортирането се прилага за {count} заредени реда",

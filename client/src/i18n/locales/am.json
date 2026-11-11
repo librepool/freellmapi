@@ -855,6 +855,8 @@
     "attemptTimingHint": "ከጥያቄ ጅምር ማካካሻ ጀምር · የሙከራ ጊዜ",
     "requestedModel": "የተጠየቀው ሞዴል",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "ጥያቄዎች በወኪል",
     "sortBy": "በ{column} ደርድር",
     "sortHint": "መደርደሩ የሚሠራው በተጫኑት {count} ረድፎች ላይ ብቻ ነው",

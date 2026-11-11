@@ -855,6 +855,8 @@
     "attemptTimingHint": "Malite nkwụsị site na mmalite arịrịọ · Ogologo oge nwaa",
     "requestedModel": "Ihe nlereanya achọrọ",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Arịrịọ site na ejenti",
     "sortBy": "Hazie site na {column}",
     "sortHint": "Nhazi ahụ metụtara naanị ahịrị {count} ebugoro",

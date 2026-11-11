@@ -855,6 +855,8 @@
     "attemptTimingHint": "بداية الإزاحة من بداية الطلب · مدة المحاولة",
     "requestedModel": "النموذج المطلوب",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "الطلبات حسب الوكيل",
     "sortBy": "ترتيب حسب {column}",
     "sortHint": "يُطبَّق الترتيب على الصفوف المحمَّلة البالغ عددها {count}",

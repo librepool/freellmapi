@@ -855,6 +855,8 @@
     "attemptTimingHint": "Začať offset od začiatku požiadavky · Trvanie pokusu",
     "requestedModel": "Požadovaný model",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Požiadavky podľa agenta",
     "sortBy": "Zoradiť podľa: {column}",
     "sortHint": "Zoradenie sa vzťahuje na {count} načítaných riadkov",

@@ -855,6 +855,8 @@
     "attemptTimingHint": "リクエスト開始からの開始オフセット · 試行期間",
     "requestedModel": "要求されたモデル",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "エージェント別リクエスト",
     "sortBy": "{column}で並べ替え",
     "sortHint": "並べ替えは読み込み済みの {count} 行にのみ適用されます",

@@ -855,6 +855,8 @@
     "attemptTimingHint": "Start offset față de începutul cererii · Durata încercării",
     "requestedModel": "Modelul cerut",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "Cereri per agent",
     "sortBy": "Sortează după {column}",
     "sortHint": "Sortarea se aplică celor {count} rânduri încărcate",

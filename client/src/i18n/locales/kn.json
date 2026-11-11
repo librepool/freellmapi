@@ -855,6 +855,8 @@
     "attemptTimingHint": "ವಿನಂತಿಯ ಪ್ರಾರಂಭದಿಂದ ಆಫ್‌ಸೆಟ್ ಪ್ರಾರಂಭಿಸಿ · ಪ್ರಯತ್ನದ ಅವಧಿ",
     "requestedModel": "ವಿನಂತಿಸಿದ ಮಾದರಿ",
     "ttft": "TTFT",
+    "p50Ttft": "TTFT p50",
+    "p95Ttft": "TTFT p95",
     "requestsByAgent": "ಏಜೆಂಟ್ ಪ್ರಕಾರ ವಿನಂತಿಗಳು",
     "sortBy": "{column} ಪ್ರಕಾರ ವಿಂಗಡಿಸಿ",
     "sortHint": "ವಿಂಗಡಣೆ ಲೋಡ್ ಆದ {count} ಸಾಲುಗಳಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ",
