@@ -3,6 +3,7 @@ import {
   BANDIT_PRESETS, combineScore, speedScore, intelligenceScore, intelligenceComposite,
   headroomFactor, burnAdjustedHeadroomFactor, rateWindowHeadroomFactor, rateLimitFactor, sampleBeta, reliabilityPosterior,
   expectedReliability, SPEED_PRIOR, HEADROOM_FLOOR,
+  probeReliabilityPrior, PROBE_PRIOR_WEIGHT,
   isPeakHours, peakAdjustedWeights, hourInTimezone, isValidPeakHour, isValidTimezone,
   isPeakExemptStrategy, DEFAULT_PEAK_HOURS, PEAK_SPEED_TO_RELIABILITY,
   taskAdjustedWeights, isTaskExemptStrategy, TASK_WEIGHT_SHARE,
@@ -496,5 +497,34 @@ describe('scoring: task-type weight bias (#1127)', () => {
     expect(taskAdjustedWeights(noSpeed, 'code', 'balanced')).toEqual({ weights: noSpeed, adjusted: false });
     const noIntel = { reliability: 0.5, speed: 0.5, intelligence: 0 };
     expect(taskAdjustedWeights(noIntel, 'chat', 'balanced')).toEqual({ weights: noIntel, adjusted: false });
+  });
+});
+
+describe('scoring: probe reliability prior (Phase B)', () => {
+  it('uses a small fixed weight of 2 pseudo-observations', () => {
+    expect(PROBE_PRIOR_WEIGHT).toBe(2);
+    expect(probeReliabilityPrior(1)).toEqual({ successes: 2, failures: 0 });
+    expect(probeReliabilityPrior(0)).toEqual({ successes: 0, failures: 2 });
+    expect(probeReliabilityPrior(0.5)).toEqual({ successes: 1, failures: 1 });
+    expect(probeReliabilityPrior(0.75)).toEqual({ successes: 1.5, failures: 0.5 });
+  });
+
+  it('returns undefined (no opinion) for null, non-finite and out-of-range scores', () => {
+    expect(probeReliabilityPrior(null)).toBeUndefined();
+    expect(probeReliabilityPrior(undefined)).toBeUndefined();
+    expect(probeReliabilityPrior(NaN)).toBeUndefined();
+    expect(probeReliabilityPrior(-0.1)).toBeUndefined();
+    expect(probeReliabilityPrior(1.1)).toBeUndefined();
+  });
+
+  it('shifts the posterior starting point without dominating local evidence', () => {
+    // Unseen model + perfect probe score: 0.75, up from the uniform 0.5.
+    expect(expectedReliability(0, 0, probeReliabilityPrior(1))).toBeCloseTo(0.75, 5);
+    // Unseen model + zero probe score: 0.25.
+    expect(expectedReliability(0, 0, probeReliabilityPrior(0))).toBeCloseTo(0.25, 5);
+    // Neutral score (0.5) is exactly the uniform prior: no change.
+    expect(expectedReliability(0, 0, probeReliabilityPrior(0.5))).toBeCloseTo(0.5, 5);
+    // Ten local successes dilute a zero probe score to 11/14 ≈ 0.786.
+    expect(expectedReliability(10, 0, probeReliabilityPrior(0))).toBeCloseTo(11 / 14, 5);
   });
 });

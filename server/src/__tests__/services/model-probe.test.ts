@@ -9,6 +9,9 @@ import {
   selectProbeCandidates,
   probeModel,
   recordProbeResult,
+  computeHealthScore,
+  getMaxProbesPerProvider,
+  isLiveSignalProbeDisabled,
   runModelProbePass,
   resetModelProbeState,
   startModelProbe,
@@ -206,5 +209,195 @@ describe('kill switch and lifecycle', () => {
     expect(scheduler.every.mock.calls[0][0]).toBe(30 * 60 * 1000);
     delete process.env.MODEL_PROBE_ENABLED;
     stopModelProbe();
+  });
+});
+
+describe('Phase B graded health score', () => {
+  it('first observation sets the score: fast success 1, slow success 0.5, unavailable 0', () => {
+    expect(computeHealthScore(null, { status: 'working', latencyMs: 100 })).toBe(1);
+    expect(computeHealthScore(null, { status: 'working' })).toBe(1);
+    expect(computeHealthScore(null, { status: 'working', latencyMs: 6000 })).toBe(0.5);
+    expect(computeHealthScore(null, { status: 'working', latencyMs: 2650 })).toBeCloseTo(0.75, 5);
+    expect(computeHealthScore(null, { status: 'unavailable', error: '403' })).toBe(0);
+  });
+
+  it('blends with weight 0.5 toward the new target', () => {
+    expect(computeHealthScore(1, { status: 'unavailable', error: '403' })).toBe(0.5);
+    expect(computeHealthScore(0, { status: 'working', latencyMs: 100 })).toBe(0.5);
+    expect(computeHealthScore(0.5, { status: 'working', latencyMs: 100 })).toBe(0.75);
+  });
+
+  it('an inconclusive outcome never changes the score', () => {
+    expect(computeHealthScore(0.8, { status: 'error', error: 'fetch failed' })).toBe(0.8);
+    expect(computeHealthScore(null, { status: 'error', error: 'fetch failed' })).toBeNull();
+  });
+
+  it('recordProbeResult stores the score, sample count and timestamp', () => {
+    const db = getDb();
+    recordProbeResult(db, candidate(), { status: 'working', latencyMs: 100 });
+    let row = db.prepare('SELECT * FROM model_probe_status').get() as any;
+    expect(row.health_score).toBe(1);
+    expect(row.health_samples).toBe(1);
+    expect(row.health_updated_at).toBeTruthy();
+
+    recordProbeResult(db, candidate(), { status: 'unavailable', error: '403' });
+    row = db.prepare('SELECT * FROM model_probe_status').get() as any;
+    expect(row.status).toBe('unavailable');
+    expect(row.health_score).toBe(0.5);
+    expect(row.health_samples).toBe(2);
+  });
+
+  it('an inconclusive probe preserves the score and sample count', () => {
+    const db = getDb();
+    recordProbeResult(db, candidate(), { status: 'working', latencyMs: 100 });
+    recordProbeResult(db, candidate(), { status: 'error', error: 'fetch failed' });
+    const row = db.prepare('SELECT * FROM model_probe_status').get() as any;
+    expect(row.status).toBe('working');
+    expect(row.health_score).toBe(1);
+    expect(row.health_samples).toBe(1);
+  });
+});
+
+describe('Phase B churn scoping and per-provider cap', () => {
+  function addKey(platform: string): void {
+    getDb().prepare(`INSERT INTO api_keys (platform, label, encrypted_key, iv, auth_tag, status, enabled)
+                     VALUES (?, 'k', '', '', '', 'healthy', 1)`).run(platform);
+  }
+
+  function addChurnModel(id: number, platform: string, modelId: string, rank: number): void {
+    getDb().prepare(`INSERT INTO models (id, platform, model_id, display_name, intelligence_rank, speed_rank, endpoint_scope, enabled)
+                     VALUES (?, ?, ?, ?, ?, 0, '', 1)`).run(id, platform, modelId, modelId, rank);
+  }
+
+  beforeEach(() => {
+    delete process.env.LIVE_SIGNAL_PROBE_DISABLED;
+    delete process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER;
+  });
+
+  afterEach(() => {
+    delete process.env.LIVE_SIGNAL_PROBE_DISABLED;
+    delete process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER;
+  });
+
+  it('churn platforms come first, best intelligence rank first within a platform', () => {
+    const db = getDb();
+    addKey('openrouter');
+    addChurnModel(1, 'openrouter', 'or-rank5', 5);
+    addChurnModel(2, 'openrouter', 'or-rank1', 1);
+    addChurnModel(3, 'probe-test', 'plain', 1);
+    const picked = selectProbeCandidates(db, 10);
+    expect(picked.map(p => p.modelId)).toEqual(['or-rank1', 'or-rank5', 'plain']);
+  });
+
+  it('a platform with no ranked rows falls back to catalog (id) order', () => {
+    const db = getDb();
+    addKey('openrouter');
+    addChurnModel(2, 'openrouter', 'or-second', 0);
+    addChurnModel(1, 'openrouter', 'or-first', 0);
+    const picked = selectProbeCandidates(db, 10);
+    expect(picked.map(p => p.modelId)).toEqual(['or-first', 'or-second']);
+  });
+
+  it('caps candidates per provider per pass (default 2)', () => {
+    expect(getMaxProbesPerProvider()).toBe(2);
+    const db = getDb();
+    addKey('openrouter');
+    addKey('nous');
+    for (let i = 1; i <= 4; i++) addChurnModel(i, 'openrouter', `or-${i}`, i);
+    for (let i = 5; i <= 6; i++) addChurnModel(i, 'nous', `nous-${i}`, i);
+    const picked = selectProbeCandidates(db, 10);
+    const byPlatform = new Map<string, number>();
+    for (const p of picked) byPlatform.set(p.platform, (byPlatform.get(p.platform) ?? 0) + 1);
+    expect(byPlatform.get('openrouter')).toBe(2);
+    expect(byPlatform.get('nous')).toBe(2);
+    expect(picked).toHaveLength(4);
+  });
+
+  it('LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER tunes the cap; invalid values fall back to 2', () => {
+    process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER = '1';
+    expect(getMaxProbesPerProvider()).toBe(1);
+    process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER = '0';
+    expect(getMaxProbesPerProvider()).toBe(2);
+    process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER = 'bogus';
+    expect(getMaxProbesPerProvider()).toBe(2);
+    const db = getDb();
+    addKey('openrouter');
+    for (let i = 1; i <= 3; i++) {
+      getDb().prepare(`INSERT INTO models (id, platform, model_id, display_name, intelligence_rank, speed_rank, endpoint_scope, enabled)
+                       VALUES (?, 'openrouter', ?, ?, ?, 0, '', 1)`).run(i, `or-${i}`, `or-${i}`, i);
+    }
+    process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER = '3';
+    expect(selectProbeCandidates(db, 10)).toHaveLength(3);
+  });
+
+  it('kill switch reverts selection to stalest-first with no per-provider cap', () => {
+    const db = getDb();
+    addKey('openrouter');
+    addChurnModel(1, 'openrouter', 'churn-old', 1);
+    addChurnModel(2, 'probe-test', 'plain-never', 99);
+    addChurnModel(3, 'openrouter', 'churn-never', 5);
+    const orKeyId = (db.prepare("SELECT id FROM api_keys WHERE platform = 'openrouter'").get() as { id: number }).id;
+    recordProbeResult(db,
+      { keyId: orKeyId, platform: 'openrouter', modelId: 'churn-old', modelDbId: 1, endpointScope: '' },
+      { status: 'working', latencyMs: 5 }, new Date(Date.now() - MODEL_PROBE_STALE_MS - 1000));
+
+    // Phase B on: churn first by rank (stale top model still eligible).
+    expect(selectProbeCandidates(db, 10).map(p => p.modelId))
+      .toEqual(['churn-old', 'churn-never', 'plain-never']);
+
+    // Kill switch on: pre-Phase-B order — never-probed first by id, no cap.
+    process.env.LIVE_SIGNAL_PROBE_DISABLED = '1';
+    expect(isLiveSignalProbeDisabled()).toBe(true);
+    expect(selectProbeCandidates(db, 10).map(p => p.modelId))
+      .toEqual(['plain-never', 'churn-never', 'churn-old']);
+  });
+});
+
+describe('Phase B kill switch and lifecycle', () => {
+  afterEach(() => {
+    delete process.env.LIVE_SIGNAL_PROBE_DISABLED;
+    delete process.env.MODEL_PROBE_ENABLED;
+    stopModelProbe();
+  });
+
+  it('logs the kill switch at startup but still starts the job when opted in', () => {
+    process.env.LIVE_SIGNAL_PROBE_DISABLED = '1';
+    process.env.MODEL_PROBE_ENABLED = '1';
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const scheduler = { every: vi.fn(() => () => undefined) };
+    try {
+      startModelProbe(scheduler as any);
+      expect(scheduler.every).toHaveBeenCalledTimes(1);
+      expect(log.mock.calls.some(c => String(c[0]).includes('LIVE_SIGNAL_PROBE_DISABLED=1'))).toBe(true);
+    } finally {
+      log.mockRestore();
+    }
+  });
+
+  it('logs the kill switch at startup and does not start the job without the opt-in', () => {
+    process.env.LIVE_SIGNAL_PROBE_DISABLED = '1';
+    delete process.env.MODEL_PROBE_ENABLED;
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const scheduler = { every: vi.fn(() => () => undefined) };
+    try {
+      startModelProbe(scheduler as any);
+      expect(scheduler.every).not.toHaveBeenCalled();
+      expect(log.mock.calls.some(c => String(c[0]).includes('LIVE_SIGNAL_PROBE_DISABLED=1'))).toBe(true);
+    } finally {
+      log.mockRestore();
+    }
+  });
+
+  it('no kill-switch log when the switch is off', () => {
+    delete process.env.LIVE_SIGNAL_PROBE_DISABLED;
+    process.env.MODEL_PROBE_ENABLED = '1';
+    const log = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const scheduler = { every: vi.fn(() => () => undefined) };
+    try {
+      startModelProbe(scheduler as any);
+      expect(log.mock.calls.some(c => String(c[0]).includes('LIVE_SIGNAL_PROBE_DISABLED'))).toBe(false);
+    } finally {
+      log.mockRestore();
+    }
   });
 });

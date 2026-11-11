@@ -296,6 +296,28 @@ export function expectedReliability(
   return alpha / (alpha + beta);
 }
 
+// ── Phase B live-signal probe prior ─────────────────────────────────────────
+// The graded health score from proactive model probes (services/model-probe.ts)
+// feeds the reliability axis as a SMALL prior, never as a replacement for
+// Thompson sampling: it only shifts the Beta posterior's starting point, and
+// local evidence dilutes it fast. Weight 2 pseudo-observations means a
+// perfect probe score (1.0) on an unseen model starts it at (0+2+1)/(0+2+1+1)
+// = 0.75 instead of the uniform 0.5, and a handful of real requests overwhelms
+// it — a model with 10 local successes and 0 failures sits at 13/14 ≈ 0.93
+// with the prior vs 11/12 ≈ 0.92 without, i.e. the prior is already a
+// second-order effect once there is any real traffic at all. Null / non-finite / out-of-range scores (never scored,
+// corrupt row) mean "no opinion" — undefined, so callers fall back to exactly
+// the behaviour they had before Phase B.
+export const PROBE_PRIOR_WEIGHT = 2;
+
+export function probeReliabilityPrior(score: number | null | undefined): CommunityReliabilityPrior | undefined {
+  if (score == null || !Number.isFinite(score) || score < 0 || score > 1) return undefined;
+  return {
+    successes: score * PROBE_PRIOR_WEIGHT,
+    failures: (1 - score) * PROBE_PRIOR_WEIGHT,
+  };
+}
+
 // ── Speed (throughput + TTFB blended into one [0,1] axis) ───────────────────
 // Throughput uses a saturating curve so one very fast tiny model can't make a
 // perfectly-fine larger model look "slow" (the global-max-normalization bug in

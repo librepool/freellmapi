@@ -26,6 +26,27 @@
 // per pass (default 3). OFF by default: probes spend the user's free-tier
 // quota and nothing consumes the labels yet, so the scheduled job only runs
 // with MODEL_PROBE_ENABLED=1. POST /api/health/probe-models always runs a pass.
+//
+// Phase B live-signal routing (design note §4): the probe now also writes a
+// graded health score (0..1) per model+provider — see computeHealthScore —
+// which the router folds into the reliability axis as a small Beta prior
+// (scoring.ts probeReliabilityPrior, weight 2 pseudo-observations). The score
+// is the graded signal alongside the binary verdict; the verdict is unchanged.
+// Candidate selection prioritizes the 16 churn-prone platforms' top free
+// models (CHURN_PLATFORMS, health.ts) and caps candidates per provider per
+// pass (LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER, default 2).
+//
+// Tension to be explicit about: the global cap (MODEL_PROBE_MAX_PER_PASS,
+// default 3) still applies as the ceiling, so with both defaults a pass
+// probes at most 3 models across at most 2 providers. Raise both together to
+// widen a pass — raising only the per-provider cap changes nothing while the
+// global cap stays at 3.
+//
+// Kill switch: LIVE_SIGNAL_PROBE_DISABLED=1 turns off the Phase B additions
+// only — the graded score is never read into routing and candidate selection
+// reverts to the pre-Phase-B stalest-first order with no per-provider cap.
+// The underlying observation-only job keeps its own opt-in
+// (MODEL_PROBE_ENABLED=1) and keeps running.
 
 import type { Scheduler } from '../lib/scheduler.js';
 import type { Db } from '../db/types.js';
@@ -37,6 +58,8 @@ import { withKeyProxy } from '../lib/proxy.js';
 import { sanitizeProviderErrorMessage } from '../lib/error-redaction.js';
 import { providerLog } from '../lib/server-logs.js';
 import { inferQuotaPoolKey } from './provider-quota.js';
+import { CHURN_PLATFORMS } from './health.js';
+import { TTFB_BEST_MS, TTFB_WORST_MS } from './scoring.js';
 
 // One pass every 30 minutes. Probes are quota-costing real requests; the point
 // is freshness on the scale of "an operator glances at the dashboard", not
@@ -55,6 +78,32 @@ export const MODEL_PROBE_STALE_MS = 6 * 60 * 60 * 1000;
 export const RECENT_SERVE_SKIP_MS = 60 * 60 * 1000;
 
 const DEFAULT_MAX_PROBES_PER_PASS = 3;
+
+// ── Phase B: kill switch + per-provider cap ────────────────────────────────
+// LIVE_SIGNAL_PROBE_DISABLED=1 (same convention as COOLDOWN_PROBE_DISABLED=1)
+// turns off the Phase B additions only: the graded score is never read into
+// routing (router.ts checks this before looking the score up) and candidate
+// selection below reverts to the pre-Phase-B order with no per-provider cap.
+// The underlying observation-only job is unaffected — it keeps its own
+// MODEL_PROBE_ENABLED=1 opt-in.
+export function isLiveSignalProbeDisabled(): boolean {
+  return process.env.LIVE_SIGNAL_PROBE_DISABLED === '1';
+}
+
+const DEFAULT_MAX_PROBES_PER_PROVIDER = 2;
+
+/** Per-provider probe budget per pass. Tunable; 0 or a bad value falls back
+ *  to the default (mirrors getMaxProbesPerPass). Raise this together with
+ *  MODEL_PROBE_MAX_PER_PASS — with the defaults (3 global, 2 per provider) a
+ *  pass probes at most 3 models across at most 2 providers. */
+export function getMaxProbesPerProvider(): number {
+  const raw = process.env.LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER;
+  if (raw !== undefined && raw.trim() !== '') {
+    const n = Number(raw);
+    if (Number.isInteger(n) && n > 0) return n;
+  }
+  return DEFAULT_MAX_PROBES_PER_PROVIDER;
+}
 
 // Ceiling for one probe request, mirroring health's transport posture. A probe
 // that takes longer than this is treated as an error (inconclusive), not as
@@ -102,12 +151,40 @@ export interface ProbePassResult {
 // unknown key, with endpoint scope carried through (custom-endpoint identity,
 // migration 20260729_000001). Ordered to rotate fairly: stalest evidence
 // first, models never probed (NULL last_probed_at) before stale ones.
+//
+// Phase B: when the live-signal kill switch is off, churn-prone platforms
+// come first and, within a platform, the top free models by intelligence
+// rank (best rank first — rank is only calibrated WITHIN a provider's own
+// catalog, so the cross-platform rank order is a heuristic tiebreak, not a
+// cross-provider quality claim; the per-provider cap below is what stops one
+// platform's top models from eating the whole pass). A platform with no
+// ranked rows (intelligence_rank NULL or <= 0) falls back to seeded catalog
+// order (m.id ASC) for its models. Candidates are also capped per provider
+// (LIVE_SIGNAL_PROBE_MAX_PER_PROVIDER, default 2). When the kill switch is
+// set, selection is exactly the pre-Phase-B order with no cap.
+export interface SelectProbeCandidatesOptions {
+  maxPerProvider?: number;
+}
 
 interface ProbeCandidateRow extends ProbeCandidate {
   lastProbedAt: string | null;
 }
 
-export function selectProbeCandidates(db: Db, limit: number, now = Date.now()): ProbeCandidateRow[] {
+export function selectProbeCandidates(
+  db: Db,
+  limit: number,
+  now = Date.now(),
+  opts: SelectProbeCandidatesOptions = {},
+): ProbeCandidateRow[] {
+  const phaseB = !isLiveSignalProbeDisabled();
+  const maxPerProvider = opts.maxPerProvider ?? getMaxProbesPerProvider();
+  const churnPlaceholders = CHURN_PLATFORMS.map(() => '?').join(', ');
+  const orderBy = phaseB
+    ? `CASE WHEN m.platform IN (${churnPlaceholders}) THEN 0 ELSE 1 END ASC,
+       CASE WHEN m.intelligence_rank IS NULL OR m.intelligence_rank <= 0 THEN 1 ELSE 0 END ASC,
+       m.intelligence_rank ASC,
+       (p.last_probed_at IS NULL) DESC, p.last_probed_at ASC, m.id ASC, k.id ASC`
+    : `(p.last_probed_at IS NULL) DESC, p.last_probed_at ASC, m.id ASC, k.id ASC`;
   const rows = db.prepare(`
     SELECT m.id AS modelDbId, m.platform, m.model_id AS modelId, m.endpoint_scope AS endpointScope,
            k.id AS keyId, COALESCE(p.last_probed_at, '') AS lastProbedAt
@@ -117,20 +194,26 @@ export function selectProbeCandidates(db: Db, limit: number, now = Date.now()): 
             ON p.platform = m.platform AND p.model_id = m.model_id
            AND p.endpoint_scope = m.endpoint_scope AND p.key_id = k.id
      WHERE m.enabled = 1
-     ORDER BY (p.last_probed_at IS NULL) DESC, p.last_probed_at ASC, m.id ASC, k.id ASC
+     ORDER BY ${orderBy}
      LIMIT ?
-  `).all(limit * 8) as Array<{
+  `).all(...(phaseB ? [...CHURN_PLATFORMS] : []), limit * 8) as Array<{
     modelDbId: number; platform: string; modelId: string; endpointScope: string;
     keyId: number; lastProbedAt: string;
   }>;
 
   const out: ProbeCandidateRow[] = [];
+  const perProvider = new Map<string, number>();
   for (const row of rows) {
     if (out.length >= limit) break;
+    if (phaseB) {
+      const count = perProvider.get(row.platform) ?? 0;
+      if (count >= maxPerProvider) continue;
+    }
     if (row.lastProbedAt) {
       const seen = Date.parse(row.lastProbedAt.includes('T') ? row.lastProbedAt : row.lastProbedAt.replace(' ', 'T') + 'Z');
       if (Number.isFinite(seen) && now - seen < MODEL_PROBE_STALE_MS) continue;
     }
+    if (phaseB) perProvider.set(row.platform, (perProvider.get(row.platform) ?? 0) + 1);
     out.push(row);
   }
   return out;
@@ -195,28 +278,76 @@ export async function probeModel(candidate: ProbeCandidate, deps: ModelProbeRequ
 }
 
 // ── Recording ────────────────────────────────────────────────────────────────
+// Phase B graded health score (0..1) per model+provider, stored alongside the
+// binary verdict. Exponential decay with weight HEALTH_SCORE_NEW_OBSERVATION_WEIGHT
+// (0.5) on the new observation, so one probe moves the score halfway toward
+// its target and a few consistent probes converge — a single flaky probe
+// neither crowns nor condemns a model.
+//
+// Targets: success → toward 1, failure/unavailable → toward 0. A working
+// model is graded by its probe latency too: the probe's wall-clock latency is
+// an upper-bound proxy for TTFT (TTFT ≤ wall time — the probe makes one tiny
+// completion, so the two are close), mapped through the same TTFB ramp the
+// speed axis uses, so a fast success targets 1.0 and a success past
+// TTFB_WORST_MS targets 0.5 — still working, but graded below a fast one. A
+// success with no latency reading targets 1.0 (no evidence of slowness).
+// An 'error' (inconclusive) outcome must NOT change the score, exactly as it
+// doesn't change the status: it returns the previous score untouched.
+export const HEALTH_SCORE_NEW_OBSERVATION_WEIGHT = 0.5;
+
+function latencyFactor(latencyMs?: number): number {
+  if (latencyMs == null || !Number.isFinite(latencyMs)) return 1;
+  if (latencyMs <= TTFB_BEST_MS) return 1;
+  if (latencyMs >= TTFB_WORST_MS) return 0;
+  return 1 - (latencyMs - TTFB_BEST_MS) / (TTFB_WORST_MS - TTFB_BEST_MS);
+}
+
+export function computeHealthScore(
+  previous: number | null | undefined,
+  outcome: ProbeOutcome,
+): number | null {
+  if (outcome.status === 'error') return previous ?? null;
+  const target = outcome.status === 'working'
+    ? 0.5 + 0.5 * latencyFactor(outcome.latencyMs)
+    : 0;
+  if (previous == null || !Number.isFinite(previous)) return target;
+  return (1 - HEALTH_SCORE_NEW_OBSERVATION_WEIGHT) * previous
+    + HEALTH_SCORE_NEW_OBSERVATION_WEIGHT * target;
+}
 
 export function recordProbeResult(db: Db, candidate: ProbeCandidate, outcome: ProbeOutcome, probedAt = new Date()): void {
   if (outcome.status === 'error') {
     // Inconclusive: do not overwrite the last real verdict, but keep the
     // diagnostic and refresh the timestamp so pacing/backoff can see it.
+    // The graded score, sample count and score timestamp are untouched too.
     db.prepare(`
       UPDATE model_probe_status SET last_error = ?, last_probed_at = datetime('now')
        WHERE platform = ? AND model_id = ? AND endpoint_scope = ? AND key_id = ?
     `).run(outcome.error ?? 'probe error', candidate.platform, candidate.modelId, candidate.endpointScope, candidate.keyId);
     return;
   }
+  const prev = db.prepare(`
+    SELECT health_score AS healthScore, health_samples AS healthSamples FROM model_probe_status
+     WHERE platform = ? AND model_id = ? AND endpoint_scope = ? AND key_id = ?
+  `).get(candidate.platform, candidate.modelId, candidate.endpointScope, candidate.keyId) as
+    { healthScore: number | null; healthSamples: number | null } | undefined;
+  const healthScore = computeHealthScore(prev?.healthScore ?? null, outcome);
+  const healthSamples = (prev?.healthSamples ?? 0) + 1;
   db.prepare(`
-    INSERT INTO model_probe_status (platform, model_id, endpoint_scope, key_id, status, last_probed_at, last_error, latency_ms)
-    VALUES (?, ?, ?, ?, ?, ?, NULL, ?)
+    INSERT INTO model_probe_status (platform, model_id, endpoint_scope, key_id, status, last_probed_at, last_error, latency_ms, health_score, health_samples, health_updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?)
     ON CONFLICT(platform, model_id, endpoint_scope, key_id) DO UPDATE SET
       status = excluded.status,
       last_probed_at = excluded.last_probed_at,
       last_error = NULL,
-      latency_ms = excluded.latency_ms
+      latency_ms = excluded.latency_ms,
+      health_score = excluded.health_score,
+      health_samples = excluded.health_samples,
+      health_updated_at = excluded.health_updated_at
   `).run(
     candidate.platform, candidate.modelId, candidate.endpointScope, candidate.keyId,
     outcome.status, probedAt.toISOString(), outcome.latencyMs ?? null,
+    healthScore, healthSamples, probedAt.toISOString(),
   );
 }
 
@@ -321,6 +452,13 @@ let cancelProbeJob: (() => void) | null = null;
 
 export function startModelProbe(scheduler: Scheduler): void {
   if (cancelProbeJob) return;
+  if (isLiveSignalProbeDisabled()) {
+    // Phase B kill switch: the job itself still starts below when opted in —
+    // only the graded score's routing use and the churn-prioritized selection
+    // are off — but log it at startup so an operator can see why probe scores
+    // are not moving routing (mirrors startCooldownProbe's disabled log).
+    console.log('[ModelProbe] live-signal probing disabled via LIVE_SIGNAL_PROBE_DISABLED=1 (graded scores and churn prioritization off; observation-only probing continues)');
+  }
   if (process.env.MODEL_PROBE_ENABLED !== '1') return;
   console.log(`[ModelProbe] starting proactive model probes (every ${MODEL_PROBE_INTERVAL_MS / 60_000}m, max ${getMaxProbesPerPass()}/pass)`);
   cancelProbeJob = scheduler.every(

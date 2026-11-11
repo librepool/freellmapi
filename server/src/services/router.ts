@@ -19,14 +19,15 @@ import {
 import {
   BANDIT_PRESETS, DEFAULT_STRATEGY, type PresetStrategy, type RoutingStrategy, type RoutingWeights,
   type KeySelectionStrategy,
-  reliabilityPosterior, expectedReliability, sampleBeta,
+  reliabilityPosterior, expectedReliability, sampleBeta, probeReliabilityPrior,
   speedScore, intelligenceScore, intelligenceComposite, headroomFactor, burnAdjustedHeadroomFactor, rateWindowHeadroomFactor,
   rateLimitFactor, combineScore,
   peakAdjustedWeights, taskAdjustedWeights, TASK_WEIGHT_SHARE, isValidPeakHour, isValidTimezone,
   DEFAULT_PEAK_HOURS, type PeakHoursConfig,
   observedSpeedRank, TIMEOUT_LATENCY_CAP_MS,
-  type HeadroomThresholds,
+  type HeadroomThresholds, type CommunityReliabilityPrior,
 } from './scoring.js';
+import { isLiveSignalProbeDisabled } from './model-probe.js';
 import { TIMEOUT_ERROR_MARKERS, isProviderMomentFailure } from '../lib/error-classify.js';
 import { checkMonthlyBudget, reserveMonthlyBudget } from './key-budget.js';
 import { cloudflareNeuronsAvailable } from './cloudflare-neurons.js';
@@ -747,6 +748,77 @@ export function setCommunityPriors(priors: CommunityPriorMap): number {
   return Object.keys(clean).length;
 }
 
+// ── Phase B live-signal probe prior ─────────────────────────────────────────
+// The graded health score per model+provider (model_probe_status.health_score,
+// services/model-probe.ts) folded into the reliability axis as a small Beta
+// prior — the same merge shape as the community prior above, so the two priors
+// simply add. One indexed GROUP BY over the probe table, cached on the same
+// 60s TTL as refreshStatsCache: a query per model per request would put a
+// SELECT in the hot path of every chain scoring, and the score only changes
+// when a probe pass lands (30m cadence), so a minute-stale snapshot is free.
+// Multiple keys of one model+provider average into one score — the probe is
+// per model+key, but routing scores per model, and the mean is the honest
+// summary of "how does this model answer across its credentials".
+// Kill switch: LIVE_SIGNAL_PROBE_DISABLED=1 makes the lookup return undefined
+// everywhere below, so routing is byte-identical to the pre-Phase-B behaviour.
+let probeScoreCache: { map: Map<string, number> } | null = null;
+let probeScoreCacheTime = 0;
+
+function probeScoreState(): { map: Map<string, number> } {
+  const now = Date.now();
+  if (probeScoreCache && now - probeScoreCacheTime < CACHE_TTL_MS) return probeScoreCache;
+  const map = new Map<string, number>();
+  try {
+    const rows = getDb().prepare(`
+      SELECT platform, model_id, endpoint_scope, AVG(health_score) AS score
+        FROM model_probe_status WHERE health_score IS NOT NULL
+       GROUP BY platform, model_id, endpoint_scope
+    `).all() as { platform: string; model_id: string; endpoint_scope: string | null; score: number }[];
+    for (const row of rows) {
+      map.set(modelStatsKey(row.platform, row.model_id, row.endpoint_scope), row.score);
+    }
+  } catch {
+    // Pre-migration schema (no health_score column yet): no scores, no opinion.
+    // The migration adds the column; until then routing behaves as before.
+  }
+  probeScoreCache = { map };
+  probeScoreCacheTime = now;
+  return probeScoreCache;
+}
+
+function invalidateProbeScoreCache(): void {
+  probeScoreCache = null;
+}
+
+/** Graded probe score for one model, or undefined when never scored.
+ *  Raw read — ignores the kill switch; routing goes through activeProbePrior. */
+export function getProbeHealthScore(platform: string, modelId: string, endpointScope?: string): number | undefined {
+  return probeScoreState().map.get(modelStatsKey(platform, modelId, endpointScope));
+}
+
+/** Gated read for routing: undefined unless a score exists AND the Phase B
+ *  kill switch is off. The sampling itself is untouched — the prior only
+ *  shifts the posterior's starting point (see scoring.ts). */
+function activeProbePrior(platform: string, modelId: string, endpointScope?: string):
+  CommunityReliabilityPrior | undefined {
+  if (isLiveSignalProbeDisabled()) return undefined;
+  return probeReliabilityPrior(getProbeHealthScore(platform, modelId, endpointScope));
+}
+
+/** Merge two priors by adding their pseudo-counts. Either side may be
+ *  absent; the result is undefined only when both are. The probe prior (weight
+ *  2) and a community prior (capped at 50) compose without either dominating
+ *  local evidence — local samples dilute the sum exactly as they dilute each
+ *  part. */
+function mergePriors(
+  a: CommunityReliabilityPrior | undefined,
+  b: CommunityReliabilityPrior | undefined,
+): CommunityReliabilityPrior | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  return { successes: a.successes + b.successes, failures: a.failures + b.failures };
+}
+
 /** Active weights plus whether the peak-hours adjustment (#760) changed them.
  *  With the setting off (the default) `weights` is the preset itself and
  *  `adjusted` is false, so nothing about routing moves with the clock.
@@ -852,7 +924,10 @@ export function refreshStatsCache(db: Db, force = false): void {
 
   // Re-read the community priors alongside the stats they season, so a forced
   // refresh (tests, admin actions) never routes on a stale prior snapshot.
+  // Same for the probe scores: a forced refresh is the moment a just-landed
+  // probe pass becomes visible to routing.
   invalidateCommunityPriorCache();
+  invalidateProbeScoreCache();
 
   const since = new Date(Date.now() - WINDOW_MS).toISOString();
   // Grouped by (model, key, day age): still a handful of rows per model — key
@@ -1103,7 +1178,10 @@ function scoreChainEntry(
   const successes = stats?.successes ?? 0;
   const failures = stats?.failures ?? 0;
 
-  const community = activeCommunityPrior(entry.platform, entry.model_id, entry.endpoint_scope);
+  const community = mergePriors(
+    activeCommunityPrior(entry.platform, entry.model_id, entry.endpoint_scope),
+    activeProbePrior(entry.platform, entry.model_id, entry.endpoint_scope),
+  );
   let reliability: number;
   if (sampled) {
     const { alpha, beta } = reliabilityPosterior(successes, failures, community);
@@ -1189,7 +1267,10 @@ export function applyReliabilityFloor(chain: ChainRow[]): ChainRow[] {
     }
     const rel = expectedReliability(
       stats!.successes, stats!.failures,
-      activeCommunityPrior(e.platform, e.model_id, e.endpoint_scope),
+      mergePriors(
+        activeCommunityPrior(e.platform, e.model_id, e.endpoint_scope),
+        activeProbePrior(e.platform, e.model_id, e.endpoint_scope),
+      ),
     );
     if (rel < floor) dropped.push(e);
     else kept.push(e);
@@ -1511,6 +1592,12 @@ function orderKeysByScore(entry: ChainRow, keys: KeyRow[]): KeyRow[] | null {
   if (!keys.some(k => keyStatsCache!.has(prefix + k.id))) return null;
 
   // The prior is per-model, not per-key: look it up once outside the loop.
+  // Deliberately NOT merged with the Phase B probe prior here: this ranks
+  // KEYS of one model against each other, and a per-model probe prior would
+  // shift every key by the same amount — it cannot change the order, only
+  // shrink the sampled spread. The probe table IS per-key, so a key-specific
+  // prior is possible later; it is out of scope for the Phase B prototype,
+  // which feeds the score at the model (chain-entry) level only.
   const community = activeCommunityPrior(entry.platform, entry.model_id, entry.endpoint_scope);
   return keys
     .map(k => {
