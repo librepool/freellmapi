@@ -493,7 +493,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
     listUrl: 'https://api.kilo.ai/api/gateway/models', intervalMs: SIX_HOURS,
     create: (deps: ScraperDeps = {}) =>
       new OpenAICompatibleScraper({ platform: 'kilo', baseUrl: 'https://api.kilo.ai/api/gateway', freeFilter: (e) => e.isFree === true, intervalMs: SIX_HOURS, ...deps }),
-    notes: ['isFree === true (live /api/gateway/models 2026-11-09: 11 of 380, all $0 prompt/completion; the two $0-priced Lyria audio previews have isFree false and are excluded)',
+    notes: ['isFree === true (live /api/gateway/models 2026-11-12: 11 of 382, all $0 prompt/completion; the two $0-priced Lyria audio previews have isFree false and are excluded; thinkingmachines/inkling-2-small:free withdrawn 2026-11-12, remaining Inkling variants paid)',
       'gateway re-serves upstream free lanes (NVIDIA, Cohere, OpenRouter); kilo-auto/free and openrouter/free are routers, not models — they rotate/select free models',
       'free prompts/outputs are logged for training (adapter); free routes transition to paid without notice — 6h churn check',
       'robots.txt has no Disallow on /api/ (checked 2026-11-09) — polls run'],
@@ -534,7 +534,7 @@ export const REGISTRY: Record<string, RegistryEntry> = {
      'no robots.txt on the host (404, checked 2026-11-09) — polls run']),
   orcarouter: generic('orcarouter', 'https://api.orcarouter.ai/v1',
     (e) => e.id === 'orcarouter/free' || e.id.endsWith('-free'), SIX_HOURS,
-    ['-free suffix + the orcarouter/free auto route (adapter; live /v1/models 2026-11-09: 215 models, 7 free; two carry explicit $0 pricing, the rest no pricing field — the suffix is the marker)',
+    ['-free suffix + the orcarouter/free auto route (adapter; live /v1/models 2026-11-12: 215 models, 6 free; orca/orcaverify-text1.0-free withdrawn 2026-11-12; two carry explicit $0 pricing, the rest no pricing field — the suffix is the marker)',
      'rotating $0 lineup, 10 RPM / 50 req/day; free routes never fall back to paid models, so a 429 is a clean quota signal, not a wallet risk — 6h churn check',
      'robots.txt has no Disallow on / (User-agent: * Allow: /, checked 2026-11-09) — polls run']),
   unorouter: generic('unorouter', 'https://api.unorouter.com/v1',

@@ -270,14 +270,14 @@ Notes from the probes:
 | nvidia | generic | `/v1/models`, frozen chat set (61 of 84 live; 23 non-chat excluded by name) — the list carries no free marker, the whole hosted catalog is the free trial tier |
 | cohere | generic | `/v1/models`, frozen chat set (9 Command/North ids, official rate-limits page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | zhipu | generic | `/v1/models`, frozen `$0` set (3 Flash ids, official pricing page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (11 of 380 live) |
+| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (11 of 382 live) |
 | ovh | generic | `/v1/models`, frozen chat set (9 of 21 live; anonymous tier, price is NOT the signal) |
 | agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
 | routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
 | bazaarlink | generic | `/v1/models`, zero pricing (`prompt` + `completion` `"0"`, 7 of 127 live) |
 | requesty | generic | `/v1/models`, zero price + `api == "chat"` (8 zero-price chat; content-safety classifier excluded) |
 | sealion | generic | `/v1/models`, frozen docs-sourced set (2 chat ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| orcarouter | generic | `/v1/models`, `-free` suffix + the `orcarouter/free` auto route (7 of 215 live) |
+| orcarouter | generic | `/v1/models`, `-free` suffix + the `orcarouter/free` auto route (6 of 215 live) |
 | unorouter | generic | `/v1/models`, `:free` suffix + `openai` endpoint type, excluding embeddings / image-generation / whisper (110 chat of 180 `:free`, 341 live) — but `api.unorouter.com/robots.txt` disallows `/`, so polls skip by default |
 | modelscope | generic | `/v1/models`, frozen chat set (36 of 38 live; the 2 Qwen-Image-Edit ids are image editing, not chat) |
 | qianfan | generic | `/v2/models`, frozen free set (5 ERNIE Speed/Lite/Tiny ids, official 2024-05-21 announcement) — but the list endpoint 429s keyless, so this entry reports errors until a list key exists; a conflicting retirement claim (single secondary source, no official notice found) is flagged in the registry entry |
