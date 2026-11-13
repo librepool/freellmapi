@@ -321,7 +321,10 @@ export async function runModelCall(
     }
 
     const startedAt = Date.now();
-    const routeOpts = { ...options, contextBudget: routeOutputBudget(route, estimatedTokens) };
+    // The judge's route comes from routeRequest, so it can be the OpenRouter
+    // auto lane; forward the hint or the provider would send
+    // 'openrouter/auto' with no allow-list (unrestricted delegation).
+    const routeOpts = { ...options, contextBudget: routeOutputBudget(route, estimatedTokens), openrouterAuto: route.openrouterAuto };
     try {
       const result = await route.provider.chatCompletion(route.apiKey, messages, route.modelId, routeOpts);
       const choice = result.choices?.[0];
@@ -433,7 +436,8 @@ async function runJudgeStreaming(
     }
 
     const startedAt = Date.now();
-    const routeOpts = { ...options, contextBudget: routeOutputBudget(route, estimatedTokens) };
+    // As above: the streaming judge can also route through the lane.
+    const routeOpts = { ...options, contextBudget: routeOutputBudget(route, estimatedTokens), openrouterAuto: route.openrouterAuto };
     let text = '';
     let started = false;
     try {
