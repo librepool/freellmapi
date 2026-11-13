@@ -178,6 +178,12 @@ export interface ChainRow {
   // per model has to tell them apart (#651).
   endpoint_scope: string;
   /**
+   * OpenRouter auto-lane allow-list (synthetic rows only, built by
+   * collapseOpenRouterLane): the :free OpenRouter model ids this lane may pick
+   * among. Absent on every database-backed row.
+   */
+  openrouterAllowedModels?: string[];
+  /**
    * Ordering TIER, ahead of score. 0 (the default, and what every other chain
    * builder produces) is a normal candidate. A higher number is a fallback that
    * may only serve once every lower tier is exhausted, however good its live
@@ -210,6 +216,13 @@ export interface RouteResult {
    * to ONE relay instead of every relay serving the same model id.
    */
   endpointScope: string;
+  /**
+   * OpenRouter auto-lane delegation (see ChainRow.openrouterAllowedModels):
+   * when set, the OpenAI-compat provider sends model 'openrouter/auto' with the
+   * auto-router plugin restricted to these :free ids. Undefined = normal
+   * per-model dispatch.
+   */
+  openrouterAuto?: { allowedModels: string[] };
   /**
    * This key's own proxy URL, already decrypted, '' when it has none (#590).
    *
@@ -817,6 +830,57 @@ function mergePriors(
   if (!a) return b;
   if (!b) return a;
   return { successes: a.successes + b.successes, failures: a.failures + b.failures };
+}
+
+// ── OpenRouter auto lane (opt-in delegation) ────────────────────────────────
+// When OPENROUTER_AUTO_LANE=1, the OpenRouter :free models in the ordered
+// chain collapse into ONE synthetic lane entry that delegates the per-request
+// pick to OpenRouter's own auto router (model 'openrouter/auto'), hard-
+// restricted to the lane's allow-list via the auto-router plugin's
+// allowed_models. LibrePool's ranking still decides WHERE the lane sits in
+// the chain (it inherits the best-ranked OpenRouter free entry's position,
+// score inputs and model_db_id); OpenRouter only picks WHICH free model
+// answers inside the lane. Non-free OpenRouter rows stay ordinary entries,
+// and everything outside the openrouter platform is untouched. Default off:
+// with the flag unset, routing is byte-identical to before. Fusion panel
+// members are unaffected (the lane lives in routeRequest's chain only).
+export function openrouterAutoLaneEnabled(): boolean {
+  return process.env.OPENROUTER_AUTO_LANE === '1';
+}
+
+const OPENROUTER_AUTO_MODEL_ID = 'openrouter/auto';
+
+/** Collapse the chain's OpenRouter :free entries into a single lane entry.
+ *  Pure: no flag check, no I/O — the caller gates on openrouterAutoLaneEnabled().
+ *  Fewer than two OpenRouter free entries is a no-op (a one-model "lane"
+ *  delegates nothing). The lane keeps the best-ranked entry's slot and
+ *  scoring inputs; its allow-list is the deduped :free ids in chain order. */
+export function collapseOpenRouterLane(chain: ChainRow[]): ChainRow[] {
+  const laneEntries = chain.filter(
+    e => e.platform === 'openrouter' && e.model_id.endsWith(':free'),
+  );
+  if (laneEntries.length < 2) return chain;
+  const anchor = laneEntries[0];
+  const allowedModels = [...new Set(laneEntries.map(e => e.model_id))];
+  const laneRow: ChainRow = {
+    ...anchor,
+    model_id: OPENROUTER_AUTO_MODEL_ID,
+    display_name: 'OpenRouter Auto (free lane)',
+    openrouterAllowedModels: allowedModels,
+  };
+  const out: ChainRow[] = [];
+  let placed = false;
+  for (const e of chain) {
+    if (e.platform === 'openrouter' && e.model_id.endsWith(':free')) {
+      if (!placed && e === anchor) {
+        out.push(laneRow);
+        placed = true;
+      }
+      continue;
+    }
+    out.push(e);
+  }
+  return out;
 }
 
 /** Active weights plus whether the peak-hours adjustment (#760) changed them.
@@ -1708,7 +1772,15 @@ function selectKeyForModel(entry: ChainRow, estimatedTokens: number, skipKeys?: 
   // excludes this model is not a candidate at all — it neither takes a
   // round-robin slot nor burns an attempt on a guaranteed 403. Parsed once per
   // key row.
-  const keys = allKeys.filter(k => scopeAllows(parseModelScope(k.model_scope_json), entry.model_id));
+  const keys = allKeys.filter(k => {
+    const scope = parseModelScope(k.model_scope_json);
+    // Lane rows carry a synthetic model id no scoped key lists literally;
+    // a scoped key serves the lane when its scope intersects the allow-list.
+    if (entry.openrouterAllowedModels) {
+      return scope === null || entry.openrouterAllowedModels.some(m => scope.has(m));
+    }
+    return scopeAllows(scope, entry.model_id);
+  });
   if (keys.length === 0) {
     diag?.push(`${label}: no usable key — ${allKeys.length} key(s) scoped to other models`);
     return null;
@@ -1829,6 +1901,9 @@ function selectKeyForModel(entry: ChainRow, estimatedTokens: number, skipKeys?: 
       displayName: entry.display_name,
       contextWindow: entry.context_window,
       endpointScope: entry.endpoint_scope ?? '',
+      openrouterAuto: entry.openrouterAllowedModels
+        ? { allowedModels: entry.openrouterAllowedModels }
+        : undefined,
       rpdLimit: limits.rpd,
       tpdLimit: limits.tpd,
       release: () => { releaseLease(leaseId); budget.release(); },
@@ -2312,7 +2387,12 @@ export function routeRequest(estimatedTokens = 1000, skipKeys?: Set<string>, pre
 
   const chain = (prefetchedChain ?? getActiveChain(db)).filter(e => e.enabled);
 
-  const sortedChain = orderChain(chain, strategy, true, task);
+  const orderedChain = orderChain(chain, strategy, true, task);
+  // OpenRouter auto lane (opt-in): collapse the chain's OpenRouter :free
+  // entries into one delegated lane entry. No-op unless OPENROUTER_AUTO_LANE=1.
+  const sortedChain = openrouterAutoLaneEnabled()
+    ? collapseOpenRouterLane(orderedChain)
+    : orderedChain;
 
   // Exploration toggle (#685/#707 follow-up): when enabled, give a model with
   // no reliability/speed samples a guaranteed chance to be tried, so it stops

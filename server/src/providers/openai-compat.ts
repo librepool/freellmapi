@@ -284,6 +284,48 @@ export class OpenAICompatProvider extends BaseProvider {
   }
 
   /**
+   * OpenRouter auto-lane allow-list for this dispatch, or undefined when the
+   * lane does not apply: only the openrouter platform, only the synthetic
+   * 'openrouter/auto' model id, only with a non-empty allow-list hint.
+   */
+  private openRouterAutoLane(modelId: string, options?: CompletionOptions): { allowed: string[] } | undefined {
+    if (this.platform !== 'openrouter' || modelId !== 'openrouter/auto') return undefined;
+    const allowed = options?.openrouterAuto?.allowedModels;
+    if (!allowed || allowed.length === 0) return undefined;
+    return { allowed };
+  }
+
+  /**
+   * OpenRouter auto-lane body fragment: the auto-router plugin hard-restricts
+   * the pick to the allow-list's :free ids. Shape follows OpenRouter's chat
+   * completions reference (plugins[].id 'auto-router'; cost_tier 'low' keeps
+   * the policy conservative — every candidate is $0, so it trades on
+   * capability, not price). Everything else gets {} so the wire shape is
+   * unchanged.
+   */
+  private openRouterAutoBody(modelId: string, options?: CompletionOptions): Record<string, unknown> {
+    const lane = this.openRouterAutoLane(modelId, options);
+    if (!lane) return {};
+    return { plugins: [{ id: 'auto-router', allowed_models: lane.allowed, cost_tier: 'low', enabled: true }] };
+  }
+
+  /** Log which model OpenRouter's auto router actually picked, so the lane's
+   *  outcomes can later be compared against LibrePool's own ranking. The
+   *  response `model` field carries the pick; 'openrouter/auto' itself (a
+   *  rescued/echoed body) is not a pick. */
+  private logAutoLanePick(picked: unknown, lane: { allowed: string[] }): void {
+    if (typeof picked !== 'string' || picked === 'openrouter/auto') return;
+    console.log(`[OpenRouter] auto lane picked ${picked} (allow-list: ${lane.allowed.length} free models)`);
+  }
+
+  /** Options for a direct (non-delegated) retry of the lane's anchor model:
+   *  same options minus the lane hint, so no plugin is attached. */
+  private directOptionsForLane(options?: CompletionOptions): CompletionOptions | undefined {
+    if (!options || !options.openrouterAuto) return options;
+    return { ...options, openrouterAuto: undefined };
+  }
+
+  /**
    * OpenAI-compatible endpoints that are strict about unknown nested fields:
    * Mistral returns 422 for provider-private replay fields, Groq rejects
    * assistant `reasoning_content` with 400 (verified in production, #1070),
@@ -362,7 +404,35 @@ export class OpenAICompatProvider extends BaseProvider {
     return sanitized;
   }
 
+  /**
+   * OpenRouter auto lane (opt-in, OPENROUTER_AUTO_LANE=1): when this dispatch
+   * carries the lane hint, try the delegated 'openrouter/auto' call first; if
+   * it fails, fall back to the lane's anchor model — the best-ranked
+   * OpenRouter :free entry, allow-list[0] — dispatched directly, exactly as
+   * the normal path would have sent it. The direct retry happens inside this
+   * one provider attempt, so the fallback loop's budgets are untouched; if the
+   * direct call fails too, its error propagates like any ordinary failure.
+   */
   async chatCompletion(
+    apiKey: string,
+    messages: ChatMessage[],
+    modelId: string,
+    options?: CompletionOptions,
+    quotaContext?: QuotaObservationContext,
+  ): Promise<ChatCompletionResponse> {
+    const lane = this.openRouterAutoLane(modelId, options);
+    if (!lane) return this.chatCompletionDirect(apiKey, messages, modelId, options, quotaContext);
+    try {
+      const auto = await this.chatCompletionDirect(apiKey, messages, modelId, options, quotaContext);
+      this.logAutoLanePick(auto?.model, lane);
+      return auto;
+    } catch (err) {
+      console.log(`[OpenRouter] auto lane failed (${err instanceof Error ? err.message : String(err)}); falling back to ${lane.allowed[0]}`);
+      return this.chatCompletionDirect(apiKey, messages, lane.allowed[0], this.directOptionsForLane(options), quotaContext);
+    }
+  }
+
+  private async chatCompletionDirect(
     apiKey: string,
     messages: ChatMessage[],
     modelId: string,
@@ -389,6 +459,7 @@ export class OpenAICompatProvider extends BaseProvider {
         tool_choice: options?.tool_choice,
         parallel_tool_calls: this.resolveParallelToolCalls(options),
         ...extendedBodyParams(this.platform, options),
+        ...this.openRouterAutoBody(modelId, options),
       }),
       // 'request' bounds: the deadline covers the body read too, so a 200
       // whose body hangs aborts instead of stalling res.json() forever.
@@ -420,7 +491,7 @@ export class OpenAICompatProvider extends BaseProvider {
         return out;
       }
       const retry = this.pinnedToolChoiceRetryFor(res.status, options);
-      if (retry) return this.chatCompletion(apiKey, messages, modelId, retry, quotaContext);
+      if (retry) return this.chatCompletionDirect(apiKey, messages, modelId, retry, quotaContext);
       throw providerHttpError(res, `${this.name} API error ${res.status}: ${this.upstreamErrorText(err, res)}`, err);
     }
 
@@ -494,7 +565,44 @@ export class OpenAICompatProvider extends BaseProvider {
     return data;
   }
 
+  /**
+   * Streaming twin of chatCompletion's lane handling: try the delegated call
+   * first, log the picked model from the first chunk, and fall back to the
+   * anchor model only when nothing has been yielded yet — once bytes have
+   * reached the client a second stream would duplicate output, so a mid-stream
+   * error rethrows instead.
+   */
   async *streamChatCompletion(
+    apiKey: string,
+    messages: ChatMessage[],
+    modelId: string,
+    options?: CompletionOptions,
+    quotaContext?: QuotaObservationContext,
+  ): AsyncGenerator<ChatCompletionChunk> {
+    const lane = this.openRouterAutoLane(modelId, options);
+    if (!lane) {
+      yield* this.streamChatCompletionDirect(apiKey, messages, modelId, options, quotaContext);
+      return;
+    }
+    let yielded = false;
+    try {
+      let logged = false;
+      for await (const chunk of this.streamChatCompletionDirect(apiKey, messages, modelId, options, quotaContext)) {
+        if (!logged) {
+          logged = true;
+          this.logAutoLanePick((chunk as { model?: unknown } | null)?.model, lane);
+        }
+        yielded = true;
+        yield chunk;
+      }
+    } catch (err) {
+      if (yielded) throw err;
+      console.log(`[OpenRouter] auto lane failed (${err instanceof Error ? err.message : String(err)}); falling back to ${lane.allowed[0]}`);
+      yield* this.streamChatCompletionDirect(apiKey, messages, lane.allowed[0], this.directOptionsForLane(options), quotaContext);
+    }
+  }
+
+  private async *streamChatCompletionDirect(
     apiKey: string,
     messages: ChatMessage[],
     modelId: string,
@@ -521,6 +629,7 @@ export class OpenAICompatProvider extends BaseProvider {
         tool_choice: options?.tool_choice,
         parallel_tool_calls: this.resolveParallelToolCalls(options),
         ...extendedBodyParams(this.platform, options),
+        ...this.openRouterAutoBody(modelId, options),
         stream: true,
         stream_options: options?.stream_options,
       }),
@@ -550,7 +659,7 @@ export class OpenAICompatProvider extends BaseProvider {
       }
       const retry = this.pinnedToolChoiceRetryFor(res.status, options);
       if (retry) {
-        yield* this.streamChatCompletion(apiKey, messages, modelId, retry, quotaContext);
+        yield* this.streamChatCompletionDirect(apiKey, messages, modelId, retry, quotaContext);
         return;
       }
       throw providerHttpError(res, `${this.name} API error ${res.status}: ${this.upstreamErrorText(err, res)}`, err);

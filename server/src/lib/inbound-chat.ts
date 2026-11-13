@@ -257,7 +257,7 @@ export async function runInboundChat(
           route.apiKey,
           input.messages,
           route.modelId,
-          { ...options, contextBudget: routeOutputBudget(route, estimatedInputTokens) },
+          { ...options, contextBudget: routeOutputBudget(route, estimatedInputTokens), openrouterAuto: route.openrouterAuto },
         );
         const message = result.choices?.[0]?.message;
         let text = contentToString(message?.content ?? '');
@@ -385,7 +385,7 @@ export async function runInboundChat(
           route.apiKey,
           input.messages,
           route.modelId,
-          { ...options, contextBudget: routeOutputBudget(route, estimatedInputTokens) },
+          { ...options, contextBudget: routeOutputBudget(route, estimatedInputTokens), openrouterAuto: route.openrouterAuto },
         );
         for await (const chunk of stream) {
           if (clientGone) break;

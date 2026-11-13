@@ -714,7 +714,7 @@ export async function handleMessages(req: Request, res: Response): Promise<void>
     },
     dispatch: async (route, attempt, dispatchCtx) => {
       const contextBudget = routeOutputBudget(route, estimatedInputTokens);
-      const routeOptions = { ...dispatchOptions, contextBudget };
+      const routeOptions = { ...dispatchOptions, contextBudget, openrouterAuto: route.openrouterAuto };
       if (stream) {
         try {
           await streamCompletion(res, route, messages, routeOptions, {

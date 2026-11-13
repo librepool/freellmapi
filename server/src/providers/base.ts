@@ -186,6 +186,11 @@ export interface CompletionOptions extends ExtendedSamplingOptions {
    * finish. Composed with the per-attempt timeout in fetchWithTimeout; never
    * serialized into the request body. */
   signal?: AbortSignal;
+  /** OpenRouter auto-lane hint: when set on an openrouter-platform dispatch
+   *  to model 'openrouter/auto', the OpenAI-compat provider adds the
+   *  auto-router plugin restricted to these :free ids. Consumed at body-build
+   *  time; never serialized verbatim. */
+  openrouterAuto?: { allowedModels: string[] };
 }
 
 /** Per-call abort/timeout wiring for fetchWithTimeout. */

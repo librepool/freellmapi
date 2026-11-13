@@ -1223,7 +1223,7 @@ export async function handleResponses(req: Request, res: Response): Promise<void
     },
     dispatch: async (route, attempt, ctx) => {
       const contextBudget = routeOutputBudget(route, estimatedInputTokens);
-      const routeOpts = contextBudget != null ? { ...dispatchOpts, contextBudget } : dispatchOpts;
+      const routeOpts = { ...(contextBudget != null ? { ...dispatchOpts, contextBudget } : dispatchOpts), openrouterAuto: route.openrouterAuto };
       traceRouteEvent('Responses', {
         event: attempt === 0 ? 'start' : 'next',
         requestId: requestGroupId,
