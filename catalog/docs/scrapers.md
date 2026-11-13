@@ -262,7 +262,7 @@ Notes from the probes:
 | nara | generic | `/v1/models`, frozen `{laguna-s-2.1}` (from public `/api/plans`) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | xkiro | generic | `/v1/models`, `access_tier: "free"` (26 of 69 live, all $0) |
 | experiential | generic | `/v1/models`, frozen `{gpt-6-luna, deepseek-v4.1-flash}` — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| llm7 | generic | `/v1/models`, `tier: "turbo"` + `model_type: "chat"`, not `usage_based_only` (2 live; `gpt-oss:20b` moved to paid `pro` tier 2026-11-11) |
+| llm7 | generic | `/v1/models`, `tier: "turbo"` + `model_type: "chat"`, not `usage_based_only` (6 live; `gpt-oss:20b` returned to the free `turbo` tier 2026-11-13 after a paid-`pro` move 2026-11-11) |
 | navy | generic | `/v1/models`, `premium: false` + chat-completions endpoint (70 live) |
 | aion | generic | `/v1/models`, all ids (whole 6-model roster is free-tier) |
 | anyapi | generic | `/v1/models`, frozen `:free` set (4 ids) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
@@ -270,7 +270,7 @@ Notes from the probes:
 | nvidia | generic | `/v1/models`, frozen chat set (61 of 84 live; 23 non-chat excluded by name) — the list carries no free marker, the whole hosted catalog is the free trial tier |
 | cohere | generic | `/v1/models`, frozen chat set (9 Command/North ids, official rate-limits page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | zhipu | generic | `/v1/models`, frozen `$0` set (3 Flash ids, official pricing page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (11 of 382 live) |
+| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (13 of 473 live) |
 | ovh | generic | `/v1/models`, frozen chat set (9 of 21 live; anonymous tier, price is NOT the signal) |
 | agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
 | routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
