@@ -181,6 +181,7 @@ export const PREFIX_MAP: Record<string, string> = {
   THK_LIVE_: 'tokenharbor',
   THK_: 'tokenharbor',
   ZRO_: 'zro',
+  LLM7_: 'llm7',
 };
 
 export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
@@ -314,6 +315,10 @@ export const AUTH_JSON_PROVIDER_MAP: Record<string, string> = {
   'token-harbor': 'tokenharbor',
   zro: 'zro',
   moonmath: 'zro',
+  llm7: 'llm7',
+  agnes: 'agnes',
+  routeway: 'routeway',
+  bazaarlink: 'bazaarlink',
 };
 
 export function detectPlatform(prefix: string): string | null {

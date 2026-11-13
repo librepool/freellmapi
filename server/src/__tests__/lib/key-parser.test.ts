@@ -21,6 +21,17 @@ describe('key parser', () => {
       expect.objectContaining({ platform: 'varosity', rawKey: 'VAROSITY_API_KEY=vsk_test_not_a_real_key_12345' }),
     ]);
   });
+  it('imports LLM7 keys and maps the former AUTH_JSON holes', () => {
+    expect(detectPlatform('LLM7_')).toBe('llm7');
+    expect(parseKeysFromFile('LLM7_API_KEY=llm7-test-not-a-real-key-12345', '.env').keys).toEqual([
+      expect.objectContaining({ platform: 'llm7', rawKey: 'LLM7_API_KEY=llm7-test-not-a-real-key-12345' }),
+    ]);
+    expect(AUTH_JSON_PROVIDER_MAP.llm7).toBe('llm7');
+    expect(AUTH_JSON_PROVIDER_MAP.agnes).toBe('agnes');
+    expect(AUTH_JSON_PROVIDER_MAP.routeway).toBe('routeway');
+    expect(AUTH_JSON_PROVIDER_MAP.bazaarlink).toBe('bazaarlink');
+  });
+
   it('parses dotenv key/value files', () => {
     expect(parseDotEnv('GOOGLE_API_KEY="ai-test"\nGROQ_API_KEY=gsk-test # comment')).toEqual([
       { key: 'GOOGLE_API_KEY', value: 'ai-test' },
