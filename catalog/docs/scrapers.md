@@ -270,7 +270,7 @@ Notes from the probes:
 | nvidia | generic | `/v1/models`, frozen chat set (61 of 84 live; 23 non-chat excluded by name) — the list carries no free marker, the whole hosted catalog is the free trial tier |
 | cohere | generic | `/v1/models`, frozen chat set (9 Command/North ids, official rate-limits page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
 | zhipu | generic | `/v1/models`, frozen `$0` set (3 Flash ids, official pricing page) — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (13 of 473 live) |
+| kilo | generic | `/api/gateway/models` (not `/v1/models`, which only takes POST), `isFree === true` (13 of 472 live) |
 | ovh | generic | `/v1/models`, frozen chat set (9 of 21 live; anonymous tier, price is NOT the signal) |
 | agnes | generic | `/v1/models`, frozen `$0` Flash set (2 ids, official pricing page) — but the list endpoint 401s keyless as of 2026-11-09, so this entry reports errors until a list key exists or keyless access stabilizes |
 | routeway | generic | `/v1/models`, `:free` suffix (9 of 287 live, all $0) |
@@ -282,7 +282,7 @@ Notes from the probes:
 | modelscope | generic | `/v1/models`, frozen chat set (36 of 38 live; the 2 Qwen-Image-Edit ids are image editing, not chat) |
 | qianfan | generic | `/v2/models`, frozen free set (5 ERNIE Speed/Lite/Tiny ids, official 2024-05-21 announcement) — but the list endpoint 429s keyless, so this entry reports errors until a list key exists; a conflicting retirement claim (single secondary source, no official notice found) is flagged in the registry entry |
 | xfyun | generic | `/v1/models`, frozen `{lite}` (official docs: Lite "can be used for free") — but the list endpoint 401s without a key, so this entry reports errors until a list key exists |
-| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (7 seeded; live /v1/models 2026-11-12: 14 ids, only 3 of the 11 frozen ids online; Qwen3-1.7B added 2026-11-12; Gemma-4-E4B, L3-8B-Stheno, Llama-3.2-1B, mini-magnum worker-less — first consecutive absence, held for a second run; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
+| aihorde | generic | `/v1/models`, frozen set of models with ≥1 worker online (6 seeded; live /v1/models 2026-11-13: 18 ids — Gemma-4-E4B, L3-8B-Stheno, mini-magnum back online after one absent run; Llama-3.2-1B-Instruct removed 2026-11-13 after a second consecutive daily absence, kept in the frozen set so the scraper re-reports it if workers return; the 2 `debug-` ids are test deployments) — the volunteer roster rotates hourly, so this entry is deliberately NOT on the 6h churn check |
 | groq | stub | List endpoint requires a provider key; the service holds none |
 | mistral | stub | List endpoint requires a provider key; the service holds none |
 | cloudflare | stub | Bespoke Workers AI API, no `/v1/models` |
